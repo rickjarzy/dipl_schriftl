@@ -553,27 +553,14 @@ y=
 % verwendete links: benötigt für DFT O(N2) FFT O(Nlog2N) https://towardsdatascience.com/fast-fourier-transform-937926e591cb 
 % 						Superpositionsprinzip Physik https://de.wikipedia.org/wiki/Superposition_(Physik) 
 % Literatur Fourier Analyse - 
-% - Mathematik für Ingenieure und Naturwissenschafter Band2 - 13. Auflage 2012 - da hab ich die Formal für die DFT her
+% - Mathematik für Ingenieure und Naturwissenschafter Band2 -  Lothar Papula - 13. Auflage 2012, S795 - da hab ich die Formal für die DFT her
 % - Mathematische Methoden in der Physik - Christian B. Lang, Norbert Pucker, Kapitel 13, S 401
 % 
 
-\subsection{Fast Fourier Transformation}
-
+\subsection{Fourier Transformation}
+\subsubsection{Harmonische Schwingungen , Diskrete Fourier Transformation und Analyse}
 % aus Mathematische Methoden in der Physik - Christian B. Lang, Norbert Pucker, Kapitel 13, S 401, 2005
 Da sich die Natur recht gut mit periodischen Funktionen beschreiben lässt, wurden auch hier einige Methoden aus der Signalanalyse und Verarbeitung gewählt um die Daten einer Zeitreihe der vorhandenen MODIS Satellitendaten zu analysieren, rekonstruieren und zu verbessern. Die Zerlegung nach Frequenzen entspricht dem, was ein Prisma mit dem einfallenden Licht macht. Der Lichtstrahl - zum Beispiel ein Sonnenstrahl - ist meist eine Überlagerung von Beiträgen verschiedenster Frequenzen. Da die Lichtbrechung beim Prisma frequenzabhängig ist, wird der Strahl zerlegt, der Ausfallwinkel hängt von der Frequenz des entsprechenden Anteils ab. Diese Zerlegung ist nichts anderes als die Projektion auf die Basisvektoren des Vektorraums periodischer Funktionen in $L^{2}$. Die Methode heißt Fourierzerlegung oder \textbf{Fourieranalyse}, die Zusammensetzung der Funktion als Summe ihrer Komponenten ist die \textbf{Fouriersynthese} (Christian B. Lang, Norbert P. 2005). 
-
-% Aus Mathematik für Ingenuere Band2 S 182/ 2.1 Fourier-Zerlegung
-Die Daten der zu analysierenden Zeitreihe sind in der Regel keine reine sinusförmige Schwingung, besitzt jedoch ebenfalls eine Schwingungsdauer $T$ und eine Kreisfrequenz $\omega_0=2\pi / T$. Diese zeitabhängige, periodische Funktion $y(t)$ lässt sich dann unter den bekannten Vorraussetzungen in eine Fourier-Reihe vom Typ
-
-\begin{equation}
-\begin{split}
-y(t) =\frac{a_0}{2}+\sum_{n=1}^{\infty} \lbrack a_n \cdot cos(n \omega_0 t) + b_n \cdot sin(n \omega_0 t) \rbrack = \\\
-= \frac{a_0}{2}+a_1 \cdot cos(\omega_0 t) + a_2 \cdot cos(2 \omega_0 t) + a_3 \cdot cos(3 \omega_0 t) + \dots \ \\\
-\dots \ + b_1 \cdot sin(\omega_0 t) + b_2 \cdot sin(2 \omega_0 t) + b_3 \cdot sin(3 \omega_0 t) + \dots\ 
-\end{split}
-\end{equation}
-
-entwickeln. Diese Entwicklung in unendlich viele Sinus- und Kosinusfunktionen bedeutet aus pyhsikalischer Sicht eine Zerlegung der Schwingung $y(t)$ in ihre harmonischen Bestandteile, auch Schwingungskomponenten genannt. Sie bestehen aus der Grundschwingung mit der Grundkreisfrequenz $\omega_0$ und en harmonischen Oberschwingungen dereb Kreisfrequenzen ganzzahlige Vielfache der Grundkreisfrquenzen sind: $2\omega_0, 3\omega_0, 4\omega_0 \dots $. Bringt man umgekehrt Grundschwingungen und Oberschwingungen zur ungestörten Überlagerung, so erhaltet man als Resultierende genau die Schwingung $y = y(t)$ (Superpositionsprinzip der Physik \footnote{ungestörte Überlagerung (Interferenz) mehrerer Wellen des gleichen Types. Hier können sich die Amplituden der (z.B. elektromagnetischen) Wellen beim Überlagern gegenseitig verstärken oder Abschwächen}). 
 
 % Grafik aus Mathemathischen Methoden in der Physik hier noch ausbessern - Prisma
 
@@ -583,13 +570,73 @@ entwickeln. Diese Entwicklung in unendlich viele Sinus- und Kosinusfunktionen be
 \caption{\textit{Aufteilung eines Lichtstrahls in seine Frequenzbereiche (Christian B. Lang, S401)}}
 \end{figure}
 
+% Aus Mathematik für Ingenuere Band2 S 182/ 2.1 Fourier-Zerlegung
+Die Daten der zu analysierenden Zeitreihe sind in der Regel keine reine sinusförmige Schwingung, besitzt jedoch ebenfalls eine Schwingungsdauer $T$ und eine Kreisfrequenz $\omega_0=2\pi / T$. Diese zeitabhängige, periodische Funktion $y(t)$ lässt sich dann unter den bekannten Vorraussetzungen in eine Fourier-Reihe vom Typ
+
+\begin{equation} \label{dft}
+\begin{split}
+y(t) =\frac{a_0}{2}+\sum_{n=1}^{\infty} \lbrack a_n \cdot cos(n \omega_0 t) + b_n \cdot sin(n \omega_0 t) \rbrack = \\\
+= \frac{a_0}{2}+a_1 \cdot cos(\omega_0 t) + a_2 \cdot cos(2 \omega_0 t) + a_3 \cdot cos(3 \omega_0 t) + \dots \ \\\
+\dots \ + b_1 \cdot sin(\omega_0 t) + b_2 \cdot sin(2 \omega_0 t) + b_3 \cdot sin(3 \omega_0 t) + \dots\ 
+\end{split}
+\end{equation}
+entwickeln. Diese Entwicklung in unendlich viele Sinus- und Kosinusfunktionen bedeutet aus pyhsikalischer Sicht eine Zerlegung der Schwingung $y(t)$ in ihre harmonischen Bestandteile, auch Schwingungskomponenten genannt. Sie bestehen aus der Grundschwingung mit der Grundkreisfrequenz $\omega_0$ und en harmonischen Oberschwingungen dereb Kreisfrequenzen ganzzahlige Vielfache der Grundkreisfrquenzen sind: $2\omega_0, 3\omega_0, 4\omega_0 \dots $. Bringt man umgekehrt Grundschwingungen und Oberschwingungen zur ungestörten Überlagerung, so erhaltet man als Resultierende genau die Schwingung $y = y(t)$ (Superpositionsprinzip der Physik \footnote{ungestörte Überlagerung (Interferenz) mehrerer Wellen des gleichen Types. Hier können sich die Amplituden der (z.B. elektromagnetischen) Wellen beim Überlagern gegenseitig verstärken oder Abschwächen}). Die Fourier-Koeffizienten $a_0, a_1, a_2, a_3, \dots, b_1, b_2, b_3, \dots $ betsimmen dabei die Amplituden der harmonischen Teilschwingung und somit letztendlich deren Anteile an der Gesamtschwingung (Lothar P., S182). Die als harmonische Analyse oder auch \emph{Fourier-Analyse} bezeichnete Zerlegung einer nichtsinusförmigen Schwingung $y=y(t)$ in Grundschwingung und harmonische Oberschwingungen läuft somit auf die Bestimmung der Fourier-Koeffizienten in der Entwicklung nach der vorangegangenen Formel (\ref{dft}) hinaus. 
+
+\begin{equation}
+y(t) =\frac{a_0}{2}+\sum_{n=1}^{\infty} \lbrack a_n \cdot cos(n \omega_0 t) + b_n \cdot sin(n \omega_0 t) \rbrack \\\
+\end{equation}
+Sie können mit Hilfe der folgenden Integralformeln berechnet werden (Lothar P., S183)
+\begin{eqnarray}
+\omega_0: &  & \textnormal{Kreisfrequenz der Grundschwingung} \\
+n\omega_0: &  & \textnormal{Kreisfrequenz harmonischer Oberschwingungen (n=1,2,3..)} \\
+T = \frac{2\pi}{\omega_0}: &  & \textnormal{Schwingungsdauer (Periode)} 
+\end{eqnarray}
+\begin{eqnarray}
+a_0 = & & \frac{2}{T} \cdot \int_{T} y(t) dt 
+\end{eqnarray}
+\begin{eqnarray} \label{int_cos_dft}
+a_1 = & & \frac{2}{T} \cdot \int_{T} y(t) \cdot cos(n\omega_0t)dt \dots n=1,2,3,... 
+\end{eqnarray}
+\begin{eqnarray}
+a_2 = & & \frac{2}{T} \cdot \int_{T} y(t) \cdot sin(n\omega_0t)dt \dots n=1,2,3,... 
+\end{eqnarray}
+Das Symbol $T$ im Integral bedeutet, dass die Integration über ein (beliebiges Periodenintervall von der Länge T zu erstrecken ist. Die Berechnung des Koeffizienten $a_0$ ist auch mit der Formel (\ref{int_cos_dft}) für $n=0$ möglich, da $cos(0\omega_0t)=cos0=1$ ist(Lothar P., 2013, S183).
+
+
+Die Fourier-Analyse einer nicht-sinusförmigen Schwingung $y=y(t)$ lässt sich auch in komplexer Form vornehmen:
+\begin{equation}
+y(t)=\sum_{n=-\infty}^{\infty} c_n \cdot e^{jn\omega_0t}
+\end{equation}
+Die Berechnung der komplexen Fourierkoeffizienten $c_n$ erfolgt mit der Integralformel
+\begin{equation}
+c_n = \frac{1}{T} \cdot \int_{0}^{T} y(t) \cdot e^{-jn\omega_0t}dt  \\\
+\end{equation}
+Wobei $\omega_0$ und $T$ wieder wie folgt sich zusammen setzen
+\begin{eqnarray}
+\omega_0 &:& \textnormal{Kreisfrequenz der Schwingung}  \\
+T & : & \textnormal{Schwingungs- oder Periodendauer} (T=2\pi/\omega_0)
+\end{eqnarray}
+% aus Lothar P. S 178
+Die Umrechnung zwischen den reellen und der komplexen Darstellung erfolgt über folgende Gleichungen:
+\begin{eqnarray}
+c_0=\frac{1}{2}a_0,&c_n=\frac{1}{2}(a_n -jb_n), & c_{-n}=c^{*}_{n}=\frac{1}{2}(a_n+jb_n)
+\end{eqnarray}
+Die Umrechnung komplexer zur reellen Form passiert wie folgt: 
+\begin{equation}
+a_0=2c_0 \qquad a_n=c_n+c_{-n}= c_n + c^{*}_{n} 
+\end{equation}
+\begin{equation}
+b_n=j(c_n-c_{-n})=j(c_n - c^{*}_{n})
+\end{equation}
+
+\subsubsection{Rekonstruktion mittels FFT}
 % das war aus Wikipedia
-Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gibt Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N}
+Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gib.t Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N}
 
 \begin{equation}
 \begin{split}
-Diskrete Fourier Transformation = O(N^{2}) \\\
-Fast Fourier Transformation = O(N log_2N)
+\textnormal{Diskrete Fourier Transformation} = O(N^{2}) \\\
+\textnormal{Fast Fourier Transformation} = O(N log_2N)
 \end{split}
 \end{equation}
 Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Die Fourier Transformation ist eine mathematische Operation, welche die Domäne der Zeit eines Signals in die Frequenzdomäne überführt, sprich in seine Frequenzanteile zerlegt und dadurch analysiert werden können. Bei der FFT wird ein zeitlich begrenztes Signal herangezogen und in seine Frequenzanteile zerlegt sowie deren Phasen und Amplituden bestimmt. In der Praxis wurde auf die bereits existierenden Routinen in \textbf{numpy 1.19.2} zurück gegriffen.
@@ -602,7 +649,9 @@ Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Die Fourie
 \begin{equation}
 \hat{x_k}=\sum_{i=1}^{n-1} x_i \qquad\qquad \dots \ FFT
 \end{equation}
-\subsubsection{Rekonstruktion mittels FFT}
+
+
+
 Bei genauerer Betrachtung des MODIS Datenmaterials stellt man fest, dass der Idealzustand bzw die optimalen Vorraussetzungen bei der Berechnung der Reflexionswerte eher selten vorhanden sind. Dies äussert sich als schlechtere Pixelqualitätsinformation oder gar als Füllwert. Die FFT ist jedoch ein sehr robuster Algorithmus der auch sehr gut bei verrauschten Signalen die wichtigsten Frequenzen heraus filtert. Vorraussetzung für eine erfolgreiche Analyse ist jedoch ein lückenloses Signal. Wenn nun Datenlücken aufgetreten sind, wurden diese von den vorangegangenem und dem nachfolgendem Wert linear interpoliert.
 
 
