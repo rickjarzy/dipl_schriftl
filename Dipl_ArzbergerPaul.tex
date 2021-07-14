@@ -420,11 +420,6 @@ Einhergehend mit der immer weiter voranschreitenden Verbesserung und  Entwicklun
 
 
 
-
-
-
-
-
 % MODIS - stabilität in den sichtbaren bändern
 % ==========================================================================
 % Da laut Vermote und Saleous die Pixelgröße der beiden zu Kalibrierenden Daten (AVHRR/MODIS) ab einem zenitwinkel von größer50 Grad zu unterschiedlich werden, klammern sie dies aus. Randpixel ausmaskieren kann eventuell eine steigerung der Genauigkeit bedeuten. Helder et al 2013 verweist auf seite 1363 das grosse zenithwinkel ( die nicht spezifiziert wurden ) und winkel größer 15° in der backscatter direction ausgelassen werden sind Kalibrierungsergebnisse kleiner 1% möglich
@@ -557,7 +552,8 @@ y=
 % - Mathematische Methoden in der Physik - Christian B. Lang, Norbert Pucker, Kapitel 13, S 401
 % 
 
-\subsection{Fourier Transformation}
+\subsection{Harmonische Schwingungen - Fourier Analyse
+}
 \subsubsection{Harmonische Schwingungen , Diskrete Fourier Transformation und Analyse}
 % aus Mathematische Methoden in der Physik - Christian B. Lang, Norbert Pucker, Kapitel 13, S 401, 2005
 Da sich die Natur recht gut mit periodischen Funktionen beschreiben lässt, wurden auch hier einige Methoden aus der Signalanalyse und Verarbeitung gewählt um die Daten einer Zeitreihe der vorhandenen MODIS Satellitendaten zu analysieren, rekonstruieren und zu verbessern. Die Zerlegung nach Frequenzen entspricht dem, was ein Prisma mit dem einfallenden Licht macht. Der Lichtstrahl - zum Beispiel ein Sonnenstrahl - ist meist eine Überlagerung von Beiträgen verschiedenster Frequenzen. Da die Lichtbrechung beim Prisma frequenzabhängig ist, wird der Strahl zerlegt, der Ausfallwinkel hängt von der Frequenz des entsprechenden Anteils ab. Diese Zerlegung ist nichts anderes als die Projektion auf die Basisvektoren des Vektorraums periodischer Funktionen in $L^{2}$. Die Methode heißt Fourierzerlegung oder \textbf{Fourieranalyse}, die Zusammensetzung der Funktion als Summe ihrer Komponenten ist die \textbf{Fouriersynthese} (Christian B. Lang, Norbert P. 2005). 
@@ -566,7 +562,7 @@ Da sich die Natur recht gut mit periodischen Funktionen beschreiben lässt, wurd
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=0.6]{./Grafiken/Fitting/FFT/FFT_time_und_frequenz_anteile.jpg}
+\includegraphics[scale=0.6]{./Grafiken/Fitting/FFT/prisma_cut.jpg}
 \caption{\textit{Aufteilung eines Lichtstrahls in seine Frequenzbereiche (Christian B. Lang, S401)}}
 \end{figure}
 
@@ -629,17 +625,20 @@ a_0=2c_0 \qquad a_n=c_n+c_{-n}= c_n + c^{*}_{n}
 b_n=j(c_n-c_{-n})=j(c_n - c^{*}_{n})
 \end{equation}
 
+% vielleicht in die Durchführung reinpacken?
 \subsubsection{Rekonstruktion mittels FFT}
 % das war aus Wikipedia
-Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gib.t Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N}
-
-\begin{equation}
+Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gibt, Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N}
+\begin{align}
 \begin{split}
 \textnormal{Diskrete Fourier Transformation} = O(N^{2}) \\\
-\textnormal{Fast Fourier Transformation} = O(N log_2N)
+\textnormal{Fast Fourier Transformation} = O(N\cdot log_2(N)) \\\
+n = 44000\\\
+DFT = O(44000^2) = 1 963 000 000 \\\
+FFT = O(4400\cdot log_2(44000)) = 204311
 \end{split}
-\end{equation}
-Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Die Fourier Transformation ist eine mathematische Operation, welche die Domäne der Zeit eines Signals in die Frequenzdomäne überführt, sprich in seine Frequenzanteile zerlegt und dadurch analysiert werden können. Bei der FFT wird ein zeitlich begrenztes Signal herangezogen und in seine Frequenzanteile zerlegt sowie deren Phasen und Amplituden bestimmt. In der Praxis wurde auf die bereits existierenden Routinen in \textbf{numpy 1.19.2} zurück gegriffen.
+\end{align}
+Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Wie vorhin schon erwähnt ist die Fourier Transformation eine mathematische Operation, welche die Domäne der Zeit eines Signals in die Frequenzdomäne überführt, sprich in seine Frequenzanteile zerlegt und dadurch analysiert werden können. Bei der FFT wird ein zeitlich begrenztes Signal herangezogen und in seine Frequenzanteile zerlegt sowie deren Phasen und Amplituden bestimmt. In der Praxis wurde auf die bereits existierenden Routinen in \textbf{numpy 1.19.2} zurück gegriffen.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Fitting/FFT/FFT_time_und_frequenz_anteile.jpg}
@@ -652,7 +651,7 @@ Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Die Fourie
 
 
 
-Bei genauerer Betrachtung des MODIS Datenmaterials stellt man fest, dass der Idealzustand bzw die optimalen Vorraussetzungen bei der Berechnung der Reflexionswerte eher selten vorhanden sind. Dies äussert sich als schlechtere Pixelqualitätsinformation oder gar als Füllwert. Die FFT ist jedoch ein sehr robuster Algorithmus der auch sehr gut bei verrauschten Signalen die wichtigsten Frequenzen heraus filtert. Vorraussetzung für eine erfolgreiche Analyse ist jedoch ein lückenloses Signal. Wenn nun Datenlücken aufgetreten sind, wurden diese von den vorangegangenem und dem nachfolgendem Wert linear interpoliert.
+Bei genauerer Betrachtung des MODIS Datenmaterials stellt man fest, dass der Idealzustand bzw die optimalen Vorraussetzungen bei der Berechnung der Reflexionswerte eher selten vorhanden sind. Dies äussert sich als schlechtere Pixelqualitätsinformation oder gar ein nichtvorhandener Wert der durch einen Füllwert repräsentiert wird. Die FFT ist jedoch ein sehr robuster Algorithmus der auch sehr gut bei verrauschten Signalen die wichtigsten Frequenzen heraus filtert. Voraussetzung für eine erfolgreiche Analyse ist jedoch ein lückenloses Signal. Wenn nun Datenlücken aufgetreten sind, wurden diese von den vorangegangenem und dem nachfolgendem Wert linear interpoliert um einen vollbesetzten Datenarray für die Ableitung der Parameter verwenden zu können. 
 
 
 % Savitzky - Golay Filterung
