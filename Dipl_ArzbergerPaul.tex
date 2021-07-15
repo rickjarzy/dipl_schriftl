@@ -15,7 +15,7 @@
 %%\newcommand{\mypapersize}{A4}
 \newcommand{\mylaterality}{oneside}
 
-\author{P.~J.~Arzberger}
+\author{Paul~J.~Arzberger}
 \title{Vollautomatische Kalibrierungsmethode hochauflösender Satellitenbildzeitreihen mittels europaweiten MODIS Zeitreihen}
 
 \begin{document}
@@ -629,7 +629,8 @@ b_n=j(c_n-c_{-n})=j(c_n - c^{*}_{n})
 \subsubsection{Rekonstruktion mittels FFT}
 % das war aus Wikipedia
 Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gibt, Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N}
-\begin{align}
+
+\begin{equation}
 \begin{split}
 \textnormal{Diskrete Fourier Transformation} = O(N^{2}) \\\
 \textnormal{Fast Fourier Transformation} = O(N\cdot log_2(N)) \\\
@@ -637,7 +638,7 @@ n = 44000\\\
 DFT = O(44000^2) = 1 963 000 000 \\\
 FFT = O(4400\cdot log_2(44000)) = 204311
 \end{split}
-\end{align}
+\end{equation}
 Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Wie vorhin schon erwähnt ist die Fourier Transformation eine mathematische Operation, welche die Domäne der Zeit eines Signals in die Frequenzdomäne überführt, sprich in seine Frequenzanteile zerlegt und dadurch analysiert werden können. Bei der FFT wird ein zeitlich begrenztes Signal herangezogen und in seine Frequenzanteile zerlegt sowie deren Phasen und Amplituden bestimmt. In der Praxis wurde auf die bereits existierenden Routinen in \textbf{numpy 1.19.2} zurück gegriffen.
 \begin{figure}[H]
 \centering
@@ -734,9 +735,6 @@ Ist der interpolierte Wert nun jedoch kleiner als das Minimum oder größer als 
 Der Filtervorgang findet Bandweise statt. Die gefilterten Daten werden zuerst als GeoTIFF verspeichert und in einem Folgeschritt zu europaweiten Mosaicen zusammengefügt sowie epochenweise in Stacks verspeichert. Als Ergebnis liegt nun einen geglättetete, wolkenfreie Zeitreihe der MODIS-Sensoren für ganz Europa (ausgenommen Island) vor, welche zur radiometrischen Kalibrierung für Landsat5 und Landsat 7 Daten verwendet werden kann.
 
 
-
-
-
 \subsection{Ausreisserdetektion}
 Aussreissertests werden dazu benutzt um die Zuverlässigkeit von Daten zu überprüfen und vor allem extreme Erscheinungen in den Daten zu identifizieren und gegebenenfalls zu eliminieren. Ausreisser sind extrem hohe oder niedrige Werte in einer ansonst mäßig unterschiedlichen Messreihe. Im folgenden wird die Methode nach Grubbs beschrieben, welche in dieser Diplomarbeit Verwendung gefunden hat. Ziel der implementierten Ausreisserdedektion ist es vor der Aggregierung der LandsatDaten auf die MODIS-Pixel-Auflösung nicht ausmaskierte Wolkenpixel aufgrund der nicht perfekten Wolkenmaske des LEDAPS-Programmes zu identifizieren und zu eliminieren. Dies impliziert das nach extrem hohen Werten in den Daten gesucht wird. \newline
 
@@ -752,7 +750,23 @@ G> \frac{(N-1)}{\sqrt{N}}\sqrt{\frac{(t_{\alpha / (2N),N-2})^2}{N-2+(t_{\alpha /
 \end{equation}\newline
 Viele statistische Methoden werden durch das Vorhandensein von Aussreisern beeinflusst  Bei schon simplen Berechnungen wie dem Mittelwert oder der Standardabweichung kann es zu einer Strörung durch einen einzigen "`verfälschten"` Wert kommen.
 
+\section{Verwendete Sprachen und Programme aus dem Bereich Data Science sowie Geoinformatik}
+\subsection{Softwareentwicklung mit Python}
 
+Python ist wenn nicht die am meisten verwendete Sprache wenn es um Datenmanipulation geht. Sei es serverseitig im Backendbereich von Webservices oder Machine Learning Anwendungen, Python bietet so ziemlich zu jeder Problemstellung eine passende Herangehensweise oder Lösung. Die Community ist riesig und man findet sehr schnell Hilfe zu Problemstellungen in diversen Foren wie \emph{www.stackoverflow.com}. Im Zuge dieser Diplomarbeit wurden zwei Versionen von Python verwendet (Python 3.8 und Python 2.7) um Datenmanipulationsschritte zu automatisieren. Der gesamte Prozess der Datenakquisition, Datenaufbereitung als auch jener der relativen Kalibrierung und Ergebnispräsentation ist entweder mit bereits vorhandenen Bibliotheken oder selbstgeschrieben Modulen in Python umgesetzt worden und umfasst einige tausende Zeilen Code. Die von mir verwendete IDE zur Erstellung der Skripts und Software stammt von Jetbrains und ist unter dem Namen PyCharm sehr bekannt. Hier sei darauf hingewiesen, dass das Thema dieser Diplomarbeit sich nicht im Detail mit Problemstellungen aus der Softwareentwicklung auseinandersetzt, sondern die Softwareentwicklung mit Python als Mittel zum Zweck verwendet. Nichts destotrotz sind ein paar verwendete Feinheiten beschrieben, die einen Geschwindigkeitsvorteil in der Berechnung oder bei der Manipulation der Daten gebracht haben. 
+% - Datenakquisition genauer beschreiben in einem eigenen Kapitel
+\subsubsection{Python 3.8}
+Python 3.8 war das Mittel zum Zweck für so ziemlich alle Arbeitsschritte um bis einschliesslich zur gefiltereten MODIS-Zeitreihe zu gelangen. Die MODIS Daten wurden mittels einem Webscrabber-Script unter Verwendung von \emph{bs4} und dem Pythoninternen \emph{requests} Modul von den NASA Servern gedownloaded, mittels \emph{GDAL} vom HDF5-Format in einzelne, bandweise GEOTIFFS konvertiert und anschliessend mittels \emph{numpy} und den vorhin beschrieben Algorithmen gefiltert oder rekonstruiert. Diese gefilterten Daten wurden weiters zu epochenweisen Stacks verarbeitet, da die relative Kalibration diese voraussetzt.
+\subsubsection{Python 3.8 - Multiprocessing}
+Da nur die gedownloadeten HDFS und rohen GEOTIFF Daten alleine fast einen ganzen Terabyte an Speicherplatz benötigen, war klar das es nicht sinnvoll sein kann, einem einzigen Pythonprozess die ganze Arbeit machen zu lassen. Multithreading ist am Papier mit Python möglich, aber auf Grund des Global Interpreter Locks immer an eine CPU gebunden. Paralleles Ausführen von Arbeitsschritten auf meherern CPUs ist aber mittels dem in Python integrierten Multiprocessing Modul und seit der Python Version 3.8 auch mit einem Shared Memory oder gemeinsamen Arbeitsspeicher möglich. Dies erlaubt einen Speicherbereich zwischen mehreren Python Prozessen zu teilen bzw zugreifbar zu machen, um große Datenmengen parallel zu verarbeiten. Jedoch sei hier darauf hingewiesen, dass man bei der Verwendung von Shared-Memory-Objecten sich nicht mehr auf die gewohnte Typesicherheit von Python verlassen darf und zusätzlich bedenken muss: 
+\begin{itemize}
+\item welchen Typ hat das Shared-Memory-Objekt: -z.B. int16
+\item welcher Typ kommt bei der Berechnung heraus - z.B. float64
+\item in welchen Typ muss ich das Ergebnis wieder umwandeln um es am Shared-Memory-Object zu verspeichern
+\end{itemize}
+Wenn man dies nicht berücksichtigt kann dies es zu unerwartetem Verhalten führen und in elendslange Fehlersuche münden.
 
+\subsection{Betriebsysteme, Speicherplatz und Rechenlogistik}
+Die verwendeten Betriebssysteme unterscheiden sich erheblich in den Ausführzeiten der Python Programme welche für das Rekonstruieren der MODIS Zeitreihen verwendet wurden. Deshalb wurde beim Fitten und Filtern der Daten auf Linux (Debian 10, Ubuntu 18.04) vertraut. Es kamen bis zu vier Rechner mit mindestens 4 CPUs und mindestens 16GB RAM zum Einsatz um die Daten parallel zu verarbeiten. Pro Spektralband der MODIS Zeitreihe kann man für 20 Jahre und jeden 9ten Tag einen Szene ca 17h Rechenzeit einplanen. Der verbrauchte Speicherplatz für die MODIS Daten in der Version 6 sowie der Landsat Daten in roher als auch absolut Kalibrierter Form belaufen sich auf 2,42 TB (Terabyte). Um die Daten zu sichern wurde Speicherplatz im Gesamt Volumen von 11 TB angeschafft um sie auf drei unabhängigen Speichervolumen zu sichern. 
 
 \end{document}
