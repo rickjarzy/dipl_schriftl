@@ -28,7 +28,7 @@
 % 
 % Motivation
 % 
-==============================================================================================================
+% ==============================================================================================================
 \chapter{Motivation}
 
 Zeitreihenanalysen in der Fernerkundung, mit Schwerpunkt zur Change Detection, setzten eine durchgehende, wenn möglich dicht besetzte Ansammlung aus Daten eines oder mehrere Sensoren voraus, um aus dem gesammelten Material einen Informationsgewinn ableiten zu können.
@@ -509,7 +509,7 @@ y=f(x_1,\dots,x_k)+\epsilon
 \end{equation}\newline
 Generelles Ziel ist die Schätzung der zugrundeliegenden unbekannten Funktion $f$. Über die unbekannte Funktion $f$ und den Fehler $\epsilon$ werden folgende Annahmen getroffen:\newline
 \begin{enumerate}
-\item Die systematische Komponente f iet eine Linearkombination der Kovariablen\\
+\item Die systematische Komponente f ist eine Linearkombination der Kovariablen\\
 Anhand der Kovariablen wird die Funktion als Linearkomination modelliert.
 \begin{equation}
 f(x_1,\dots,x_k) = \beta_0, + \beta_1 x_1 +  \dots + \beta_k x_k
@@ -567,16 +567,16 @@ Da sich die Natur recht gut mit periodischen Funktionen beschreiben lässt, wurd
 \end{figure}
 
 % Aus Mathematik für Ingenuere Band2 S 182/ 2.1 Fourier-Zerlegung
-Die Daten der zu analysierenden Zeitreihe sind in der Regel keine reine sinusförmige Schwingung, besitzt jedoch ebenfalls eine Schwingungsdauer $T$ und eine Kreisfrequenz $\omega_0=2\pi / T$. Diese zeitabhängige, periodische Funktion $y(t)$ lässt sich dann unter den bekannten Vorraussetzungen in eine Fourier-Reihe vom Typ
+Die Daten der zu analysierenden Zeitreihe sind in der Regel keine reine sinusförmige Schwingung, besitzt jedoch ebenfalls eine Schwingungsdauer $T$ und eine Kreisfrequenz $\omega_0=2\pi / T$. Diese zeitabhängige, periodische Funktion $y(t)$ lässt sich dann unter den bekannten Voraussetzungen in eine Fourier-Reihe vom Typ
 
-\begin{equation} \label{dft}
-\begin{split}
+\begin{equation}\label{dft}
+\begin{split}  
 y(t) =\frac{a_0}{2}+\sum_{n=1}^{\infty} \lbrack a_n \cdot cos(n \omega_0 t) + b_n \cdot sin(n \omega_0 t) \rbrack = \\\
 = \frac{a_0}{2}+a_1 \cdot cos(\omega_0 t) + a_2 \cdot cos(2 \omega_0 t) + a_3 \cdot cos(3 \omega_0 t) + \dots \ \\\
 \dots \ + b_1 \cdot sin(\omega_0 t) + b_2 \cdot sin(2 \omega_0 t) + b_3 \cdot sin(3 \omega_0 t) + \dots\ 
 \end{split}
 \end{equation}
-entwickeln. Diese Entwicklung in unendlich viele Sinus- und Kosinusfunktionen bedeutet aus pyhsikalischer Sicht eine Zerlegung der Schwingung $y(t)$ in ihre harmonischen Bestandteile, auch Schwingungskomponenten genannt. Sie bestehen aus der Grundschwingung mit der Grundkreisfrequenz $\omega_0$ und en harmonischen Oberschwingungen dereb Kreisfrequenzen ganzzahlige Vielfache der Grundkreisfrquenzen sind: $2\omega_0, 3\omega_0, 4\omega_0 \dots $. Bringt man umgekehrt Grundschwingungen und Oberschwingungen zur ungestörten Überlagerung, so erhaltet man als Resultierende genau die Schwingung $y = y(t)$ (Superpositionsprinzip der Physik \footnote{ungestörte Überlagerung (Interferenz) mehrerer Wellen des gleichen Types. Hier können sich die Amplituden der (z.B. elektromagnetischen) Wellen beim Überlagern gegenseitig verstärken oder Abschwächen}). Die Fourier-Koeffizienten $a_0, a_1, a_2, a_3, \dots, b_1, b_2, b_3, \dots $ betsimmen dabei die Amplituden der harmonischen Teilschwingung und somit letztendlich deren Anteile an der Gesamtschwingung (Lothar P., S182). Die als harmonische Analyse oder auch \emph{Fourier-Analyse} bezeichnete Zerlegung einer nichtsinusförmigen Schwingung $y=y(t)$ in Grundschwingung und harmonische Oberschwingungen läuft somit auf die Bestimmung der Fourier-Koeffizienten in der Entwicklung nach der vorangegangenen Formel (\ref{dft}) hinaus. 
+entwickeln. Diese Entwicklung in unendlich viele Sinus- und Kosinusfunktionen bedeutet aus physikalischer Sicht eine Zerlegung der Schwingung $y(t)$ in ihre harmonischen Bestandteile, auch Schwingungskomponenten genannt. Sie bestehen aus der Grundschwingung mit der Grundkreisfrequenz $\omega_0$ und den harmonischen Oberschwingungen deren Kreisfrequenzen ganzzahlige Vielfache der Grundkreisfrequenzen sind: $2\omega_0, 3\omega_0, 4\omega_0 \dots $. Bringt man umgekehrt Grundschwingungen und Oberschwingungen zur ungestörten Überlagerung, so erhaltet man als Resultierende genau die Schwingung $y = y(t)$ (Superpositionsprinzip der Physik \footnote{ungestörte Überlagerung (Interferenz) mehrerer Wellen des gleichen Typs. Hier können sich die Amplituden der (z.B. elektromagnetischen) Wellen beim Überlagern gegenseitig verstärken oder abschwächen}). Die Fourier-Koeffizienten $a_0, a_1, a_2, a_3, \dots, b_1, b_2, b_3, \dots $ bestimmen dabei die Amplituden der harmonischen Teilschwingung und somit letztendlich deren Anteile an der Gesamtschwingung (Lothar P., S182). Die als harmonische Analyse oder auch \emph{Fourier-Analyse} bezeichnete Zerlegung einer nichtsinusförmigen Schwingung $y=y(t)$ in Grundschwingung und harmonische Oberschwingungen läuft somit auf die Bestimmung der Fourier-Koeffizienten in der Entwicklung nach der vorangegangenen Formel (\ref{dft}) hinaus. 
 
 \begin{equation}
 y(t) =\frac{a_0}{2}+\sum_{n=1}^{\infty} \lbrack a_n \cdot cos(n \omega_0 t) + b_n \cdot sin(n \omega_0 t) \rbrack \\\
@@ -590,13 +590,13 @@ T = \frac{2\pi}{\omega_0}: &  & \textnormal{Schwingungsdauer (Periode)}
 \begin{eqnarray}
 a_0 = & & \frac{2}{T} \cdot \int_{T} y(t) dt 
 \end{eqnarray}
-\begin{eqnarray} \label{int_cos_dft}
-a_1 = & & \frac{2}{T} \cdot \int_{T} y(t) \cdot cos(n\omega_0t)dt \dots n=1,2,3,... 
+\begin{eqnarray}
+a_1 = & & \frac{2}{T} \cdot \int_{T} y(t) \cdot cos(n\omega_0t)dt \dots n=1,2,3,...  
 \end{eqnarray}
 \begin{eqnarray}
 a_2 = & & \frac{2}{T} \cdot \int_{T} y(t) \cdot sin(n\omega_0t)dt \dots n=1,2,3,... 
 \end{eqnarray}
-Das Symbol $T$ im Integral bedeutet, dass die Integration über ein (beliebiges Periodenintervall von der Länge T zu erstrecken ist. Die Berechnung des Koeffizienten $a_0$ ist auch mit der Formel (\ref{int_cos_dft}) für $n=0$ möglich, da $cos(0\omega_0t)=cos0=1$ ist(Lothar P., 2013, S183).
+Das Symbol $T$ im Integral bedeutet, dass die Integration über ein beliebiges Periodenintervall von der Länge T zu erstrecken ist. Die Berechnung des Koeffizienten $a_0$ ist auch mit der Formel für $n=0$ möglich, da $cos(0\omega_0t)=cos0=1$ ist(Lothar P., 2013, S183).
 
 
 Die Fourier-Analyse einer nicht-sinusförmigen Schwingung $y=y(t)$ lässt sich auch in komplexer Form vornehmen:
