@@ -457,9 +457,41 @@ Die Daten der verwendeten MODIS-Zeitreihe wurden mittels dem MODIS-Reprojection-
 \subsection{UTM-Referenzsystem}
 Sämtliche Daten der Landsatmissionen sind im \textit{Universal Transverse Mercator}-Referenzsystem (UTM) projiziert. Es handelt sich hierbei um ein globales Koordinatensystem das die Erdoberfläche von 80 Grad Süd bis 84 Grad Nord streifenförmig in 6 Grad breite Zonen unterteilt. Als Basis dient das Bezugsellipsoid WGS84. UTM nutzt eine transversale Mercator-Projektion zum verebnen. Hierbei berührt der Projektionszylinder die Oberfläche nicht am Bezugsmeridian sondern schneidet sie. Dadurch ensteht ein Streifen
 
-\section{Datenakquisition}
+\section{Datenakquisition - v5}
 Die  rohen MODIS-Zeitreihe liegt als verrauschete Zeitreihe von 2000-2012 im hdf-4 Format vor und  wurden mittels der NASA-eigenen Software "`MRT-TOOL"' in das GeoTIFF-Format entpackt und in das Sinusodial Reference System transformiert. Die Zeitreihe an sich selbst, setzt sich aus 16-Tägigen Kompositionen der besten spektralen Einzelaufnahme eines Pixels zusammen. Abhängig von der Auflösung des verwendeten Produktes zum Beispiel im 250 Meter aufgelöstem Produkt kann auch zwischen den Aufnahmen des Terra Satelliten mit dem Postfix "MOD" und dem Aqua Satelliten mit dem Postfix "MYD" unterschieden werden, welches zusätzlich in der Programmierung bedacht werden muss. Aufgrund der unterschiedlichen Launchzeitpunkte der Satelliten wurde die Zeitreihe zwischen 2000 und der ersten Aqua-Aufnahme künstlich verdichtet, indem die Terra-Aufnahmen einfach verdoppelt wurden und einen passenden Zeitstempel erhalten haben. Die komplettierte Zeitreihe an sich selbst weist alle 8 Tage eine Epoche eines MODIS-Sensors (Terra und Aqua-Epochen immer abwechselnd) auf.Für die Diplomarbeit selbst beschränkt sich der Author auf das "`500m"' aufgelöste Produkt MCD43A4 welches alle 8 Tage Daten des Terra- oder des Aqua-Satelliten inklusive die passende Qualitätsinformation zur Verfügung stellt. 
 Trotz des einwandfreien Rufes einer perfekten radiometrischen Korrektur der MODIS-Daten wurden Störungen in der visuellen Kontrolle ausfindig gemacht und die Zeitreihe anhand eines Glättungsalgorithmus nach Savitzky-Golay verbessert. Somit liegt eine europaweite wolkenfreie MODIS-Zeitreihe in 500 Meter Pixelauflösung als Basis für die relative Kalibrierung der Landsatdaten bereit.
+% - HDF interne Struktur
+% - Day of Year fertig beschreiben
+\section{Datenakquisition - MODIS Zeitreihe V6}
+Die rohen MODIS Datenpunkte mit der Kennung MCD43A4  und den epochenweisen zugehörigen Qualitätsinformation mit der Kennung MCD43A2 liegen als HDF4 auf einem Server des United States Geological Survey (USGS) auf und können dort über die Website \footnote{https://e4ftl01.cr.usgs.gov/MOTA/} bezogen werden (eine Registrierung wird vorausgesetzt). Das HDF4 Format ist ein Containerformat das unterschiedlichste Datentypen kombiniert in einem File hierarchisch bzw multidimensional verspeichern kann. Vorteil ist vor allem bei diesem Format, dass man auch an bestehenden Dateien neue Daten anhängen kann.
+\begin{figure}[H]
+\centering
+\includegraphics{./Grafiken/Datenakquisition/HDF5_MCD4A4_Layerhierarchy.JPG}
+\caption{\textit{Layerhierarchie eines HDF4 Files}}
+\end{figure}
+In den Datenfiles sind auch Qualitätsinformationslayer enthalten, diese bieten jedoch nicht die Genauigkeit des Qualitätsproduktes MCD43A2. 
+\begin{figure}[H]
+   \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+      \includegraphics[width=\linewidth]{./Grafiken/Datenakquisition/Quali_verleich_MCD43A4.JPG}
+      \caption{Qualitätsinformation aus dem Datenprodukt}
+   \end{minipage}
+   \hspace{.1\linewidth}% Abstand zwischen Bilder
+   \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+      \includegraphics[width=\linewidth]{./Grafiken/Datenakquisition/Quali_verleich_MCD43A2.JPG}
+      \caption{Qualitätsinformaion aus dem Qualitätsprodukt}
+   \end{minipage}
+\end{figure}
+Der Dateiname jeder Datenepoche oder der zugehörigen Qualitätsinformation beinhaltet 
+\begin{itemize}
+\item Dateiname=MCD43A4.A2000057.h18v04.006.hdf 
+\item Produkt = MCD43A4 (hier Datenprodukt)
+\item Day Of Year = A2000057 
+\item Kachel = h18v04
+\item Version = 006
+\item Fileextension = hdf
+\end{itemize}
+Um ein Jahr zu rekonstruieren bzw zu filtern werden 46 Datenpunkte verwendet. Dies entspricht den Day of Year von 001 bis 361. 
+Da es sich für den in Betracht gezogenen Zeitraum 2000-2020 um 927 Datenpunkte pro Kachel handelt, wurde hier mit Python bzw den Bibliotheken \emph{requets, bs4} ein Webscrabber-Skript geschrieben, welches alle Metadaten für die zu interessierenden Daten erstellt und aus der passenden Ordnerstruktur am USGS Server downloaded. 
 
 \begin{figure}[H]
 \centering
@@ -776,5 +808,10 @@ Die abgeleiteten Daten benötigen natürlich eine menschliche, visuelle Kontroll
 \subsection{Betriebsysteme, Speicherplatz und Rechenlogistik}
 Hier möchte ich nur kurz Anreißen, dass die großen Datenmengen eine eigene Denkweise, Infrastruktur und Logistik erfordert haben.
 Die verwendeten Betriebssysteme unterscheiden sich erheblich in den Ausführzeiten der Python Programme welche für das Rekonstruieren der MODIS Zeitreihen verwendet wurden. Deshalb wurde beim Fitten und Filtern der Daten auf Linux (Debian 10, Ubuntu 18.04) vertraut. Es kamen bis zu vier Rechner mit mindestens 4 CPUs ab 3GHz Takt und mindestens 32GB RAM zum Einsatz um die Daten parallel zu verarbeiten. Pro Spektralband der MODIS Zeitreihe kann man für 20 Jahre und jeden 9ten Tag eine vorhandene Szene ( oder 927 Datenpunkte) ca 17h Rechenzeit für Savitzky-Golay-Filter einplanen, die FFT brauchte hingegen nur an die drei Stunden. Der verbrauchte Speicherplatz für die MODIS Daten in der Version 6 sowie der Landsat Daten in roher als auch absolut Kalibrierter Form belaufen sich auf 2,42 TB (Terabyte). Um die Daten zu sichern wurde Speicherplatz im Gesamt Volumen von 11 TB angeschafft um sie auf drei unabhängigen Speichervolumen zu sichern. 
+
+\chapter{Durchführung}
+\subsection{Rekonstruktion und Filtern der Verrauschten MODIS V6 Zeitreihe}
+\subsubsection{Savitzky-Golay Filterung mit einem Polynom 2. Grades}
+Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation 
 
 \end{document}
