@@ -842,7 +842,7 @@ Die verwendeten Betriebssysteme unterscheiden sich erheblich in den Ausführzeit
 
 \chapter{Durchführung}
 \section{Rekonstruktion und Filtern der Verrauschten MODIS V6 Zeitreihe}
-Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon in Kapitel \ref{NBAR} beschrieben vor. Zu jedem Zeitpunkt bzw zu jedem Pixel ist nun eine Qualitätsinformation vorhanden die in der P-Matrix der Ausgleichsfunktion als Gewichtung an die Beobachtungen angebracht wird. Um einen vielfältigen Vergleich zu erhalten, welche Gewichtung die besten Resultate liefert, oder eventuell welche Tradeoffs in Kauf genommen werden müssen, wurden mehrere Iterationen der SG Filterungen mit unterschiedlicher Gewichtung vorgenommen ( dies kostet einiges an Speicherplatz!). Auch die Berechnungen der DFT wurde mit unterschiedlichen Gewichten durchgeführt, aber immer mit einer harmonischen Schwingung die auf 3 Elemente ( hat sich als als am besten Idealsten herausgestellt) beschränkt war. Allein die Rekonstruktion und Filterung der FFT kommt gänzlich ohne Gewichtung aus. Zu Beginn eines Jahres liegen für gewöhnlich Daten mit schlechter räumliche Abdeckung vor, da dies vor allem mit der vermehrten Wolkenbedeckung rückzuschliessen ist, siehe Abbildung \ref{MODIS_data_jan} und Abbildung \ref{MODIS_qual_jan}.
+Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon in Kapitel \ref{NBAR} beschrieben vor. Zu jedem Zeitpunkt bzw zu jedem Pixel ist nun eine Qualitätsinformation vorhanden die in der P-Matrix der Ausgleichsfunktion als Gewichtung an die Beobachtungen angebracht wird. Um einen vielfältigen Vergleich zu erhalten, welche Gewichtung die besten Resultate liefert, oder eventuell welche Tradeoffs in Kauf genommen werden müssen, wurden mehrere Iterationen der SG Filterungen mit unterschiedlicher Gewichtung vorgenommen ( dies kostet einiges an Speicherplatz!). Auch die Berechnungen der DFT wurde mit unterschiedlichen Gewichten durchgeführt, aber immer mit einer harmonischen Schwingung die auf 3 Elemente ( hat sich als als am Idealsten herausgestellt) beschränkt war. Allein die Rekonstruktion und Filterung der FFT kommt gänzlich ohne Gewichtung aus. Zu Beginn eines Jahres liegen für gewöhnlich Daten mit schlechter räumliche und temporaler Abdeckung vor, da dies vor allem mit der vermehrten Wolkenbedeckung rückzuschließen ist, siehe Abbildung \ref{MODIS_data_jan} und Abbildung \ref{MODIS_qual_jan}.
 
 \begin{figure}[H]
    \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
@@ -878,8 +878,9 @@ Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon i
 \includegraphics[scale=0.4]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_1.JPG}
 \caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001}}
 \end{figure}
-
 \subsection{Savitzky-Golay Filterung mit einem Polynom 2. Grades}
+Wie schon in den Grundlagen angesprochen, verwendet eine Rekonstruktionsmethode den Savitzky-Golay-Filter um einerseits verrauschte Daten zu glätten. Bevor es jedoch ins glätten der Zeitreihe geht wird überprüft, ob es NaN stellen im SG-Fenster gibt. Füllwerte treten abhängig vom Fortschritt des Jahres vermehrt in den niederschlagsreichen Zeiten, besonders gegen Ende und Anfang des Jahres auf. An diesen Stellen wird zu aller erst linear interpoliert, um einen Näherungswert für die anschließende Filterung an nicht besetzten Stellen zu haben. 
+% Hier kommen die Plots von der Linearen interpolation für NaN Stellen - weiter im Code 
 \subsection{DFT}
 \subsection{FFT}
 \end{document}
