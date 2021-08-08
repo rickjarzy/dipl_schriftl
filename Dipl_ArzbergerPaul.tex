@@ -384,7 +384,54 @@ TIMESAT wurde primär zur Prozessierung von Vegetationsindexzeitreihen für die 
 \section{Datengrundlagen}
 In diesem Kapitel werden die verwendeten Satellitendaten besprochen. Dabei handelt es sich um multispektrale Satellitendaten unterschiedlicher Auflösung und Datengehaltes  sowie der Qualitätsinformation die bei der absoluten Kalibrierung der Landsatdaten mittels LEDAPS generiert wurde als fertiges Produkt für MODIS bereitgestellt wird. 
 
-\subsection{MODIS - Allgemeine Informationen zum Sensor und Trägersystem}
+
+
+% MODIS - stabilität in den sichtbaren bändern
+% ==========================================================================
+% Da laut Vermote und Saleous die Pixelgröße der beiden zu Kalibrierenden Daten (AVHRR/MODIS) ab einem zenitwinkel von größer50 Grad zu unterschiedlich werden, klammern sie dies aus. Randpixel ausmaskieren kann eventuell eine steigerung der Genauigkeit bedeuten. Helder et al 2013 verweist auf seite 1363 das grosse zenithwinkel ( die nicht spezifiziert wurden ) und winkel größer 15° in der backscatter direction ausgelassen werden sind Kalibrierungsergebnisse kleiner 1% möglich
+
+
+% Landsat
+% ==========================================================================
+\subsection{Landsat - Allgemeine Informationen zum Sensor und Trägersystem}
+Landsat ist die weltweit längste zivile Erdbeobachtungsmission mittels Fernerkundungssensoren  mittlerer Auflösung. Seit 1972 sind bis jetzt 8 Satelliten in Orbit gebracht worden wobei Landsat 6 beim Start verlorenging. Im näheren wird nur auf jene Sensoren eingegangen deren Daten in der Diplomarbeit verwendet wurden. Dies umfasst die Satelliten Landsat5, Landsat7 und Landsat8.
+
+Landsat5 und Landsat4 (der Vollständigkeit halber erwähnt) wurden mit den verbesserten \textit{Thematic Mapper} ausgestattet der im sichtbaren Bereich und nahen Infrarotbereich sowie im thermalen und panchromatischen Bereich Aufnahmen tätigt. Für das sichtbare und naheinfrarote Spektrum beträgt die Auflösung 30m, für das thermale Band 120m und im panchromatischen Kanal 15m.
+
+Landsat7 führt den multispektralen \textit{Enhanced Thematic Mapper Plus} (ETM+) mit sich, welcher im sichtbaren Bereich und nahen Infrarotbereich sowie im thermalen und panchromatischen Bereich Aufnahmen tätigt. Für das sichtbare und naheinfrarote Spektrum beträgt die Auflösung 30m, für das thermale Band 60m und im panchromatischen Kanal 15m.
+Der Satellit führt drei on-board Kalibriereinrichtungen mit sich einen \textit{Full Apertrure Solar Calibrator(FASC)}, einen \textit{Partial Aperture Solar Calibrator (PASC)} und einen \textit{Internal Calibrator (IC)}
+
+Landsat8 wurde mit dem multispektralen Sensor \textit{Operational Land Imager} (OLI) und dem \textit{Thermal Infrared Sensor} (TIRS) ausgestattet. OLI liefert Aufnahmen in 8 spektralen Bändern in einer Auflösung von 30 m und einem panchromatischen Kanal in einer Auflösung von 15m. TIRS nimmt in zwei mittleren infraroten Bereichen in einer Auflösung von 100m auf. Da die TIRS Daten allerdings mit den OLI-Daten mitgeliefert werden, werden sie auf 30m neu aufgelöst.
+
+Aktuell liefern Landsat7  und Landsat8  alle 16 Tage Aufnahmen des selben Erdoberflächenausschnittes. Die Orbits sind polare, sonnen-synchrone kreisförmige Bahnen in 705 km über Grund und ein Satellit umkreist die Erde in 99 Minuten. Die Bahnen der beiden Satelliten sind so synchronisiert das jeden achten Tag eine Aufnahmen des selben Beobachtungspunktes zur selben Uhrzeit vorliegt. Der beobachtete Groundtrack umfasst dabei einen 185 km breiten Streifen.  Landsat5 hält bis jetzt den Rekord für den am längsten eingesetzten Erdbeobachtungssatelliten. Nach knapp 29 Jahren wurde seine Aktivität am 5. Juni 2013 eingestellt. Landsat7 weist seit dem 31 Mai 2003 Artefakte in seinen Satellitenbilddaten auf. Verursacht werden sie durch einen Defekt des \textit{Scan Line Correctors} (SLC), der zur richtigen Abtastung des Beobachtungsgebietes bei Rotationsscannern eingesetzt wird. Seit diesem Ausfall finden sich zick-zack-artige Datenlücken in den Aufnahmen, die von einem zentralen nicht betroffenem Streifen horizontal nach außen laufen und von innen nach außen sich verbreitern.
+
+% \href{http://glovis.usgs.gov}{http://glovis.usgs.gov}
+% \href{http://earthexplorer.usgs.gov}{http://earthexplorer.usgs.gov}
+\subsection{Landsat}
+Die Daten des Landsatsystems wurden alle über die von der NASA und U.S.G.S. zur Verfügung gestellten Downloadsites \textit{Earth Explorer} sowie \textit{GloVis} akquiriert. Eine Landsatszene definiert ihre Position über Path- und Row- Angaben welche für das ausgewählte Gebiet der Diplomarbeit im Schwarzwald liegen Pathindizes von $195$ bis $196$ sowie Rowindizes von $25$ und $26$ umfasst. Der maximale Bewölkungsgrad wurde mit $40\%$ gewählt. Sämtliche Landsat5 und Landsat 7 Satellitendaten wurden entweder direkt mit der \textit{Bulk Download Application} (BDA) der NASA downgeloadet oder über deren Bestellservice geordert und sobald fertig prozessiert ebenfalls mittels der BDA downgeloadet.
+Die Daten liegen als GeoTIFF für jedes einzelne Band pro Epoche auf. Sämtliche Landsatdaten wurden im Anschluss mittels LEDAPS absolut kalibriert. Die Kalibrierung liefert nicht nur die Landsatdaten in Oberflächenreflexion sondern vor allem die notwendige Wolkenmaske für jede zu kalibrierende LandsatSzene. Da LEDAPS seinerseits alle seine Ergebnisse  als hdf4 verspeichert müssen diese ebenfalls wieder in das GeoTIFF-Format übergeführt werden. 
+
+
+
+\subsection{Sentinel}
+Sentinel sind eine Reihe von Erdbeobachtungs- und Forschungssatelliten der ESA welche im Rahmen des Copernicus Forschungsprogramms gestartet und zum Einsatz kommen. Sie setzten sich aus 5 Satelliten zusammen die im optischen und Radarbereich eine dichte Bandbreite an Informationen über den Planeten sammeln. Sentinel 2  liefern Daten im optischen, nahen infraroten Bereich, hochauflösend von 10 mal 10 Meter,  in einem Intervall von 5 Tagen. Dies gewährt Aussicht auf besonders dichte Zeitreihen die mit diesem System möglich sind. Sentinel 3  nimmt die Erdoberfläche mit einer höheren Auflösung auf , soll allerdings zumindest auf dem Level der MODIS Daten  kalibriert sein. Die entwickelte Methodik zielt auch auf eine portable Herangehensweise ab, dass man die besser kalibrierten Sentinel 3 Daten zum Kalibrieren von Satellitendaten anderer Syteme  verwendet.
+
+
+\subsection{Sinusodial Referenzsystem}
+Die Daten der verwendeten MODIS-Zeitreihe wurden mittels dem MODIS-Reprojection-Tool in eine Sinusoidale Projection gebracht. Die Sinusoidal-Projektion nist eine flächentreue, pseudo-zylindrische Projektion, welche die gesamte Erdoberfläche darstellen kann. Der Zentralmeridian und der Äquator werden winkel- und längentreu wiedergegeben während Meridiane als Sinuskurven und Breitenkreise als Geraden dargestellt werden. Als Basis dient eine Kugel mit einem gemittelten Erdradius von 6371007,181 m ( MODIS Land, web-quelle nr 11). Je weiter man sich vom Abbildungsmeridian entfernt umso verzerrter wird die Darstellung. Die meisten MODIS Land Produkte sind als Kacheln indiziert und nutzen das Sinusodial-Grid-Tilling-System. Am Äquator weist eine Kachel eine Größe von 10 Grad mal 10 Grad auf. Das Kachelkoordinatensystem startet bei (0,0) - (horizontale nummer, verticale nummer) in der linken oberen Ecke beginnt und bei (35,17) in der rechten unteren Ecke endet. Das System zählt dabei von rechts nach links (horizontal) und von oben nach unten (vertikal)
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{./Grafiken/RefSys/modis_sinusoidal_grid.jpg}
+\caption{\textit{MODIS Tilling System, (U.S.G.S., 2013)}}
+\end{figure}
+
+
+
+\subsection{UTM-Referenzsystem}
+Sämtliche Daten der Landsatmissionen sind im \textit{Universal Transverse Mercator}-Referenzsystem (UTM) projiziert. Es handelt sich hierbei um ein globales Koordinatensystem das die Erdoberfläche von 80 Grad Süd bis 84 Grad Nord streifenförmig in 6 Grad breite Zonen unterteilt. Als Basis dient das Bezugsellipsoid WGS84. UTM nutzt eine transversale Mercator-Projektion zum verebnen. Hierbei berührt der Projektionszylinder die Oberfläche nicht am Bezugsmeridian sondern schneidet sie. Dadurch ensteht ein Streifen
+
+\section{MODIS - Allgemeine Informationen zum Sensor und Trägersystem}
 
 
 MODIS ( Moderate Resolution Imaging Spectroradiometer) nennt sich ein optischer Sensor, welcher sich in einem Low Earth Orbit in 705 km Höhe, mit einer Blickwinkel von 2330 km auf den beiden Satelliten Terra (früher EOS AM-1) und Aqua (früher EOS PM-1) um die Erde befindet. Die Mission wurde am 18. Dezember 1999 mit dem Launch des Terra (EOS AM-1) Spacevehicles gestartet. Am 4. Mai 2002 wurde der Satellite Aqua (EOS PM-1) mit dem zweiten MODIS in seine Umlaufbahn geschossen. Die Lebenszeit von Terra und Aqua war mit jeweils 6 Jahren anberaumt und erfreut sich nun über ein mehr als 15 jähriges Bestehen. Die Orbits der Satelliten sind so synchronisiert, dass Terra den Äquatior am Vormittag von Nord nach Süd passiert und Aqua den Äquator nachmittags von Süd nach Nord. Die räumliche Auflösung eines einzenlnen Pixels reicht von 250 und 500 Metern im Nadir bis zu 1 km als Whisk-Broom-Scanner. Die Bänder 1-2 werden in 250m, die Bänder 3-7 in 500m und die Bänder 8-37 werden in 1000m Auflösung aufgenommen. Beide Satelliten vermögen in einer ein bis zwei Tage Periode die gesamte Erdoberfläche in 36 spektralen Bändern in einem Umfang von $0.4\mu$ m bis $14.4\mu$ m aufzunehmen. Die Aufnahmen finden dabei jeweils unter einem anderen Einstrahlwinkel, bidirektional,  der Sonne statt. Nach der Anwendung von atmosphärischen Korrekturen und der Überführung der Strahlungswerten in Reflexionswerten der Erdoberfläche gibt das System die anisotropischen Reflexionseigenschaften mit dem Wandel der Landbedeckungstypen, Vegetation sowie Bodenkomponenten  in jedem einzelnen Pixel wieder. Anhand von State-of-the-Art On-board-Kalibrierungseinheiten wird eine Genauigkeit von unter 2\% angegeben (Vermote E.F., Saleous N.Z.,2006). MODIS Terra wird generell als einer der am besten kalibierten Sensoren im Bereich der "`reflektierenden"' Wellenlängen mit einer Unsicherheit von 2\% (Helder et al., 2013).
@@ -420,50 +467,43 @@ Einhergehend mit der immer weiter voranschreitenden Verbesserung und  Entwicklun
 
 
 
-% MODIS - stabilität in den sichtbaren bändern
-% ==========================================================================
-% Da laut Vermote und Saleous die Pixelgröße der beiden zu Kalibrierenden Daten (AVHRR/MODIS) ab einem zenitwinkel von größer50 Grad zu unterschiedlich werden, klammern sie dies aus. Randpixel ausmaskieren kann eventuell eine steigerung der Genauigkeit bedeuten. Helder et al 2013 verweist auf seite 1363 das grosse zenithwinkel ( die nicht spezifiziert wurden ) und winkel größer 15° in der backscatter direction ausgelassen werden sind Kalibrierungsergebnisse kleiner 1% möglich
 
-
-% Landsat
-% ==========================================================================
-\subsection{Landsat - Allgemeine Informationen zum Sensor und Trägersystem}
-Landsat ist die weltweit längste zivile Erdbeobachtungsmission mittels Fernerkundungssensoren  mittlerer Auflösung. Seit 1972 sind bis jetzt 8 Satelliten in Orbit gebracht worden wobei Landsat 6 beim Start verlorenging. Im näheren wird nur auf jene Sensoren eingegangen deren Daten in der Diplomarbeit verwendet wurden. Dies umfasst die Satelliten Landsat5, Landsat7 und Landsat8.
-
-Landsat5 und Landsat4 (der Vollständigkeit halber erwähnt) wurden mit den verbesserten \textit{Thematic Mapper} ausgestattet der im sichtbaren Bereich und nahen Infrarotbereich sowie im thermalen und panchromatischen Bereich Aufnahmen tätigt. Für das sichtbare und naheinfrarote Spektrum beträgt die Auflösung 30m, für das thermale Band 120m und im panchromatischen Kanal 15m.
-
-Landsat7 führt den multispektralen \textit{Enhanced Thematic Mapper Plus} (ETM+) mit sich, welcher im sichtbaren Bereich und nahen Infrarotbereich sowie im thermalen und panchromatischen Bereich Aufnahmen tätigt. Für das sichtbare und naheinfrarote Spektrum beträgt die Auflösung 30m, für das thermale Band 60m und im panchromatischen Kanal 15m.
-Der Satellit führt drei on-board Kalibriereinrichtungen mit sich einen \textit{Full Apertrure Solar Calibrator(FASC)}, einen \textit{Partial Aperture Solar Calibrator (PASC)} und einen \textit{Internal Calibrator (IC)}
-
-Landsat8 wurde mit dem multispektralen Sensor \textit{Operational Land Imager} (OLI) und dem \textit{Thermal Infrared Sensor} (TIRS) ausgestattet. OLI liefert Aufnahmen in 8 spektralen Bändern in einer Auflösung von 30 m und einem panchromatischen Kanal in einer Auflösung von 15m. TIRS nimmt in zwei mittleren infraroten Bereichen in einer Auflösung von 100m auf. Da die TIRS Daten allerdings mit den OLI-Daten mitgeliefert werden, werden sie auf 30m neu aufgelöst.
-
-Aktuell liefern Landsat7  und Landsat8  alle 16 Tage Aufnahmen des selben Erdoberflächenausschnittes. Die Orbits sind polare, sonnen-synchrone kreisförmige Bahnen in 705 km über Grund und ein Satellit umkreist die Erde in 99 Minuten. Die Bahnen der beiden Satelliten sind so synchronisiert das jeden achten Tag eine Aufnahmen des selben Beobachtungspunktes zur selben Uhrzeit vorliegt. Der beobachtete Groundtrack umfasst dabei einen 185 km breiten Streifen.  Landsat5 hält bis jetzt den Rekord für den am längsten eingesetzten Erdbeobachtungssatelliten. Nach knapp 29 Jahren wurde seine Aktivität am 5. Juni 2013 eingestellt. Landsat7 weist seit dem 31 Mai 2003 Artefakte in seinen Satellitenbilddaten auf. Verursacht werden sie durch einen Defekt des \textit{Scan Line Correctors} (SLC), der zur richtigen Abtastung des Beobachtungsgebietes bei Rotationsscannern eingesetzt wird. Seit diesem Ausfall finden sich zick-zack-artige Datenlücken in den Aufnahmen, die von einem zentralen nicht betroffenem Streifen horizontal nach außen laufen und von innen nach außen sich verbreitern.
-
-\subsection{Sentinel}
-Sentinel sind eine Reihe von Erdbeobachtungs- und Forschungssatelliten der ESA welche im Rahmen des Copernicus Forschungsprogramms gestartet und zum Einsatz kommen. Sie setzten sich aus 5 Satelliten zusammen die im optischen und Radarbereich eine dichte Bandbreite an Informationen über den Planeten sammeln. Sentinel 2  liefern Daten im optischen, nahen infraroten Bereich, hochauflösend von 10 mal 10 Meter,  in einem Intervall von 5 Tagen. Dies gewährt Aussicht auf besonders dichte Zeitreihen die mit diesem System möglich sind. Sentinel 3  nimmt die Erdoberfläche mit einer höheren Auflösung auf , soll allerdings zumindest auf dem Level der MODIS Daten  kalibriert sein. Die entwickelte Methodik zielt auch auf eine portable Herangehensweise ab, dass man die besser kalibrierten Sentinel 3 Daten zum Kalibrieren von Satellitendaten anderer Syteme  verwendet.
-
-
-\subsection{Sinusodial Referenzsystem}
-Die Daten der verwendeten MODIS-Zeitreihe wurden mittels dem MODIS-Reprojection-Tool in eine Sinusoidale Projection gebracht. Die Sinusoidal-Projektion nist eine flächentreue, pseudo-zylindrische Projektion, welche die gesamte Erdoberfläche darstellen kann. Der Zentralmeridian und der Äquator werden winkel- und längentreu wiedergegeben während Meridiane als Sinuskurven und Breitenkreise als Geraden dargestellt werden. Als Basis dient eine Kugel mit einem gemittelten Erdradius von 6371007,181 m ( MODIS Land, web-quelle nr 11). Je weiter man sich vom Abbildungsmeridian entfernt umso verzerrter wird die Darstellung. Die meisten MODIS Land Produkte sind als Kacheln indiziert und nutzen das Sinusodial-Grid-Tilling-System. Am Äquator weist eine Kachel eine Größe von 10 Grad mal 10 Grad auf. Das Kachelkoordinatensystem startet bei (0,0) - (horizontale nummer, verticale nummer) in der linken oberen Ecke beginnt und bei (35,17) in der rechten unteren Ecke endet. Das System zählt dabei von rechts nach links (horizontal) und von oben nach unten (vertikal)
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.6]{./Grafiken/RefSys/modis_sinusoidal_grid.jpg}
-\caption{\textit{MODIS Tilling System, (U.S.G.S., 2013)}}
-\end{figure}
-
-
-
-\subsection{UTM-Referenzsystem}
-Sämtliche Daten der Landsatmissionen sind im \textit{Universal Transverse Mercator}-Referenzsystem (UTM) projiziert. Es handelt sich hierbei um ein globales Koordinatensystem das die Erdoberfläche von 80 Grad Süd bis 84 Grad Nord streifenförmig in 6 Grad breite Zonen unterteilt. Als Basis dient das Bezugsellipsoid WGS84. UTM nutzt eine transversale Mercator-Projektion zum verebnen. Hierbei berührt der Projektionszylinder die Oberfläche nicht am Bezugsmeridian sondern schneidet sie. Dadurch ensteht ein Streifen
-
-\section{Datenakquisition - v5}
+\subsection{Datenakquisition - v5}
 Die  rohen MODIS-Zeitreihe liegt als verrauschete Zeitreihe von 2000-2012 im hdf-4 Format vor und  wurden mittels der NASA-eigenen Software "`MRT-TOOL"' in das GeoTIFF-Format entpackt und in das Sinusodial Reference System transformiert. Die Zeitreihe an sich selbst, setzt sich aus 16-Tägigen Kompositionen der besten spektralen Einzelaufnahme eines Pixels zusammen. Abhängig von der Auflösung des verwendeten Produktes zum Beispiel im 250 Meter aufgelöstem Produkt kann auch zwischen den Aufnahmen des Terra Satelliten mit dem Postfix "MOD" und dem Aqua Satelliten mit dem Postfix "MYD" unterschieden werden, welches zusätzlich in der Programmierung bedacht werden muss. Aufgrund der unterschiedlichen Launchzeitpunkte der Satelliten wurde die Zeitreihe zwischen 2000 und der ersten Aqua-Aufnahme künstlich verdichtet, indem die Terra-Aufnahmen einfach verdoppelt wurden und einen passenden Zeitstempel erhalten haben. Die komplettierte Zeitreihe an sich selbst weist alle 8 Tage eine Epoche eines MODIS-Sensors (Terra und Aqua-Epochen immer abwechselnd) auf.Für die Diplomarbeit selbst beschränkt sich der Author auf das "`500m"' aufgelöste Produkt MCD43A4 welches alle 8 Tage Daten des Terra- oder des Aqua-Satelliten inklusive die passende Qualitätsinformation zur Verfügung stellt. 
 Trotz des einwandfreien Rufes einer perfekten radiometrischen Korrektur der MODIS-Daten wurden Störungen in der visuellen Kontrolle ausfindig gemacht und die Zeitreihe anhand eines Glättungsalgorithmus nach Savitzky-Golay verbessert. Somit liegt eine europaweite wolkenfreie MODIS-Zeitreihe in 500 Meter Pixelauflösung als Basis für die relative Kalibrierung der Landsatdaten bereit.
 % - HDF interne Struktur
 % - Day of Year fertig beschreiben
-\section{Datenakquisition - MODIS Zeitreihe V6}
+\subsection{Datenakquisition - MODIS Zeitreihe V6}
+%\subsection{MODIS}
+%Die 500m aufgelösten MODIS-Daten sowie deren epochenzugehörige Qualitätsinformation im hdf4-Format wurden von einem mittlerweile geschlossenem FTP Server der NASA mittels einem Python FTP-Skript heruntergeladen und epochenweise lokal als hdf4-Stack verspeichert. Das hdf4-Format ist ein Containerformat welches vor allem in der wissenschaftlichen Community weit %verbreitet ist. Das Datenprodukt trägt die Kennzeichnung MCD43A4 und das zugehörige Qualitätsprodukt die Kennzeichnung MCD43A2. Aus den hdf4-Stacks wurden  mittels Python-Skript für die 500m Daten die Bänder \begin{enumerate} \item Rot \item NIR \item Blau \item Grün \item 3 mal MIR ( siehe Tabelle ) \end{enumerate} mittels dem MRT-Tool sowie aus dem Qualitätsprodukt %jener Layer mit der Qualitätsinformation der Albedo extrahiert und als GeoTIFF verspeichert. Die Rohdaten liegen nach dem Entpacken in der sinusoidalen Projektion vor.
+
+\subsubsection{MODIS Data General Describtion}
+% MODIS steht für\emph{\textbd{MOD}erater-resolution \textbf{I}maging \textbf{S}pectrometer} (MODIS)
+%[1]https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MCD43A2/
+%[2]https://developers.google.com/earth-engine/datasets/catalog/MODIS_006_MCD43A2#bands
+%[3]https://lpdaac.usgs.gov/products/mcd43a2v006/
+%[4]https://www.umb.edu/spectralmass/terra_aqua_modis/modis_brdf_albedo_product_mcd43
+%[5]https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD09GA/
+%[6]https://landweb.modaps.eosdis.nasa.gov/cgi-bin/QA_WWW/newPage.cgi?fileName=maturity
+%[7]https://ladsweb.modaps.eosdis.nasa.gov/filespec/MODIS/6/MCD43A2
+%[8]https://lpdaac.usgs.gov/products/mcd43a4v006/
+%[9]https://www.umb.edu/spectralmass/terra_aqua_modis/v006/mcd34a4_nbar_product
+%[10]https://e4ftl01.cr.usgs.gov/MOTA/
+MCD steht für eine Kombination aus TERRA und AQUA Daten, welche für die Herstellung dieses Produktes herangezogen wurden, um die größt mögliche Güte der Qualitätsinformation zu gewährleisten. Der herangezogene Zeitraum beträgt 16 Tage und das Datum des Files repräsentiert dabei das Zentrom des Moving-16-tages-Windows [1]. Die täglichen Produkte werden hinsichtlich ihrer Qualität, Beobachtungsabdeckung und zeitlichen Distanz zum interessierenden Zeitpunkt gewichtet [4]. MCD43 Produkte verwenden L2G-lite Daten als Input [3]. Wenn zuwenige Beobachtungen vorliegen ( aus den unterschiedlichen Orbits), dann wird mit Hilfe einer Datenbank, welche urtypische BRDF Parameter enthält eine "lower-magnitude" Inversion durchgeführt und angewandt[3].
 Die rohen MODIS Datenpunkte mit der Kennung MCD43A4  und den epochenweisen zugehörigen Qualitätsinformation mit der Kennung MCD43A2 liegen als HDF4 auf einem Server des United States Geological Survey (USGS) auf und können dort über die Website \footnote{https://e4ftl01.cr.usgs.gov/MOTA/} bezogen werden (eine Registrierung wird vorausgesetzt). Das HDF4 Format ist ein Containerformat das unterschiedlichste Datentypen kombiniert in einem File hierarchisch bzw multidimensional verspeichern kann. Vorteil ist vor allem bei diesem Format, dass man auch an bestehenden Dateien neue Daten anhängen kann.
+
+\subsubsection{MCD43A4 NBAR Data} \label{NBAR}
+MODIS MCD43A4 Version 6 ist ein Nadir BRDF (Bidirectional Reflectance Distribution Function) angepasstes Reflexionsprodukt (NBAR) aus ebenfalls 16 tägigen Auqa und Terra Daten. Die Daten werden für den Sonnenhöchststand der Tagesepoche berechnet [9]. Daraus resultiert ein stabiles und konsistentes NBAR Produkt. Die Daten werden mit einem überblicksartigen Qualitylayer für jedes Band in einem HDF Stack verspeichert. Es wird jedoch explizit darauf hingewiesen bei Berechnungen oder sonstiger Verwendung die Qualityinfo aus den MCD43A2 Produkten zu verwenden, da diese eine höhere Genauigkeit aufweisen. Die berechneten Reflexionswerte werden für jede Band als Rasterdaten in 16bit verspeichert. Fill value oder NoDate value ist 32767 [←8].
+\subsubsection{MCD43A2 Quality Product}
+Die Beobachtungen sind auf den neunten Tag der 116 Tagesperiode gewichtet [3. Dies führt auch zu einer besseren Qualität in höheren Breiten. Im Vergleich hierzu Version 5 verwendet ein Fenster von nur vier Beobachtungen pro Tag [3]. Die Qualitätsinformation für die Bänder 1 - 7 befinden sich im HDF-Stack des Qualitätsproduktes in den Layern 11-17 und weisen die Qualität nach folgendem Schlüssel aus [7]
+\begin{itemize}
+\item 0 = best qualiy, full inversion (WoDs, RMSE majority good)
+\item 1 = good quality, full inversion ( also including the cases that no clear sky observations over the day of interest or the Solar Zenith Angle is to large even WoDs, RMSE majority good)
+\item 2 = Magnitude inversion ( numobs $>$=7)
+\item 3 = Magnitude inversion ( 2$>$= numobs $<$7)
+\item 4 = Fill value
+\end{itemize}
+Der Fill value ist mit 255 dem NoData Value gleichzusetzen, da er so in den Qualitätsdaten vorkommt. 
 \begin{figure}[H]
 \centering
 \includegraphics{./Grafiken/Datenakquisition/HDF5_MCD4A4_Layerhierarchy.JPG}
@@ -481,6 +521,7 @@ In den Datenfiles sind auch Qualitätsinformationslayer enthalten, diese bieten 
       \caption{Qualitätsinformaion aus dem Qualitätsprodukt}
    \end{minipage}
 \end{figure}
+
 Der Dateiname jeder Datenepoche oder der zugehörigen Qualitätsinformation beinhaltet 
 \begin{itemize}
 \item Dateiname=MCD43A4.A2000057.h18v04.006.hdf 
@@ -490,22 +531,13 @@ Der Dateiname jeder Datenepoche oder der zugehörigen Qualitätsinformation bein
 \item Version = 006
 \item Fileextension = hdf
 \end{itemize}
-Um ein Jahr zu rekonstruieren bzw zu filtern werden 46 Datenpunkte verwendet. Dies entspricht den Day of Year von 001 bis 361. 
-Da es sich für den in Betracht gezogenen Zeitraum 2000-2020 um 927 Datenpunkte pro Kachel handelt, wurde hier mit Python bzw den Bibliotheken \emph{requets, bs4} ein Webscrabber-Skript geschrieben, welches alle Metadaten für die zu interessierenden Daten erstellt und aus der passenden Ordnerstruktur am USGS Server downloaded. 
+Um ein Jahr zu rekonstruieren bzw zu filtern werden 46 Datenpunkte verwendet. Dies entspricht den Day of Year von 001 bis 361 in einem Intervall mit an jedem 9.ten Tag einen Datenpunkt. Da es sich für den in Betracht gezogenen Zeitraum 2000-2020 um 927 Datenpunkte pro Kachel handelt, wurde hier mit Python bzw den Bibliotheken \emph{requets, bs4} ein Webscrabber-Skript geschrieben, welches alle Metadaten für die zu interessierenden Daten erstellt und aus der passenden Ordnerstruktur am USGS Server downloaded und in einer passenden Ordnerstruktur lokal verspeichert.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth,height=\textheight]{./Diagramme/Workflow_rel_Kal.PNG}
 \caption{\textit{Workflow der relativen Kalibrierung von Landsatdaten mittels gefilterter MODIS Zeitreihe}}
 \end{figure}
-\subsection{MODIS}
-Die 500m aufgelösten MODIS-Daten sowie deren epochenzugehörige Qualitätsinformation im hdf4-Format wurden von einem mittlerweile geschlossenem FTP Server der NASA mittels einem Python FTP-Skript heruntergeladen und epochenweise lokal als hdf4-Stack verspeichert. Das hdf4-Format ist ein Containerformat welches vor allem in der wissenschaftlichen Community weit verbreitet ist. Das Datenprodukt trägt die Kennzeichnung MCD43A4 und das zugehörige Qualitätsprodukt die Kennzeichnung MCD43A2. Aus den hdf4-Stacks wurden  mittels Python-Skript für die 500m Daten die Bänder \begin{enumerate} \item Rot \item NIR \item Blau \item Grün \item 3 mal MIR ( siehe Tabelle ) \end{enumerate} mittels dem MRT-Tool sowie aus dem Qualitätsprodukt jener Layer mit der Qualitätsinformation der Albedo extrahiert und als GeoTIFF verspeichert. Die Rohdaten liegen nach dem Entpacken in der sinusoidalen Projektion vor.
-
-% \href{http://glovis.usgs.gov}{http://glovis.usgs.gov}
-% \href{http://earthexplorer.usgs.gov}{http://earthexplorer.usgs.gov}
-\subsection{Landsat}
-Die Daten des Landsatsystems wurden alle über die von der NASA und U.S.G.S. zur Verfügung gestellten Downloadsites \textit{Earth Explorer} sowie \textit{GloVis} akquiriert. Eine Landsatszene definiert ihre Position über Path- und Row- Angaben welche für das ausgewählte Gebiet der Diplomarbeit im Schwarzwald liegen Pathindizes von $195$ bis $196$ sowie Rowindizes von $25$ und $26$ umfasst. Der maximale Bewölkungsgrad wurde mit $40\%$ gewählt. Sämtliche Landsat5 und Landsat 7 Satellitendaten wurden entweder direkt mit der \textit{Bulk Download Application} (BDA) der NASA downgeloadet oder über deren Bestellservice geordert und sobald fertig prozessiert ebenfalls mittels der BDA downgeloadet.
-Die Daten liegen als GeoTIFF für jedes einzelne Band pro Epoche auf. Sämtliche Landsatdaten wurden im Anschluss mittels LEDAPS absolut kalibriert. Die Kalibrierung liefert nicht nur die Landsatdaten in Oberflächenreflexion sondern vor allem die notwendige Wolkenmaske für jede zu kalibrierende LandsatSzene. Da LEDAPS seinerseits alle seine Ergebnisse  als hdf4 verspeichert müssen diese ebenfalls wieder in das GeoTIFF-Format übergeführt werden. 
 
 
 
@@ -660,16 +692,15 @@ b_n=j(c_n-c_{-n})=j(c_n - c^{*}_{n})
 % vielleicht in die Durchführung reinpacken?
 \subsubsection{Rekonstruktion mittels FFT}
 % das war aus Wikipedia
-Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gibt, Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N}
-
+Die Fast Fourier Transformation (FFT) is eine wichtige und bekannte Methodik aus der Signalverarbeitung, welche ein Signal in ihre einzelnen Spektralkomponenten zerlegt und Aufschluss über deren Zusammensetzung gibt, Der Kern einer FFT ist eine Diskrete Fourier Transformation (DFT), jedoch ist der dahinterliegende Algorithmus optimiert, wovon auch der der Namen herrührt, sprich man verwendet die FFT um die Koeffizienten einer DFT zu ermitteln. Die FFT reduziert die Anzahl der Berechnungen für eine Anzahl \textbf{N} erheblichst
 \begin{equation}
-\begin{split}
-\textnormal{Diskrete Fourier Transformation} = O(N^{2}) \\\
-\textnormal{Fast Fourier Transformation} = O(N\cdot log_2(N)) \\\
-n = 44000\\\
-DFT = O(44000^2) = 1 963 000 000 \\\
-FFT = O(4400\cdot log_2(44000)) = 204311
-\end{split}
+%\begin{split}
+\begin{aligned}
+n &= 44000\\\
+DFT &= O(N^{2}) = O(44000^2) = 1 963 000 000 \\\
+FFT &= O(N\cdot log_2(N)) = O(4400\cdot log_2(44000)) = 204311
+%\end{split}
+\end{aligned}
 \end{equation}
 Dies merkt man besonders wenn man große Mengen an Daten verarbeitet. Wie vorhin schon erwähnt ist die Fourier Transformation eine mathematische Operation, welche die Domäne der Zeit eines Signals in die Frequenzdomäne überführt, sprich in seine Frequenzanteile zerlegt und dadurch analysiert werden können. Bei der FFT wird ein zeitlich begrenztes Signal herangezogen und in seine Frequenzanteile zerlegt sowie deren Phasen und Amplituden bestimmt. In der Praxis wurde auf die bereits existierenden Routinen in \textbf{numpy 1.19.2} zurück gegriffen.
 \begin{figure}[H]
@@ -810,8 +841,45 @@ Hier möchte ich nur kurz Anreißen, dass die großen Datenmengen eine eigene De
 Die verwendeten Betriebssysteme unterscheiden sich erheblich in den Ausführzeiten der Python Programme welche für das Rekonstruieren der MODIS Zeitreihen verwendet wurden. Deshalb wurde beim Fitten und Filtern der Daten auf Linux (Debian 10, Ubuntu 18.04) vertraut. Es kamen bis zu vier Rechner mit mindestens 4 CPUs ab 3GHz Takt und mindestens 32GB RAM zum Einsatz um die Daten parallel zu verarbeiten. Pro Spektralband der MODIS Zeitreihe kann man für 20 Jahre und jeden 9ten Tag eine vorhandene Szene ( oder 927 Datenpunkte) ca 17h Rechenzeit für Savitzky-Golay-Filter einplanen, die FFT brauchte hingegen nur an die drei Stunden. Der verbrauchte Speicherplatz für die MODIS Daten in der Version 6 sowie der Landsat Daten in roher als auch absolut Kalibrierter Form belaufen sich auf 2,42 TB (Terabyte). Um die Daten zu sichern wurde Speicherplatz im Gesamt Volumen von 11 TB angeschafft um sie auf drei unabhängigen Speichervolumen zu sichern. 
 
 \chapter{Durchführung}
-\subsection{Rekonstruktion und Filtern der Verrauschten MODIS V6 Zeitreihe}
-\subsubsection{Savitzky-Golay Filterung mit einem Polynom 2. Grades}
-Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation 
+\section{Rekonstruktion und Filtern der Verrauschten MODIS V6 Zeitreihe}
+Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon in Kapitel \ref{NBAR} beschrieben vor. Zu jedem Zeitpunkt bzw zu jedem Pixel ist nun eine Qualitätsinformation vorhanden die in der P-Matrix der Ausgleichsfunktion als Gewichtung an die Beobachtungen angebracht wird. Um einen vielfältigen Vergleich zu erhalten, welche Gewichtung die besten Resultate liefert, oder eventuell welche Tradeoffs in Kauf genommen werden müssen, wurden mehrere Iterationen der SG Filterungen mit unterschiedlicher Gewichtung vorgenommen ( dies kostet einiges an Speicherplatz!). Auch die Berechnungen der DFT wurde mit unterschiedlichen Gewichten durchgeführt, aber immer mit einer harmonischen Schwingung die auf 3 Elemente ( hat sich als als am besten Idealsten herausgestellt) beschränkt war. Allein die Rekonstruktion und Filterung der FFT kommt gänzlich ohne Gewichtung aus. Zu Beginn eines Jahres liegen für gewöhnlich Daten mit schlechter räumliche Abdeckung vor, da dies vor allem mit der vermehrten Wolkenbedeckung rückzuschliessen ist, siehe Abbildung \ref{MODIS_data_jan} und Abbildung \ref{MODIS_qual_jan}.
 
+\begin{figure}[H]
+   \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+      \includegraphics[scale=0.28]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_2.JPG}
+	\caption{\textit{Bildinformation für die Kachel h18v04 für den DOY 001 des Jahres 2001 - Weiss : NoData - Graustufen: Reflexionswerte}}
+   \end{minipage}
+   \hspace{.1\linewidth}% Abstand zwischen Bilder
+   \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+      \includegraphics[scale=0.28]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_2.JPG}
+\caption{\textit{Bildinformation für die Kachel h18v04 für den DOY 001 des Jahres 2001 - Weiss : NoData - Graustufen: Reflexionswerte}}
+   \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+   \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+      \includegraphics[scale=0.28]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_1.JPG}
+	\caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001}}
+   \end{minipage}
+   \hspace{.1\linewidth}% Abstand zwischen Bilder
+   \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
+      \includegraphics[scale=0.28]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_1.JPG}
+\caption{\textit{Qualitätsinformtion für einen Auschnitt aus der Kachel h18v04 für den DOY 001 des Jahres 2001 - grün: full inversion - gelb: full inversion - orange: magnitude inversion ( numobs $>$=7)  - red: magnitude inversion ( numobs $2>$=7) - white: NoData}}
+   \end{minipage}
+\end{figure}
+
+\begin{figure}[H] \label{MODIS_data_jan}
+\centering
+\includegraphics[scale=0.4]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_2.JPG}
+\caption{\textit{Bildinformation für die Kachel h18v04 für den DOY 001 des Jahres 2001 - Weiss : NoData - Graustufen: Reflexionswerte}}
+\end{figure}
+\begin{figure}[H] \label{MODIS_qual_jan}
+\centering
+\includegraphics[scale=0.4]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_1.JPG}
+\caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001}}
+\end{figure}
+
+\subsection{Savitzky-Golay Filterung mit einem Polynom 2. Grades}
+\subsection{DFT}
+\subsection{FFT}
 \end{document}
