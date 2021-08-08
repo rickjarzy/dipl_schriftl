@@ -1,0 +1,17 @@
+.idea
+.idead/**
+.idead/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+__pycache__/**
+user_cred.py
+data/**
+QGis/**
+QGis
+fit_config.py
+*.patch
+test_fft.py
+python/**
+fitting/__pychache__/**
+*.pyc
+Literatur/**
