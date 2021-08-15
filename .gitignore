@@ -15,3 +15,5 @@ python/**
 fitting/__pychache__/**
 *.pyc
 Literatur/**
+.vscode
+.vscode/**
