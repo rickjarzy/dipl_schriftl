@@ -858,12 +858,12 @@ Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon i
 
 \begin{figure}[H]
    \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
-      \includegraphics[scale=0.28]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_1.JPG}
-	\caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001}}
+      \includegraphics[scale=0.3]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_1.JPG}
+	\caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001 - grün: full inversion - gelb: full inversion - orange: magnitude inversion ( numobs $>$=7)  - red: magnitude inversion ( numobs $2>$=7) - white: NoData}}
    \end{minipage}
    \hspace{.1\linewidth}% Abstand zwischen Bilder
    \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
-      \includegraphics[scale=0.28]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_1.JPG}
+      \includegraphics[scale=0.3]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_1.JPG}
 \caption{\textit{Qualitätsinformtion für einen Auschnitt aus der Kachel h18v04 für den DOY 001 des Jahres 2001 - grün: full inversion - gelb: full inversion - orange: magnitude inversion ( numobs $>$=7)  - red: magnitude inversion ( numobs $2>$=7) - white: NoData}}
    \end{minipage}
 \end{figure}
@@ -879,7 +879,7 @@ Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon i
 \caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001}}
 \end{figure}
 \subsection{Savitzky-Golay Filterung mit einem Polynom 2. Grades}
-Wie schon in den Grundlagen angesprochen, verwendet eine Rekonstruktionsmethode den Savitzky-Golay-Filter um einerseits verrauschte Daten zu glätten. Bevor es jedoch ins glätten der Zeitreihe geht wird überprüft, ob es NaN stellen im SG-Fenster gibt. Füllwerte treten abhängig vom Fortschritt des Jahres vermehrt in den niederschlagsreichen Zeiten, besonders gegen Ende und Anfang des Jahres auf. An diesen Stellen wird zu aller erst linear interpoliert, um einen Näherungswert für die anschließende Filterung an nicht besetzten Stellen zu haben. 
+Wie schon in den Grundlagen angesprochen, verwendet eine Rekonstruktionsmethode den Savitzky-Golay-Filter um einerseits verrauschte Daten zu glätten. Bevor es jedoch ins glätten der Zeitreihe geht wird überprüft, ob es NaN stellen im SG-Fenster gibt. Füllwerte treten abhängig vom Fortschritt des Jahres vermehrt in den niederschlagsreichen Zeiten, besonders gegen Ende und Anfang des Jahres auf. Auch der Rest des Jahres ist nicht davor gefeit keine NaN Werte zwischenzeitich aufzuweisen. An diesen Stellen wird zu aller erst linear interpoliert, um einen Näherungswert für die anschließende Filterung an nicht besetzten Stellen zu haben. 
 % Hier kommen die Plots von der Linearen interpolation für NaN Stellen - weiter im Code 
 \subsection{DFT}
 \subsection{FFT}
