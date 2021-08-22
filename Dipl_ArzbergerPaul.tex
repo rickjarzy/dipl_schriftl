@@ -494,8 +494,8 @@ Die rohen MODIS Datenpunkte mit der Kennung MCD43A4  und den epochenweisen zugeh
 
 \subsubsection{MCD43A4 NBAR Data} \label{NBAR}
 MODIS MCD43A4 Version 6 ist ein Nadir BRDF (Bidirectional Reflectance Distribution Function) angepasstes Reflexionsprodukt (NBAR) aus ebenfalls 16 tägigen Auqa und Terra Daten. Die Daten werden für den Sonnenhöchststand der Tagesepoche berechnet [9]. Daraus resultiert ein stabiles und konsistentes NBAR Produkt. Die Daten werden mit einem überblicksartigen Qualitylayer für jedes Band in einem HDF Stack verspeichert. Es wird jedoch explizit darauf hingewiesen bei Berechnungen oder sonstiger Verwendung die Qualityinfo aus den MCD43A2 Produkten zu verwenden, da diese eine höhere Genauigkeit aufweisen. Die berechneten Reflexionswerte werden für jede Band als Rasterdaten in 16bit verspeichert. Fill value oder NoDate value ist 32767 [←8].
-\subsubsection{MCD43A2 Quality Product}
-Die Beobachtungen sind auf den neunten Tag der 116 Tagesperiode gewichtet [3. Dies führt auch zu einer besseren Qualität in höheren Breiten. Im Vergleich hierzu Version 5 verwendet ein Fenster von nur vier Beobachtungen pro Tag [3]. Die Qualitätsinformation für die Bänder 1 - 7 befinden sich im HDF-Stack des Qualitätsproduktes in den Layern 11-17 und weisen die Qualität nach folgendem Schlüssel aus [7]
+\subsubsection{MCD43A2 Quality Product} \label{MCD43A2_qualy_desc}
+Die Beobachtungen sind auf den neunten Tag der 116 Tagesperiode gewichtet [3]. Dies führt auch zu einer besseren Qualität in höheren Breiten. Im Vergleich hierzu, Version 5 verwendet ein Fenster von nur vier Beobachtungen pro Tag [3]. Die Qualitätsinformation für die Bänder 1 - 7 befinden sich im HDF-Stack des Qualitätsproduktes in den Layern 11-17 und weisen die Qualität nach folgendem Schlüssel aus [7]
 \begin{itemize}
 \item 0 = best qualiy, full inversion (WoDs, RMSE majority good)
 \item 1 = good quality, full inversion ( also including the cases that no clear sky observations over the day of interest or the Solar Zenith Angle is to large even WoDs, RMSE majority good)
@@ -727,6 +727,7 @@ Durch den Fakt, dass die MODIS Daten fehlerbehaftet sind, wird der Rohdatenwert 
 Im Falle der Datenvorverarbeitung wurde ein Polynom 2. Grades gewählt, 
 
 \begin{equation}
+\label{form_poly_2nd}
 f(t) = a_0+a_1 \cdot t+a_2 \cdot t^2
 \end{equation}
 
@@ -868,19 +869,34 @@ Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon i
    \end{minipage}
 \end{figure}
 
-\begin{figure}[H] \label{MODIS_data_jan}
+\begin{figure}[H] \label{fig:MODIS_data_jan}
 \centering
 \includegraphics[scale=0.4]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_2.JPG}
 \caption{\textit{Bildinformation für die Kachel h18v04 für den DOY 001 des Jahres 2001 - Weiss : NoData - Graustufen: Reflexionswerte}}
 \end{figure}
-\begin{figure}[H] \label{MODIS_qual_jan}
+\begin{figure}[H] \label{fig:MODIS_qual_jan}
 \centering
 \includegraphics[scale=0.4]{./Grafiken/Fitting/Fitting_durchführung/Fitting_Vergleich_Rohdaten_Qualität_full_1.JPG}
 \caption{\textit{Qualitätsinformtion für die Kachel h18v04 für den DOY 001 des Jahres 2001}}
 \end{figure}
+
 \subsection{Savitzky-Golay Filterung mit einem Polynom 2. Grades}
-Wie schon in den Grundlagen angesprochen, verwendet eine Rekonstruktionsmethode den Savitzky-Golay-Filter um einerseits verrauschte Daten zu glätten. Bevor es jedoch ins glätten der Zeitreihe geht wird überprüft, ob es NaN stellen im SG-Fenster gibt. Füllwerte treten abhängig vom Fortschritt des Jahres vermehrt in den niederschlagsreichen Zeiten, besonders gegen Ende und Anfang des Jahres auf. Auch der Rest des Jahres ist nicht davor gefeit keine NaN Werte zwischenzeitich aufzuweisen. An diesen Stellen wird zu aller erst linear interpoliert, um einen Näherungswert für die anschließende Filterung an nicht besetzten Stellen zu haben. 
+Wie schon in den Grundlagen angesprochen, verwendet eine Rekonstruktionsmethode den Savitzky-Golay-Filter um einerseits verrauschte Daten zu glätten als auch nicht vorhandene Daten zu rekonstruieren. Man wählt ein passendes sich bewegendes Zeitfenster aus, in diesem Fall werden 15 Beobachtungsepochen im Abstand von jeweils 8 Tagen verwendet, und updated dieses mit der nächsten Epoche nach abgeschlossener Filterung. Der zentrale Wert ( nicht der Median) innerhalb dieses Datenarrays ist der gefilterte Wert, welcher von Interesse ist und zur weiteren Bearbeitung und Verspeicherung herangezogen wird. Bevor es jedoch ans glätten der Zeitreihe geht wird überprüft, ob es NaN stellen im SG-Fenster gibt. Füllwerte treten abhängig vom Fortschritt des Jahres vermehrt in den niederschlagsreichen Zeiten, besonders gegen Ende und Anfang des Jahres auf. Auch der Rest des Jahres ist nicht davor gefeit keine NaN Werte zwischenzeitlich aufzuweisen. An diesen Stellen wird zu aller erst linear interpoliert, um einen Näherungswert für die anschließende Filterung an nicht besetzten Stellen zu haben. 
 % Hier kommen die Plots von der Linearen interpolation für NaN Stellen - weiter im Code 
+\begin{figure}[H]
+\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_raffaella_it.png}
+\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Raffaelle Italien im NIR}}
+\label{fig:compare_fit_sg_raf_it_2011}
+\end{figure}
+Abbildung \ref{fig:compare_fit_sg_raf_it_2011} stellt diese unterschiedlichen Zustände des Datenmaterials grafisch dar. Die unbearbeiteten Rohdaten sind als cyanfarbige X-Signaturen gekennzeichnet und deren Qualitätsklasse ist als farbige Punktsignatur am Fusse des Plotes dargestellt. Beste Qualität wird mit grün symbolisiert ( in \ref{fig:compare_fit_sg_raf_it_2011} ist keine vorhanden), gelb symbolisiert gute Qualität, sprich volle Inversion aber auch bewölkte Szenen werden mitverwendet,  orange beschreibt, dass mindestens 7 Beobachtungen für die Wertermittlung vorgelegen sind, rot das mindestens zwei Beobachtungen aber maximal 7 Beobachtungen zur Wertermittlung herangezogen wurden. Schwarz sind NoData Werte welche nicht zur Berechnung herangezogen werden können. Diese NoData Stellen werden mittels einer linearen Interpolation aus dem vorangegangenem und nachfolgendem Wert approximiert, um einen Näherungswert für die Filterung nach SG zur Verfügung zu haben. In Abbildung \ref{fig:compare_fit_sg_raf_it_2011} wird diese Approximation mittels der schwarzen gestrichelten Linie dargestellt. Dies ist nun die vollbesetzte Zeitreihe die zur Schätzung der Parameter des Polynom zweiten Grades wie in Formel \ref{form_poly_2nd}, welches für den Savitzky-Golay-Filter verwendet, herangezogen wird. Die durchgezeichnete blaue Linie symbolisiert die gefilterte Zeitreihe unter Verwendung des SG Filters mit einem 15 tägigem Beobachtungsfenster. Die Beobachtungen wurden nach absteigender Qualität mit 
+\begin{itemize}
+\item Best Quality = 1 
+\item Good Quality = 0.5
+\item Magnitude Inversion ( number of obs >= 7) = 0.25
+\item Magnitude Inversion (number of obs 2>= X < 7) = 0.01
+\end{itemize}
+
+
 \subsection{DFT}
 \subsection{FFT}
 \end{document}
