@@ -750,6 +750,7 @@ Der Normalgleichung ausgedrückt durch den Parametervektor $\widehat{\textbf{x}}
 
 Anhand der Qualitätsinformation aus den MODIS-Epochen wird die Gewichtsmatrix P aufgestellt:
 \begin{equation}
+\label{p_mat}
 P_{ij} = \left[ \begin{array}{cccc} p_{11} & 0 & \ldots \\0 & p_{22} & \ldots \\ \vdots & \vdots & \ddots \end{array} \right]
 \end{equation}\newline
 Somit ergibt sich mit der Gewichtsmatrix folgende Form für die Normalgleichungen für den Parametervektor und den Beobachtungsvektor:
@@ -884,18 +885,41 @@ Die Daten der MODIS Zeitreihe liegen mit einer Qualitätsinformation wie schon i
 Wie schon in den Grundlagen angesprochen, verwendet eine Rekonstruktionsmethode den Savitzky-Golay-Filter um einerseits verrauschte Daten zu glätten als auch nicht vorhandene Daten zu rekonstruieren. Man wählt ein passendes sich bewegendes Zeitfenster aus, in diesem Fall werden 15 Beobachtungsepochen im Abstand von jeweils 8 Tagen verwendet, und updated dieses mit der nächsten Epoche nach abgeschlossener Filterung. Der zentrale Wert ( nicht der Median) innerhalb dieses Datenarrays ist der gefilterte Wert, welcher von Interesse ist und zur weiteren Bearbeitung und Verspeicherung herangezogen wird. Bevor es jedoch ans glätten der Zeitreihe geht wird überprüft, ob es NaN stellen im SG-Fenster gibt. Füllwerte treten abhängig vom Fortschritt des Jahres vermehrt in den niederschlagsreichen Zeiten, besonders gegen Ende und Anfang des Jahres auf. Auch der Rest des Jahres ist nicht davor gefeit keine NaN Werte zwischenzeitlich aufzuweisen. An diesen Stellen wird zu aller erst linear interpoliert, um einen Näherungswert für die anschließende Filterung an nicht besetzten Stellen zu haben. 
 % Hier kommen die Plots von der Linearen interpolation für NaN Stellen - weiter im Code 
 \begin{figure}[H]
-\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_raffaella_it.png}
+\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_Raffaelle_ITA_agriculture_1_050_025_001.png}
 \caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Raffaelle Italien im NIR}}
 \label{fig:compare_fit_sg_raf_it_2011}
 \end{figure}
-Abbildung \ref{fig:compare_fit_sg_raf_it_2011} stellt diese unterschiedlichen Zustände des Datenmaterials grafisch dar. Die unbearbeiteten Rohdaten sind als cyanfarbige X-Signaturen gekennzeichnet und deren Qualitätsklasse ist als farbige Punktsignatur am Fusse des Plotes dargestellt. Beste Qualität wird mit grün symbolisiert ( in \ref{fig:compare_fit_sg_raf_it_2011} ist keine vorhanden), gelb symbolisiert gute Qualität, sprich volle Inversion aber auch bewölkte Szenen werden mitverwendet,  orange beschreibt, dass mindestens 7 Beobachtungen für die Wertermittlung vorgelegen sind, rot das mindestens zwei Beobachtungen aber maximal 7 Beobachtungen zur Wertermittlung herangezogen wurden. Schwarz sind NoData Werte welche nicht zur Berechnung herangezogen werden können. Diese NoData Stellen werden mittels einer linearen Interpolation aus dem vorangegangenem und nachfolgendem Wert approximiert, um einen Näherungswert für die Filterung nach SG zur Verfügung zu haben. In Abbildung \ref{fig:compare_fit_sg_raf_it_2011} wird diese Approximation mittels der schwarzen gestrichelten Linie dargestellt. Dies ist nun die vollbesetzte Zeitreihe die zur Schätzung der Parameter des Polynom zweiten Grades wie in Formel \ref{form_poly_2nd}, welches für den Savitzky-Golay-Filter verwendet, herangezogen wird. Die durchgezeichnete blaue Linie symbolisiert die gefilterte Zeitreihe unter Verwendung des SG Filters mit einem 15 tägigem Beobachtungsfenster. Die Beobachtungen wurden nach absteigender Qualität mit 
+Abbildung \ref{fig:compare_fit_sg_raf_it_2011} stellt diese unterschiedlichen Zustände des Datenmaterials grafisch dar. Die unbearbeiteten Rohdaten sind als cyanfarbige X-Signaturen gekennzeichnet und deren Qualitätsklasse ist als farbige Punktsignatur am Fusse des Plotes dargestellt. Beste Qualität wird mit grün symbolisiert ( in \ref{fig:compare_fit_sg_raf_it_2011} ist keine vorhanden), gelb symbolisiert gute Qualität, sprich volle Inversion aber auch bewölkte Szenen werden mitverwendet,  orange beschreibt, dass mindestens 7 Beobachtungen für die Wertermittlung vorgelegen sind, rot das mindestens zwei Beobachtungen aber maximal 7 Beobachtungen zur Wertermittlung herangezogen wurden. Schwarz sind NoData Werte welche nicht zur Berechnung herangezogen werden können. Diese NoData Stellen werden mittels einer linearen Interpolation aus dem vorangegangenem und nachfolgendem Wert approximiert, um einen Näherungswert für die Filterung nach SG zur Verfügung zu haben. In Abbildung \ref{fig:compare_fit_sg_raf_it_2011} wird diese Approximation mittels der schwarzen gestrichelten Linie dargestellt. Dies ist nun die vollbesetzte Zeitreihe die zur Schätzung der Parameter des Polynom zweiten Grades wie in Formel \ref{form_poly_2nd}, welches für den Savitzky-Golay-Filter verwendet, herangezogen wird. Die durchgezeichnete blaue Linie symbolisiert die gefilterte Zeitreihe unter Verwendung des SG Filters mit einem 15 tägigem Beobachtungsfenster. Die Beobachtungen wurden nach absteigender Qualität mit gewichtet und so in die P Matrix aus \ref{p_mat} übernommen. 
 \begin{itemize}
 \item Best Quality = 1 
 \item Good Quality = 0.5
-\item Magnitude Inversion ( number of obs >= 7) = 0.25
-\item Magnitude Inversion (number of obs 2>= X < 7) = 0.01
+\item Magnitude Inversion ( number of obs $>$= 7) = 0.25
+\item Magnitude Inversion (number of obs 2$>$= X $<$ 7) = 0.01
 \end{itemize}
-
+Eine weitere Gewichtungskombination, bei der die beste Qualitätsgüte hoch, die Zweitbeste höher gewichtet und alle anderen Güteklassen sehr gering gewichtet sind, lässt den Filteralgorithmus sich mehr den Rohdaten annähern, welches hier in Abbildung \ref{fig:compare_fit_sg_raf_it_2011_w001_050} wieder für Raffaelle in Italien dargestellt ist. 
+\begin{itemize}
+\item Best Quality = 1 
+\item Good Quality = 0.5
+\item Magnitude Inversion ( number of obs $>$= 7) = 0.01
+\item Magnitude Inversion (number of obs 2$>$= X $<$ 7) = 0.01
+\end{itemize}
+\begin{figure}[H]
+\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_Raffaelle_ITA_agriculture_1_050_001_001.png}
+\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Raffaelle Italien im NIR mit einer niedrigen Gewichtung für alle ausser der besten und zweitbesten Qualitätstufe }}
+\label{fig:compare_fit_sg_raf_it_2011_w001_050}
+\end{figure}
+Eine weitere Iteration in Abbildung \ref{fig:compare_fit_sg_raf_it_2011_w001}, bei der alle Güteklassen bis auf die Beste niedrig gewichtet sind, bring für diesen Fall nahezu keine Veränderung in diesem Zeitfenster . 
+\begin{itemize}
+\item Best Quality = 1 
+\item Good Quality = 0.01
+\item Magnitude Inversion ( number of obs $>$= 7) = 0.01
+\item Magnitude Inversion (number of obs 2$>$= X $<$ 7) = 0.01
+\end{itemize}
+\begin{figure}[H]
+\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_Raffaelle_ITA_agriculture_1_050_001_001.png}
+\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Raffaelle Italien im NIR mit einer niedrigen Gewichtung für alle ausser der besten und zweitbesten Qualitätstufe }}
+\label{fig:compare_fit_sg_raf_it_2011_w001}
+\end{figure}
 
 \subsection{DFT}
 \subsection{FFT}
