@@ -901,11 +901,12 @@ Eine weitere Gewichtungskombination, bei der die beste Qualitätsgüte hoch, die
 \item Best Quality = 1 
 \item Good Quality = 0.5
 \item Magnitude Inversion ( number of obs $>$= 7) = 0.01
-\item Magnitude Inversion (number of obs 2$>$= X $<$ 7) = 0.01
+\item Magnitude Inversion (number of obs 2$>$= X $<$ 7) = 0.0100000
 \end{itemize}
 \begin{figure}[H]
-\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_Raffaelle_ITA_agriculture_1_050_001_001.png}
-\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Raffaelle Italien im NIR mit einer niedrigen Gewichtung für alle ausser der besten und zweitbesten Qualitätstufe }}
+\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_2007001_band_2_Weidenbach_GER_agriculture_1_050_001_001.png}
+\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation undFMODIS
+ SG Filterung für einen Zeitraum von 15 Epochen im Raum Weidenbach Deutschland im NIR mit einer niedrigen Gewichtung für alle ausser der besten und zweitbesten Qualitätstufe }}
 \label{fig:compare_fit_sg_raf_it_2011_w001_050}
 \end{figure}
 Eine weitere Iteration in Abbildung \ref{fig:compare_fit_sg_raf_it_2011_w001}, bei der alle Güteklassen bis auf die Beste niedrig gewichtet sind, bring für diesen Fall nahezu keine Veränderung in diesem Zeitfenster . 
@@ -916,11 +917,42 @@ Eine weitere Iteration in Abbildung \ref{fig:compare_fit_sg_raf_it_2011_w001}, b
 \item Magnitude Inversion (number of obs 2$>$= X $<$ 7) = 0.01
 \end{itemize}
 \begin{figure}[H]
-\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_band_2_Raffaelle_ITA_agriculture_1_001_001_001.png}
-\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Raffaelle Italien im NIR mit einer niedrigen Gewichtung für alle ausser der besten Qualitätsstufe ( die hier aber nicht enthalten ist)}}
+
+\includegraphics[scale=0.6]{./Grafiken/Fitting/Fitting_method_comparison/comparison_reflectance_values_for_2007001_band_2_Weidenbach_GER_agriculture_1_001_001_001.png}
+\caption{\textit{Gegenüberstellung Rohdaten, lineare Interpolation, SG Filterung für einen Zeitraum von 15 Epochen im Raum Weidenbach Deutschland im NIR mit einer niedrigen Gewichtung für alle ausser der besten Qualitätsstufe ( die hier aber nicht enthalten ist)}}
 \label{fig:compare_fit_sg_raf_it_2011_w001}
 \end{figure}
-Das Ergebnis der Rekonstruktion oder der Filterung kann jedoch durch Ausreisser, die als zu verwendete Datenpunkte laut Qualitätsinformation klassifiziert sind,  beeinträchtigt werden. Diese 
+Die Gegenüberstellung der errechneten Ergebnisse für die unterschiedlichen Gewichtungen sind in Grafik \ref{fig:compare_fit_sg_raf_it_2002_ger} veranschaulicht. Sie zeigt hierbei das Ergebnis für einen Pixel entsprechen Nähe Weidenbach in Deutschland in einem landwirtschaftlich genutztem Gebiet. Die Datenpunkten mit der cyanfärbigen Sternsignatur sind die Rohdatenpunkte, die schwarz strichlierte Linie stellt die Rohdaten mit linear interpolierten Daten für Datenlücken dar und die färbig durchgezogenen Linien stellen die rekonstruierten Daten für das Jahr 2002 dar. Blau stellt jene Ergebnisse dar die mit einer Gewichtsmatrix gerechnet wurden, die 4 unterschiedlichen Gewichten ausgestattet sein kann. Der gelbgefärbte Graf gewichtet nur die besten 2 Datenqualitätsklassen hoh, jene Pixel mit schlechterer Qualität niedrig. Grün symbolisiert eine sehr konservative Gewichtung, bei welcher nur die beste Pixelqualität auch hoch gewichtet wird, alles andere wird mit einem niedrigen Gewicht ausgestattet. 
+
+% Nach auswahl der besten Fits, checkn ob die auch am Anfang des Jahres Aussreisser haben oder ob das nur im Jahr 2002 passiert is, bei dem bekanntlich 
+% probleme des Sensors vorkamen
+Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg höhere Werte, welche den Graphen einen Sprung nach oben erleben lassen. Dies dürfte auf bekannte Probleme des Sensors im Jahr 2002 zurück zuführen sein. 
+
+Die Datenrekonstruktion läuft so weit ganz ordentlich wie auch die Beispiele für Bad Pippoldsau im deutschen Schwarzwald \ref{fig:compare_fit_sg_raf_it_2002_ger_pip} und ein Waldgebiet in Doba Lothringen Frankreich \ref{fig:compare_fit_sg_raf_it_2002_fra_doba} . Jedoch wurde ein Problem bei Wasserflächen ausgemacht. Wenn nicht genug Beobachtungen vorliegen und die interpolierten Werte bei Null liegen, kommt es zu singulären Matrizen und der Ausgleich liefert keine brauchbaren Ergenisse wie  Abbildung \ref{fig:compare_fit_sg_raf_it_2002_ch_neub} veranschaulicht. 
+\begin{figure}[H]
+\hspace*{-2.5cm}
+\includegraphics[scale=0.55]{./Grafiken/Fitting/Fitting_method_comparison/selected_comparisons_poly/Fit_comparison_poly_all_Weidenbach-GER-agriculture_2002.png}
+\caption{\textit{Vergleich der rekonstruierten Zeitreihe für das Jahr 2002 im Bereich Weidenbach Deutschland unter Verwendung unterschiedlicher Gewichtung für die 4 Pixelqualitätsstufen}}
+\label{fig:compare_fit_sg_raf_it_2002_ger}
+\end{figure}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+\includegraphics[scale=0.55]{./Grafiken/Fitting/Fitting_method_comparison/selected_comparisons_poly/Fit_comparison_poly_all_Bad Pippoldsau-GER-Schwarzwald_2002.png}
+\caption{\textit{Vergleich der rekonstruierten Zeitreihe für das Jahr 2002 im Bereich Bad Pippoldsau Deutschland unter Verwendung unterschiedlicher Gewichtung für die 4 Pixelqualitätsstufen}}
+\label{fig:compare_fit_sg_raf_it_2002_ger_pip}
+\end{figure}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+\includegraphics[scale=0.55]{./Grafiken/Fitting/Fitting_method_comparison/selected_comparisons_poly/Fit_comparison_poly_all_Dabo Lothringen-FRA-forrest_2002.png}
+\caption{\textit{Vergleich der rekonstruierten Zeitreihe für das Jahr 2002 im Bereich Doba Lothringen Frankreich unter Verwendung unterschiedlicher Gewichtung für die 4 Pixelqualitätsstufen}}
+\label{fig:compare_fit_sg_raf_it_2002_fra_doba}
+\end{figure}
+\begin{figure}[H]
+\hspace*{-2.5cm}
+\includegraphics[scale=0.55]{./Grafiken/Fitting/Fitting_method_comparison/selected_comparisons_poly/Fit_comparison_poly_all_Neuenburgersee-CH-pond_2002.png}
+\caption{\textit{Vergleich der rekonstruierten Zeitreihe für das Jahr 2002 im Wasserbereich des Neuenburgersees in der Schweiz unter Verwendung unterschiedlicher Gewichtung für die 4 Pixelqualitätsstufen}}
+\label{fig:compare_fit_sg_raf_it_2002_ch_neub}
+\end{figure}
 \subsection{DFT}
 \subsection{FFT}
 \end{document}
