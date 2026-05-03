@@ -926,9 +926,14 @@ Die Gegenüberstellung der errechneten Ergebnisse für die unterschiedlichen Gew
 
 % Nach auswahl der besten Fits, checkn ob die auch am Anfang des Jahres Aussreisser haben oder ob das nur im Jahr 2002 passiert is, bei dem bekanntlich 
 % probleme des Sensors vorkamen
-Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg höhere Werte, welche den Graphen einen Sprung nach oben erleben lassen. Dies dürfte auf bekannte Probleme des Sensors im Jahr 2002 zurück zuführen sein. 
+Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg höhere Werte, welche den Graphen einen Sprung nach oben erleben lassen. Dies dürfte auf bekannte Probleme des Sensors im Jahr 2002 zurück zuführen sein. Die Datenrekonstruktion läuft so weit ganz ordentlich wie auch die Beispiele für Bad Pippoldsau im deutschen Schwarzwald \ref{fig:compare_fit_sg_raf_it_2002_ger_pip} und ein Waldgebiet in Doba Lothringen Frankreich \ref{fig:compare_fit_sg_raf_it_2002_fra_doba} . Jedoch wurde ein Problem bei Wasserflächen ausgemacht. Wenn nicht genug Beobachtungen vorliegen und die interpolierten Werte bei Null liegen, kommt es zu singulären Matrizen und der Ausgleich liefert keine brauchbaren Ergenisse wie  Abbildung \ref{fig:compare_fit_sg_raf_it_2002_ch_neub} veranschaulicht. Um dieses Problem zu umgehen werden an solchen Positionen linear interpolierte Werte zwischen den einzelnen Stützstellen herangezogen. Diese Werte werden ja noch vorab dem Ausgleich an jenen Stellen ermittelt, die einen NaN Wert beinhalten, bleiben als Kopie im Speicher erhalten und können somit sehr schnell und leicht bei der Hand zu haben.
 
-Die Datenrekonstruktion läuft so weit ganz ordentlich wie auch die Beispiele für Bad Pippoldsau im deutschen Schwarzwald \ref{fig:compare_fit_sg_raf_it_2002_ger_pip} und ein Waldgebiet in Doba Lothringen Frankreich \ref{fig:compare_fit_sg_raf_it_2002_fra_doba} . Jedoch wurde ein Problem bei Wasserflächen ausgemacht. Wenn nicht genug Beobachtungen vorliegen und die interpolierten Werte bei Null liegen, kommt es zu singulären Matrizen und der Ausgleich liefert keine brauchbaren Ergenisse wie  Abbildung \ref{fig:compare_fit_sg_raf_it_2002_ch_neub} veranschaulicht. 
+
+
+
+
+
+
 \begin{figure}[H]
 \hspace*{-2.5cm}
 \includegraphics[scale=0.55]{./Grafiken/Fitting/Fitting_method_comparison/selected_comparisons_poly/Fit_comparison_poly_all_Weidenbach-GER-agriculture_2002.png}
