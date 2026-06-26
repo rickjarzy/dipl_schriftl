@@ -36,8 +36,17 @@
 % 		- die relative Kalibration in der Überlappungsbereichen der Landsatszenen ist 45 Grad
 %
 \chapter{Motivation und Hauptfragestellung}
-Atmosphärische Einflüsse stellen eine große Herausforderung in Umweltmonitoring mittels Fernerkundung dar.  Oft ist es der Fall, dass für ein zu untersuchendes Gebiet, mehrere, sich überlappende Szenen verwendet werden müssen. Im Idealfall sind diese alle vom gleichen Zeitpunkt, wolkenlos und spektral sich sehr ähnlich. Da es aber sehr selten vorkommt, dass einem Analyst all diese Wünsche erfüllt werden, müssen oft Daten verwendet werden, die zeitliche als auch radiometrische Unterschiede zueinander aufweisen. Um die radiometrischen Einflüsse zweier zeitlich versetzter Satellitenbildszenen zu minimieren bedient man sich unterschiedlicher Kalibrierungsmethoden. Absolute als auch relative Kalibrierungsmethoden sind in der Praxis bekannt und werden auch in dieser Arbeit kurz umrissen. Diese Arbeit setzt sich ebenfalls mit einer relativen Kalibrierungsmethodik hochauflösender Satellitenbilddaten auseinander. Das MODIS ( Moderate Resolution Imaging Spectrometer) Satellitensystem liefert seit Jahren, gar schon Jahrzehnten, anhand deren zweier Satelliten Terra und Aqua Aufnahmen des gesamten Planeten. Diese Daten sind anhand einer Bidirektionalen Verteilungsfunktion radiometrisch bereits kalibriert und beinhalten die Oberflächenreflexionen der Erdoberfläche in den gezeigten Ausschnitten. Anhand dieser Datengrundlage werden Landsat 5 und 7 relative zu den MODIS-Daten kalibriert und deren Digital Numbers (DN) in Reflexionswerte der Oberfläche transformiert. Im Überlappungsbereich der Landsatszenen sollten nach der relativen Kalibration radiometrische Werte und Bedingungen herrschen, die eine neuerliche relative Kalibration der Landsatszenen untereinander in einem klaren linearen Zusammenhang sehen und setzen. Eine lineare Regression der Daten im Überlappungsbereich sollte daher eine Steigung von ca 45 Grad aufweise, welches die ideale Kalibration bedeuten würde. Die zeitliche Auflösung der MODIS Szenen zueinander beträgt 8 Tage, und bietet daher eine gute Dichte an Zeitpunkten um diese Kalibration der Landsat-Daten zeitnahe durchführen zu können. 
-Da die MODIS-Daten allerdings in ihren Ausschnitten nicht immer komplett sind, oder auch Störungen beinhalten, müssen diese zuerst gefiltert und rekonstruiert werden, damit die Landsat-Daten eine lückenlose, hochqualitative Zeitreihe zur Kalibrierung vorliegen haben. Die Filterung, um das Rauschen in den MODIS Daten zu beseitigen, wird anhand einer FFT, einer DFT und einer Savitzky Golay Filterung durchgeführt. Da diese Filterungen auch unterschiedlich auf das Datenmaterial oder Datenlücken reagieren, werden auch bei der relativen Kalibrierung abweichende Ergebnisse erwartet. Die relativ kalibrierten Landsat-Daten werden hinsichtlich ihres Ergebnisses auch mittels der Software LEDAPS absolut kalibrierten Daten der NASA verglichen um eine weitere Evaluierung bei der Hand zu haben. Ziel dieser Arbeit ist vor allem die aufgestellten Thesen mit Ergebnissen zu überprüfen und zu bewerten. Auch die Erkenntnis, dass diese Methodik kein geeignetes Mittel ist MODIS Daten mit Landsat-Daten zu relativ zu kalibrieren, kann ein Ergebnis dieser Untersuchung sein. 
+
+Atmosphärische Einflüsse stellen eine große Herausforderung in Umweltmonitoring mittels Fernerkundung dar.  Oft ist es der Fall, dass für ein zu untersuchendes Gebiet, mehrere, sich überlappende Szenen verwendet werden müssen. Im Idealfall sind diese alle vom gleichen Zeitpunkt, wolkenlos und spektral sich sehr ähnlich. Da es aber sehr selten vorkommt, dass einem Analyst all diese Wünsche erfüllt werden, müssen oft Daten verwendet werden, die zeitliche als auch radiometrische Unterschiede zueinander aufweisen. Um die radiometrischen Einflüsse zweier zeitlich versetzter Satellitenbildszenen zu minimieren bedient man sich unterschiedlicher Kalibrierungsmethoden. Absolute als auch relative Kalibrierungsmethoden sind in der Praxis bekannt und werden auch in dieser Arbeit kurz umrissen. Diese Arbeit setzt sich ebenfalls mit einer relativen Kalibrierungsmethodik zwischen MODIS Daten und  hochauflösender LANDSAT 5 und 7 Satellitenbilddaten auseinander. Das MODIS ( Moderate Resolution Imaging Spectrometer) Satellitensystem liefert seit Jahren, gar schon Jahrzehnten, anhand deren zweier Satelliten Terra und Aqua Aufnahmen des gesamten Planeten. Diese Daten sind anhand einer Bidirektionalen Verteilungsfunktion radiometrisch bereits kalibriert und beinhalten die Oberflächenreflexionen der Erdoberfläche in den gezeigten Ausschnitten. 3 Hauptfragestellungen sollen nun in dieser Arbeit zur relativen Kalibrierung zwischen MODIS und Landsat um rissen werden:
+\begin{enumerate}
+\item Anhand der bereits erwähnten  Datengrundlage werden Landsat 5 und 7 relative zu den MODIS-Daten kalibriert und deren Digital Numbers (DN) in Reflexionswerte der Oberfläche transformiert. Im Überlappungsbereich der Landsatszenen sollten nach der relativen Kalibration radiometrische Werte und Bedingungen herrschen, die eine neuerliche relative Kalibration der Landsatszenen untereinander in einem klaren linearen Zusammenhang sehen und setzen. Eine lineare Regression der Daten im Überlappungsbereich sollte daher eine Steigung von ca 45 Grad aufweise, welches die ideale Kalibration bedeuten würde. Die zeitliche Auflösung der MODIS Szenen zueinander beträgt 8 Tage, und bietet daher eine gute Dichte an Zeitpunkten um diese Kalibration der Landsat-Daten zeitnahe durchführen zu können.
+
+\item Da die MODIS-Daten allerdings in ihren Ausschnitten Datenlücken oder auch Störungen beinhalten, müssen diese zuerst gefiltert oder rekonstruiert werden, damit die Landsat-Daten eine lückenlose, hochqualitative Zeitreihe zur Kalibrierung vorliegen haben. Die Filterung, um das Rauschen in den MODIS Daten zu beseitigen, wird anhand einer FFT, einer DFT und einer Savitzky Golay Filterung durchgeführt. Da diese Filterungen auch unterschiedlich auf das Datenmaterial oder Datenlücken reagieren, werden auch bei der relativen Kalibrierung abweichende Ergebnisse erwartet.
+
+\item Die relativ kalibrierten Landsat-Daten werden hinsichtlich ihres Ergebnisses auch mittels der Software LEDAPS absolut kalibrierten Daten der NASA verglichen um eine weitere Evaluierung bei der Hand zu haben. 
+\end{enumerate}
+Ziel dieser Arbeit ist vor allem die aufgestellten Thesen mit Ergebnissen zu überprüfen und zu bewerten. Auch die Erkenntnis, dass diese Methodik kein geeignetes Mittel ist MODIS Daten mit Landsat-Daten zu relativ zu kalibrieren, kann ein Ergebnis dieser Untersuchung sein.
+
 
 
 
@@ -68,7 +77,7 @@ f(t) = a_0+a_1 \cdot t+a_2 \cdot t^2
 \begin{figure}[H]		% H bedeutet Here
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Fitting/TIMESATmanuell_savitzky_golay_filter.PNG}
-\caption{\textit{Gefittete Funktion nach Savitzky Golay. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funtion. In (a) ist die Moving-Window-Größe n=5, in (b) ist die Moving-Window-Größe n=3 (Eklundh L., Jönnson P.,2012)}}
+\caption{\textit{Gefittete Funktion nach Savitzky Golay. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funtion. In (a) ist die Moving-Window-Größe n=5, in (b) ist die Moving-Window-Größe n=3 (Eklundh \& Jönsson, 2012)}}
 \end{figure}
 
 \subsubsection{Asymmetrische Gauss'scher Fit}
@@ -92,7 +101,7 @@ x_5\qquad &\dots\qquad \text{Wölbung linke Seite}
 \begin{figure}[H]		% H bedeutet Here
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Fitting/TIMESATmanuell_asymmetric_gaussian_filter.PNG}
-\caption{\textit{Auswirkungen auf die Breite und Wölbung wenn sich die lokalen Parameter ändern. In (a) wurde $x_2$ vermindert (durchgezogen) und erhöht ( strichliert),dass sich in einer geänderten Breite und Wölbung auf der rechten Seite auswirkt. In (b) wurde $x_3$ vermindert (durchgezogen) und erhöht (strichliert).(Eklundh L., Jönnson P.,2012)}}
+\caption{\textit{Auswirkungen auf die Breite und Wölbung wenn sich die lokalen Parameter ändern. In (a) wurde $x_2$ vermindert (durchgezogen) und erhöht ( strichliert),dass sich in einer geänderten Breite und Wölbung auf der rechten Seite auswirkt. In (b) wurde $x_3$ vermindert (durchgezogen) und erhöht (strichliert).(Eklundh \& Jönsson, 2012)}}
 \end{figure}
 
 \subsubsection{Doppel-Logistische Funktion}
@@ -105,7 +114,7 @@ f(t;x_1,\dots,x_4) = \frac{1}{1+exp\left(\frac{x_1-t}{x_2}\right)} - \frac{1}{1+
 \begin{figure}[H]		% H bedeutet Here
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Fitting/TIMESATmanuell_adaption_to_the_uper_envelope.PNG}
-\caption{\textit{Gefittete Funktion nach meheren Iterationen. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funtion (a). In (b) die erneute Berechnung des Modells mit einer verringerten Gewichtung der niedrigeren Datenwerten (Eklundh L., Jönnson P.,2012)}}
+\caption{\textit{Gefittete Funktion nach meheren Iterationen. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funtion (a). In (b) die erneute Berechnung des Modells mit einer verringerten Gewichtung der niedrigeren Datenwerten (Eklundh \& Jönsson, 2012)}}
 \end{figure}
 
 
@@ -186,10 +195,10 @@ Es exitsiert eine Vielzahl an Möglichkeiten von pre-launch laborgetätigten Kal
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/zeitlStabilitaetLybia4_inkl_BRDF.PNG}
-\caption{\textit{TOA Reflexion zeitlicher Trend von HYPERION über der Libya 4 Testsite und anhand einer BRDF korrigiert (Helder et al.,2013)}}
+\caption{\textit{TOA Reflexion zeitlicher Trend von HYPERION über der Libya 4 Testsite und anhand einer BRDF korrigiert (Helder et al., 2013)}}
 \end{figure}
 
-Helder et al wenden zuerst wird ein vereinfachtes lineares BRDF-Modell auf die Libya Testsite an. In diesem Modell wird lediglich der solare Zenithwinkel berücksichtig. Sämtliche anderen Einflüsse werden vernachlässigt.
+Helder et al. (2013) wenden zuerst wird ein vereinfachtes lineares BRDF-Modell auf die Libya Testsite an. In diesem Modell wird lediglich der solare Zenithwinkel berücksichtig. Sämtliche anderen Einflüsse werden vernachlässigt.
 \begin{equation}
 \rho_{Libya4}(\lambda,SZA) = k(\lambda)\rho_h(\lambda)\left[a(\lambda)(SZA)+1\right]
 \end{equation}
@@ -206,31 +215,31 @@ Die Kalibrierungen zeigen bei beiden Sensoren ein Ergebnis das innerhalb ihrer a
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/modellierte_gmessene_MODIS_mittels_lin_BRDF_Libya4.PNG}
-\caption{\textit{Gemessene MODIS und modelierte MODIS mittels linearer BRDF über Libya4  (Helder et al.,2013)}}
+\caption{\textit{Gemessene MODIS und modelierte MODIS mittels linearer BRDF über Libya4  (Helder et al., 2013)}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/prozent_diff_zw_lyb4model_und_MODIS.PNG}
-\caption{\textit{Prozent Differenz zwischen MODIS-Beobachtungen und Modellberechnungen  (Helder et al.,2013)}}
+\caption{\textit{Prozent Differenz zwischen MODIS-Beobachtungen und Modellberechnungen  (Helder et al., 2013)}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/temporaler_Trend_vonETMplus_Libya4.PNG}
-\caption{\textit{Gemessene ETM+ (asteriks) und modelierte Prediktionen (kreis) über Libya4  (Helder et al.,2013)}}
+\caption{\textit{Gemessene ETM+ (asteriks) und modelierte Prediktionen (kreis) über Libya4  (Helder et al., 2013)}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/prozent_diff_zw_lyb4model_und_ETMplus.PNG}
-\caption{\textit{Prozent Differenz zwischen ETM+ -Beobachtungen und Modellberechnungen  (Helder et al.,2013)}}
+\caption{\textit{Prozent Differenz zwischen ETM+ -Beobachtungen und Modellberechnungen  (Helder et al., 2013)}}
 \end{figure}
 
 \subsubsection{6S-Modell}
 %6S radiative transfer 
 % ===============================================
-In diesem Unterabschnitt wird grob die 6S Methode zur Berechnung eines empfangenen Signales beschrieben. Für eine genaue Diskussion wird auf die Literatur von Vermote et al., 2006, "`Second Simulation of a Satellite Signal in the Solar Spectrum - Vector (6SV)"' hingtewiesen.\newline\newline
+In diesem Unterabschnitt wird grob die 6S Methode zur Berechnung eines empfangenen Signales beschrieben. Für eine genaue Diskussion wird auf die Literatur von Vermote et al. (2006), "`Second Simulation of a Satellite Signal in the Solar Spectrum - Vector (6SV)"' hingtewiesen.\newline\newline
 Anhand der 6S (6S - Second Simulation of a Satellite Signal in the Solar Spectrum) radiometrischen Transfer Codes wird der Einfluss der Atmosphäre, speziel die Absorption und Streuung modelliert. Im Idealfall ( mit keiner vorhandenen ) Atmosphäre wird ein Teil der ausgesandten Photonen von der Erdoberfläche absorbiert und der Rest wieder in den Weltraum zurück reflektiert wird. Diese aufgefangenen Messungen selbst hängen direkt mit der Eigenschaft der Reflexionsoberfläche zusammen.bei vorhandener Erdatmosphäre Circa $80 \%$ der Photonen kommen bei einer Wellenlänge von $0.85 \mu m$ und $50 \%$ bei $0.45 \mu m$ an. Jene Lichtteilchen gehen bei zwei Prozessen , der Absorption ( durch Gase, hauptsächlich $ O_2,O_3, H_2O,CO_2,CH_4$ sowie $N_2O$ und der Streuung verloren. Die Absorption ist in der Regel klein gehalten und man vermeidet in der Fernerkundung Bänder in denen stark absorbiert wird. Die Streuung wird durch nicht absorbierende Moleküle verursacht. Das Photon wird dabei in eine andere Richtung reemmitiert in die es eigentlich weiter gehen sollte. In der Regel durchläuft ein Photon mehrere solche Streuungsvorgänge, welche in der Verarbeitung mitberücksichtigt werden müssen.\newline
 Ein Teil der Strahlung wird direkt von der Atmosphäre zurück reflektiert ohne die Oberfläche zu erreichen somit tragen sie nur zum Strahlungshaushalt bei aber nicht zum Informationsgewinn über das Beobachtungsziel. Die überbleibenden Photonen beleuchten die Oberfläche abhängig von ihrem gestreuten Pfad diffus und werden auf ihrem Weg Richtung Weltraum bzw Sensor erneut gestreut, reflektiert und erneut gestreut ( Trappingeffekt ). Kurz es verlangt nach einer genauen Bestimmung der absorbierenden Gase der Atmosphäre sowie eine genaue Behandlung der Streuprozesse in Kombination beider Prozesse. \newline
 
@@ -252,7 +261,7 @@ E_s\qquad &\dots\qquad \text{solare Flux am Atmosphären-beginn} \\
 \end{flalign}\newline
 
 % aus den 6S manual vom vermote part 1
-Berücksichtigt man atmopshärischen Einfluss, Absorbtionseffekte von $H_2O, O_2, CO_2$ und $O_3$, Streuung an Molekülen und Aerosolen und der Einfluss der Oberfläche, schreibt man nun \newline (Vermote et al, 6S,2006)s
+Berücksichtigt man atmopshärischen Einfluss, Absorbtionseffekte von $H_2O, O_2, CO_2$ und $O_3$, Streuung an Molekülen und Aerosolen und der Einfluss der Oberfläche, schreibt man nun \newline (Vermote et al., 2006)
 \begin{equation}
 \rho' (\Theta_s, \Theta_v, \Phi_v) = t_g ( \Theta_s, \Theta_v) \left\{\rho_a(\Theta_s, \Theta_v, \Phi_v)+ \frac{T(\Theta_s)}{1-\langle\rho (M)\rangle S}\left[  \rho_c(M)e^{-\tau / \mu_v} + \langle \rho(M)\rangle t_d(\Theta_v)\right] \right\}
 \end{equation}\newline
@@ -270,7 +279,7 @@ Für jeden Schritt in der Berechnung werden entweder standartisierte Zustände a
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/Workflow_6S.PNG}
-\caption{\textit{Workflow der 6S Radiative Transformation Codes  (Vermote et al.,2006)}}
+\caption{\textit{Workflow der 6S Radiative Transformation Codes  (Vermote et al., 2006)}}
 \end{figure}
 
 %BRDF - aus Einige BRDF Modelle
@@ -295,7 +304,7 @@ BRDF(\Theta_{in},\Phi_{in},\Theta_{ref},\Phi_{ref}) = \frac{dL_{ref}(\Theta_{ref
 
 Allgemein ist die BRDF eine Funktion die nur in drei Variablen abhängig ist $f(\Theta_{in},\Theta_{ref},\Phi_{in}-\Phi_{ref}) $. Als weiterführende Literatur wird Nikolaus Gebhardt und Shree Nayar empfohlen.
 \newline
-Die Oberflächenalbedo variiert sehr stark abhängig von sesonalen oder geographischen Parametern. Regenfall kann zum Beispiel die Oberflächenalbedo einer Baumkrone um bis zu 50\% reduzieren (Román et al 2009). Zusätzlich dazu kommen noch Faktoren wie Schattenwurf durch Baumkronen oder spiegelnde Reflexionen abhängig vom Einfallwinkel des Sonnenlichtes oder atmosphärische Veränderungen und Schwankungen (Román et. al. 2009).\newline
+Die Oberflächenalbedo variiert sehr stark abhängig von sesonalen oder geographischen Parametern. Regenfall kann zum Beispiel die Oberflächenalbedo einer Baumkrone um bis zu 50\% reduzieren (Román et al., 2009). Zusätzlich dazu kommen noch Faktoren wie Schattenwurf durch Baumkronen oder spiegelnde Reflexionen abhängig vom Einfallwinkel des Sonnenlichtes oder atmosphärische Veränderungen und Schwankungen (Román et al., 2009).\newline
 
 %BRDF - MODIS collection V005 BRDF/albedor product
 \subsubsection{MODIS ( Collection V5) BRDF/albedo product}
@@ -324,11 +333,11 @@ $h_k(\Theta)$  stellt das Integral des BRDF Kernels $k$ über einen gegebenen Be
 
 \subsection{Relative Kalibrierung}
 \subsubsection{Lineare Regression}
-(Tokol T. et al, 1999) gehen von zwei Grundlegenden Strategien aus, die bei der relativen Datenkalibrierung angewandt werden können. Manche Methoden basieren auf der Verteilung der Bildinformation während andere auf paarweise Pixelbeziehungen abziehlen. Alle Regressionsmodelle wurden anhand von robusten Methoden berechnet, welche iterativ die Gewichte für die Regression neu berechnen. Um Band-zu-Band kalibrieren zu können wird folgendes Modell verwendet:
+Tokola et al. (1999) gehen von zwei Grundlegenden Strategien aus, die bei der relativen Datenkalibrierung angewandt werden können. Manche Methoden basieren auf der Verteilung der Bildinformation während andere auf paarweise Pixelbeziehungen abziehlen. Alle Regressionsmodelle wurden anhand von robusten Methoden berechnet, welche iterativ die Gewichte für die Regression neu berechnen. Um Band-zu-Band kalibrieren zu können wird folgendes Modell verwendet:
 \begin{equation}
 \hat{y_i}=\beta_0+\beta_1x_i
 \end{equation}
-$y_i$ ist hierbei ein Pixel eines Bandes aus einer nachfolgenden Epoche und $x_i$ bezieht sich auf einen Pixel eines Bandes in einer früheren Epoche. (Vermote E.F., Saleous N.Z., 2006) führen einen Kreuzkalibrierung zwischen AVHRR und MODIS über einem radiometrischen stabilem Wüstengebiet im Niger anhand einer lineraren Translation durch.
+$y_i$ ist hierbei ein Pixel eines Bandes aus einer nachfolgenden Epoche und $x_i$ bezieht sich auf einen Pixel eines Bandes in einer früheren Epoche. Vermote und Saleous (2006) führen einen Kreuzkalibrierung zwischen AVHRR und MODIS über einem radiometrischen stabilem Wüstengebiet im Niger anhand einer lineraren Translation durch.
 
 
 \subsubsection{PIF's}
@@ -375,25 +384,20 @@ Als Endergebnis liegen Landsat5 TM und Landsat7 ETM+ Daten als Oberflächenrefle
 % ==================================================
 
 \subsection{TIMESAT}
-TIMESAT wurde primär zur Prozessierung von Vegetationsindexzeitreihen für die  Ableitung von saisonalen Parametern wie Anfang, Ende, Länge etc der Vegetationsperiode entwickelt. Es erlaubt die Filterung von Satellitenbildzeitreihen sowie berücksichtigt es Zusatzinformation wie Qualitätsinformationen ( z.B. Modis Qualitätsprodukt) für eine mögliche Gewichtung. Die verwendeten Algorithmen basierend auf der Methode der kleinsten Quadrate sind ein Savitzky Golay Filtern sowie zwei Methoden bei denen die Daten anhand von nonlinearer Funktionen unterschiedlicher Komplexität gefittet werden. TIMESAT arbeitet iterativ und mit einer dynamischen Gewichtung. Nach einer ersten Iteration und Schätzung der Parameter werden die Rohdatenwerte unterhalb der gefitteten Kurve mit einem neuen geringeren Gewicht behaftet und das Modell wird neu berechent. Dadurch resultiert eine an den oberen Verlauf der Daten adaptiertes Modell.TIMESATs größter Nachteil ist die Prozessierungsgeschwindigkeit. In der Literatur wird TIMESAT meist nur für kurze Perioden oder einem beschränkten Gebiet eingesetzt siehe (Jönsson P., Eklundh L.,2004) sowie (Tan B. et al.,2011). Bei der Prozessierung einer Zeitreihe die Daten von mehr als einem Jahrzehnt umfasst steigt die Rechenzeit und das Programm wird nicht mehr brauchbar. 
+TIMESAT wurde primär zur Prozessierung von Vegetationsindexzeitreihen für die  Ableitung von saisonalen Parametern wie Anfang, Ende, Länge etc der Vegetationsperiode entwickelt. Es erlaubt die Filterung von Satellitenbildzeitreihen sowie berücksichtigt es Zusatzinformation wie Qualitätsinformationen ( z.B. Modis Qualitätsprodukt) für eine mögliche Gewichtung. Die verwendeten Algorithmen basierend auf der Methode der kleinsten Quadrate sind ein Savitzky Golay Filtern sowie zwei Methoden bei denen die Daten anhand von nonlinearer Funktionen unterschiedlicher Komplexität gefittet werden. TIMESAT arbeitet iterativ und mit einer dynamischen Gewichtung. Nach einer ersten Iteration und Schätzung der Parameter werden die Rohdatenwerte unterhalb der gefitteten Kurve mit einem neuen geringeren Gewicht behaftet und das Modell wird neu berechent. Dadurch resultiert eine an den oberen Verlauf der Daten adaptiertes Modell.TIMESATs größter Nachteil ist die Prozessierungsgeschwindigkeit. In der Literatur wird TIMESAT meist nur für kurze Perioden oder einem beschränkten Gebiet eingesetzt siehe Jönsson und Eklundh (2004) sowie Tan et al. (2011). Bei der Prozessierung einer Zeitreihe die Daten von mehr als einem Jahrzehnt umfasst steigt die Rechenzeit und das Programm wird nicht mehr brauchbar. 
 
 
 % ==============================================================================================================
-% METHODIK
-% Grundlagen
+% DATENGRUNDLAGEN
+% 
 % 
 % ==============================================================================================================
 
 
 
 
-\chapter{Methodik}
-% MODIS - Allgemeine Informationen
-% - to do: was über die einheiten schreiben , warum modis, weil SI einheiten verwendet wie bei Landsat etc ( schauen in Tokola 2013 
-% ================================
-
-\section{Datengrundlagen}
-In diesem Kapitel werden die verwendeten Satellitendaten besprochen. Dabei handelt es sich um multispektrale Satellitendaten unterschiedlicher Auflösung und Datengehaltes  sowie der Qualitätsinformation die bei der absoluten Kalibrierung der Landsatdaten mittels LEDAPS generiert wurde als fertiges Produkt für MODIS bereitgestellt wird. 
+\chapter{Datengrundlagen}
+In diesem Kapitel werden die verwendeten Satellitendaten besprochen. Dabei handelt es sich um multispektrale Satellitendaten unterschiedlicher Auflösung und Datengehaltes  sowie der Qualitätsinformation die bei der absoluten Kalibrierung der Landsatdaten mittels LEDAPS generiert wurde als fertiges Produkt für MODIS bereitgestellt wird.
 
 
 
@@ -404,7 +408,7 @@ In diesem Kapitel werden die verwendeten Satellitendaten besprochen. Dabei hande
 
 % Landsat
 % ==========================================================================
-\subsection{Landsat - Allgemeine Informationen zum Sensor und Trägersystem}
+\section{Landsat - Allgemeine Informationen zum Sensor und Trägersystem}
 Landsat ist die weltweit längste zivile Erdbeobachtungsmission mittels Fernerkundungssensoren  mittlerer Auflösung. Seit 1972 sind bis jetzt 8 Satelliten in Orbit gebracht worden wobei Landsat 6 beim Start verlorenging. Im näheren wird nur auf jene Sensoren eingegangen deren Daten in der Diplomarbeit verwendet wurden. Dies umfasst die Satelliten Landsat5, Landsat7 und Landsat8.
 
 Landsat5 und Landsat4 (der Vollständigkeit halber erwähnt) wurden mit den verbesserten \textit{Thematic Mapper} ausgestattet der im sichtbaren Bereich und nahen Infrarotbereich sowie im thermalen und panchromatischen Bereich Aufnahmen tätigt. Für das sichtbare und naheinfrarote Spektrum beträgt die Auflösung 30m, für das thermale Band 120m und im panchromatischen Kanal 15m.
@@ -418,34 +422,19 @@ Aktuell liefern Landsat7  und Landsat8  alle 16 Tage Aufnahmen des selben Erdobe
 
 % \href{http://glovis.usgs.gov}{http://glovis.usgs.gov}
 % \href{http://earthexplorer.usgs.gov}{http://earthexplorer.usgs.gov}
-\subsection{Landsat}
+\section{Landsat}
 Die Daten des Landsatsystems wurden alle über die von der NASA und U.S.G.S. zur Verfügung gestellten Downloadsites \textit{Earth Explorer} sowie \textit{GloVis} akquiriert. Eine Landsatszene definiert ihre Position über Path- und Row- Angaben welche für das ausgewählte Gebiet der Diplomarbeit im Schwarzwald liegen Pathindizes von $195$ bis $196$ sowie Rowindizes von $25$ und $26$ umfasst. Der maximale Bewölkungsgrad wurde mit $40\%$ gewählt. Sämtliche Landsat5 und Landsat 7 Satellitendaten wurden entweder direkt mit der \textit{Bulk Download Application} (BDA) der NASA downgeloadet oder über deren Bestellservice geordert und sobald fertig prozessiert ebenfalls mittels der BDA downgeloadet.
-Die Daten liegen als GeoTIFF für jedes einzelne Band pro Epoche auf. Sämtliche Landsatdaten wurden im Anschluss mittels LEDAPS absolut kalibriert. Die Kalibrierung liefert nicht nur die Landsatdaten in Oberflächenreflexion sondern vor allem die notwendige Wolkenmaske für jede zu kalibrierende LandsatSzene. Da LEDAPS seinerseits alle seine Ergebnisse  als hdf4 verspeichert müssen diese ebenfalls wieder in das GeoTIFF-Format übergeführt werden. 
+Die Daten liegen als GeoTIFF für jedes einzelne Band pro Epoche auf. Sämtliche Landsatdaten wurden im Anschluss mittels LEDAPS absolut kalibriert. Die Kalibrierung liefert nicht nur die Landsatdaten in Oberflächenreflexion sondern vor allem die notwendige Wolkenmaske für jede zu kalibrierende LandsatSzene. Da LEDAPS seinerseits alle seine Ergebnisse  als hdf4 verspeichert müssen diese ebenfalls wieder in das GeoTIFF-Format übergeführt werden.
 
 
-
-\subsection{Sentinel}
-Sentinel sind eine Reihe von Erdbeobachtungs- und Forschungssatelliten der ESA welche im Rahmen des Copernicus Forschungsprogramms gestartet und zum Einsatz kommen. Sie setzten sich aus 5 Satelliten zusammen die im optischen und Radarbereich eine dichte Bandbreite an Informationen über den Planeten sammeln. Sentinel 2  liefern Daten im optischen, nahen infraroten Bereich, hochauflösend von 10 mal 10 Meter,  in einem Intervall von 5 Tagen. Dies gewährt Aussicht auf besonders dichte Zeitreihen die mit diesem System möglich sind. Sentinel 3  nimmt die Erdoberfläche mit einer höheren Auflösung auf , soll allerdings zumindest auf dem Level der MODIS Daten  kalibriert sein. Die entwickelte Methodik zielt auch auf eine portable Herangehensweise ab, dass man die besser kalibrierten Sentinel 3 Daten zum Kalibrieren von Satellitendaten anderer Syteme  verwendet.
-
-
-\subsection{Sinusodial Referenzsystem}
-Die Daten der verwendeten MODIS-Zeitreihe wurden mittels dem MODIS-Reprojection-Tool in eine Sinusoidale Projection gebracht. Die Sinusoidal-Projektion nist eine flächentreue, pseudo-zylindrische Projektion, welche die gesamte Erdoberfläche darstellen kann. Der Zentralmeridian und der Äquator werden winkel- und längentreu wiedergegeben während Meridiane als Sinuskurven und Breitenkreise als Geraden dargestellt werden. Als Basis dient eine Kugel mit einem gemittelten Erdradius von 6371007,181 m ( MODIS Land, web-quelle nr 11). Je weiter man sich vom Abbildungsmeridian entfernt umso verzerrter wird die Darstellung. Die meisten MODIS Land Produkte sind als Kacheln indiziert und nutzen das Sinusodial-Grid-Tilling-System. Am Äquator weist eine Kachel eine Größe von 10 Grad mal 10 Grad auf. Das Kachelkoordinatensystem startet bei (0,0) - (horizontale nummer, verticale nummer) in der linken oberen Ecke beginnt und bei (35,17) in der rechten unteren Ecke endet. Das System zählt dabei von rechts nach links (horizontal) und von oben nach unten (vertikal)
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.6]{./Grafiken/RefSys/modis_sinusoidal_grid.jpg}
-\caption{\textit{MODIS Tilling System, (U.S.G.S., 2013)}}
-\end{figure}
-
-
-
-\subsection{UTM-Referenzsystem}
-Sämtliche Daten der Landsatmissionen sind im \textit{Universal Transverse Mercator}-Referenzsystem (UTM) projiziert. Es handelt sich hierbei um ein globales Koordinatensystem das die Erdoberfläche von 80 Grad Süd bis 84 Grad Nord streifenförmig in 6 Grad breite Zonen unterteilt. Als Basis dient das Bezugsellipsoid WGS84. UTM nutzt eine transversale Mercator-Projektion zum verebnen. Hierbei berührt der Projektionszylinder die Oberfläche nicht am Bezugsmeridian sondern schneidet sie. Dadurch ensteht ein Streifen
+% MODIS - Allgemeine Informationen
+% - to do: was über die einheiten schreiben , warum modis, weil SI einheiten verwendet wie bei Landsat etc ( schauen in Tokola 2013
+% ================================
 
 \section{MODIS - Allgemeine Informationen zum Sensor und Trägersystem}
 
 
-MODIS ( Moderate Resolution Imaging Spectroradiometer) nennt sich ein optischer Sensor, welcher sich in einem Low Earth Orbit in 705 km Höhe, mit einer Blickwinkel von 2330 km auf den beiden Satelliten Terra (früher EOS AM-1) und Aqua (früher EOS PM-1) um die Erde befindet. Die Mission wurde am 18. Dezember 1999 mit dem Launch des Terra (EOS AM-1) Spacevehicles gestartet. Am 4. Mai 2002 wurde der Satellite Aqua (EOS PM-1) mit dem zweiten MODIS in seine Umlaufbahn geschossen. Die Lebenszeit von Terra und Aqua war mit jeweils 6 Jahren anberaumt und erfreut sich nun über ein mehr als 15 jähriges Bestehen. Die Orbits der Satelliten sind so synchronisiert, dass Terra den Äquatior am Vormittag von Nord nach Süd passiert und Aqua den Äquator nachmittags von Süd nach Nord. Die räumliche Auflösung eines einzenlnen Pixels reicht von 250 und 500 Metern im Nadir bis zu 1 km als Whisk-Broom-Scanner. Die Bänder 1-2 werden in 250m, die Bänder 3-7 in 500m und die Bänder 8-37 werden in 1000m Auflösung aufgenommen. Beide Satelliten vermögen in einer ein bis zwei Tage Periode die gesamte Erdoberfläche in 36 spektralen Bändern in einem Umfang von $0.4\mu$ m bis $14.4\mu$ m aufzunehmen. Die Aufnahmen finden dabei jeweils unter einem anderen Einstrahlwinkel, bidirektional,  der Sonne statt. Nach der Anwendung von atmosphärischen Korrekturen und der Überführung der Strahlungswerten in Reflexionswerten der Erdoberfläche gibt das System die anisotropischen Reflexionseigenschaften mit dem Wandel der Landbedeckungstypen, Vegetation sowie Bodenkomponenten  in jedem einzelnen Pixel wieder. Anhand von State-of-the-Art On-board-Kalibrierungseinheiten wird eine Genauigkeit von unter 2\% angegeben (Vermote E.F., Saleous N.Z.,2006). MODIS Terra wird generell als einer der am besten kalibierten Sensoren im Bereich der "`reflektierenden"' Wellenlängen mit einer Unsicherheit von 2\% (Helder et al., 2013).
+MODIS ( Moderate Resolution Imaging Spectroradiometer) nennt sich ein optischer Sensor, welcher sich in einem Low Earth Orbit in 705 km Höhe, mit einer Blickwinkel von 2330 km auf den beiden Satelliten Terra (früher EOS AM-1) und Aqua (früher EOS PM-1) um die Erde befindet. Die Mission wurde am 18. Dezember 1999 mit dem Launch des Terra (EOS AM-1) Spacevehicles gestartet. Am 4. Mai 2002 wurde der Satellite Aqua (EOS PM-1) mit dem zweiten MODIS in seine Umlaufbahn geschossen. Die Lebenszeit von Terra und Aqua war mit jeweils 6 Jahren anberaumt und erfreut sich nun über ein mehr als 15 jähriges Bestehen. Die Orbits der Satelliten sind so synchronisiert, dass Terra den Äquatior am Vormittag von Nord nach Süd passiert und Aqua den Äquator nachmittags von Süd nach Nord. Die räumliche Auflösung eines einzenlnen Pixels reicht von 250 und 500 Metern im Nadir bis zu 1 km als Whisk-Broom-Scanner. Die Bänder 1-2 werden in 250m, die Bänder 3-7 in 500m und die Bänder 8-37 werden in 1000m Auflösung aufgenommen. Beide Satelliten vermögen in einer ein bis zwei Tage Periode die gesamte Erdoberfläche in 36 spektralen Bändern in einem Umfang von $0.4\mu$ m bis $14.4\mu$ m aufzunehmen. Die Aufnahmen finden dabei jeweils unter einem anderen Einstrahlwinkel, bidirektional,  der Sonne statt. Nach der Anwendung von atmosphärischen Korrekturen und der Überführung der Strahlungswerten in Reflexionswerten der Erdoberfläche gibt das System die anisotropischen Reflexionseigenschaften mit dem Wandel der Landbedeckungstypen, Vegetation sowie Bodenkomponenten  in jedem einzelnen Pixel wieder. Anhand von State-of-the-Art On-board-Kalibrierungseinheiten wird eine Genauigkeit von unter 2\% angegeben (Vermote \& Saleous, 2006). MODIS Terra wird generell als einer der am besten kalibierten Sensoren im Bereich der "`reflektierenden"' Wellenlängen mit einer Unsicherheit von 2\% (Helder et al., 2013).
 \newline
 
 % Spektrale Tabelle
@@ -470,7 +459,7 @@ MIR   & Band 7 & 2105-2155 & Band 7 & 2090-2350   & Band 7 & 2080-2350 & Band 7 
 % =================
 
 \subsection{MODIS - Compositemethoden}
-Der Grundgedanke des MODIS Compositionalgorithmus ist aus einem zeitlich vordefiniertem Pool an Epochen mittels einer reflexionsbasierten BRDF (Bi-directional Reflectance Distribution Function) mit einem eingeschränktem MVC ( Maximum Value Composite) als Rückversicherung. 
+Der Grundgedanke des MODIS Compositionalgorithmus ist aus einem zeitlich vordefiniertem Pool an Epochen mittels einer reflexionsbasierten BRDF (Bi-directional Reflectance Distribution Function) mit einem eingeschränktem MVC ( Maximum Value Composite) als Rückversicherung.
 \subsubsection{Maximum Value Composite}
 % Maximum Value Composite wie in AVHRR-NDVI benutzt wird
 Das Maximum Value Composite (MVC) Verfahren zieht aus einem zeitlich vordefiniertem Pool für den NDVI den maximalen Wert jedes Pixels und trägt ihn in die abschliessende Epoche ein. Diese Vorgehensweise ist so geschaffen um störende  atmosphärische Effekte zu minimieren , Wolken inkludiert. Der Kompositionsvorgang inkludiert in der Regel ein Wolkenscreening sowie einen Qualitätscheck der Daten. Die MVC funktioniert eher über Oberfläcgen mit Lambert'schen Eigenschaften, bei sich ändernden atmosphärischen Eigenschaften und anisotropischem Oberflächenverhalten wird die Methode jedoch ungenau (Van Leeuwen et al., 1999). Nach atmosphärischer Korrektur nimmt die Ungenauigkeit der MVC noch zu da die Anisotropie der Oberflächen ebenfalls zunimmt. Generell arbeitet die  MVC am besten bei atmosphärisch unkorregierten Daten und ist ungeeignet für die atmosphärisch korregierten Oberflächenrefelxions Daten des MODIS-Sensors. Der NDVI tendiert zu einer Zunahme nachdem er aus atmosphärisch korregierten Daten berechnet wurde, jedoch bedeutet der höchste NDVI für ein Pixel noch nicht, dass es auch um den  besten atmosphärisch korregierten Pixel handelt. Nicht entfernte Wolken und sowie unterschiedliche Sonnen- und Beobachtungswinkel verändern die Oberflächenrefelxion und somit den ausgewählten maximalen Wert. Über das Jahr gesehen wäre somit der Pixel nicht konsistent ( Van Leeuwen et al., 1999). Generell überschätzt das MVC-Verfahren die Rasterwerte und führt in weiterer Folge auch zu einer Überschätzung der abgeleiteten Parameters ( Van Leeuwen et al., 1999). Wird der NDVI nun aus atmosphörisch korregierten Daten berechnet, so sind vor allem Pixel im Off-Nadir Bereich mehr fehlerbehaftet, da hier die Korrektur nicht so gut funktioniert.
@@ -480,7 +469,7 @@ Einhergehend mit der immer weiter voranschreitenden Verbesserung und  Entwicklun
 
 
 \subsection{Datenakquisition - v5}
-Die  rohen MODIS-Zeitreihe liegt als verrauschete Zeitreihe von 2000-2012 im hdf-4 Format vor und  wurden mittels der NASA-eigenen Software "`MRT-TOOL"' in das GeoTIFF-Format entpackt und in das Sinusodial Reference System transformiert. Die Zeitreihe an sich selbst, setzt sich aus 16-Tägigen Kompositionen der besten spektralen Einzelaufnahme eines Pixels zusammen. Abhängig von der Auflösung des verwendeten Produktes zum Beispiel im 250 Meter aufgelöstem Produkt kann auch zwischen den Aufnahmen des Terra Satelliten mit dem Postfix "MOD" und dem Aqua Satelliten mit dem Postfix "MYD" unterschieden werden, welches zusätzlich in der Programmierung bedacht werden muss. Aufgrund der unterschiedlichen Launchzeitpunkte der Satelliten wurde die Zeitreihe zwischen 2000 und der ersten Aqua-Aufnahme künstlich verdichtet, indem die Terra-Aufnahmen einfach verdoppelt wurden und einen passenden Zeitstempel erhalten haben. Die komplettierte Zeitreihe an sich selbst weist alle 8 Tage eine Epoche eines MODIS-Sensors (Terra und Aqua-Epochen immer abwechselnd) auf.Für die Diplomarbeit selbst beschränkt sich der Author auf das "`500m"' aufgelöste Produkt MCD43A4 welches alle 8 Tage Daten des Terra- oder des Aqua-Satelliten inklusive die passende Qualitätsinformation zur Verfügung stellt. 
+Die  rohen MODIS-Zeitreihe liegt als verrauschete Zeitreihe von 2000-2012 im hdf-4 Format vor und  wurden mittels der NASA-eigenen Software "`MRT-TOOL"' in das GeoTIFF-Format entpackt und in das Sinusodial Reference System transformiert. Die Zeitreihe an sich selbst, setzt sich aus 16-Tägigen Kompositionen der besten spektralen Einzelaufnahme eines Pixels zusammen. Abhängig von der Auflösung des verwendeten Produktes zum Beispiel im 250 Meter aufgelöstem Produkt kann auch zwischen den Aufnahmen des Terra Satelliten mit dem Postfix "MOD" und dem Aqua Satelliten mit dem Postfix "MYD" unterschieden werden, welches zusätzlich in der Programmierung bedacht werden muss. Aufgrund der unterschiedlichen Launchzeitpunkte der Satelliten wurde die Zeitreihe zwischen 2000 und der ersten Aqua-Aufnahme künstlich verdichtet, indem die Terra-Aufnahmen einfach verdoppelt wurden und einen passenden Zeitstempel erhalten haben. Die komplettierte Zeitreihe an sich selbst weist alle 8 Tage eine Epoche eines MODIS-Sensors (Terra und Aqua-Epochen immer abwechselnd) auf.Für die Diplomarbeit selbst beschränkt sich der Author auf das "`500m"' aufgelöste Produkt MCD43A4 welches alle 8 Tage Daten des Terra- oder des Aqua-Satelliten inklusive die passende Qualitätsinformation zur Verfügung stellt.
 Trotz des einwandfreien Rufes einer perfekten radiometrischen Korrektur der MODIS-Daten wurden Störungen in der visuellen Kontrolle ausfindig gemacht und die Zeitreihe anhand eines Glättungsalgorithmus nach Savitzky-Golay verbessert. Somit liegt eine europaweite wolkenfreie MODIS-Zeitreihe in 500 Meter Pixelauflösung als Basis für die relative Kalibrierung der Landsatdaten bereit.
 % - HDF interne Struktur
 % - Day of Year fertig beschreiben
@@ -514,13 +503,13 @@ Die Beobachtungen sind auf den neunten Tag der 116 Tagesperiode gewichtet [3]. D
 \item 3 = Magnitude inversion ( 2$>$= numobs $<$7)
 \item 4 = Fill value
 \end{itemize}
-Der Fill value ist mit 255 dem NoData Value gleichzusetzen, da er so in den Qualitätsdaten vorkommt. 
+Der Fill value ist mit 255 dem NoData Value gleichzusetzen, da er so in den Qualitätsdaten vorkommt.
 \begin{figure}[H]
 \centering
 \includegraphics{./Grafiken/Datenakquisition/HDF5_MCD4A4_Layerhierarchy.JPG}
 \caption{\textit{Layerhierarchie eines HDF4 Files}}
 \end{figure}
-In den Datenfiles sind auch Qualitätsinformationslayer enthalten, diese bieten jedoch nicht die Genauigkeit des Qualitätsproduktes MCD43A2. 
+In den Datenfiles sind auch Qualitätsinformationslayer enthalten, diese bieten jedoch nicht die Genauigkeit des Qualitätsproduktes MCD43A2.
 \begin{figure}[H]
    \begin{minipage}[b]{.4\linewidth} % [b] => Ausrichtung an \caption
       \includegraphics[width=\linewidth]{./Grafiken/Datenakquisition/Quali_verleich_MCD43A4.JPG}
@@ -533,11 +522,11 @@ In den Datenfiles sind auch Qualitätsinformationslayer enthalten, diese bieten 
    \end{minipage}
 \end{figure}
 
-Der Dateiname jeder Datenepoche oder der zugehörigen Qualitätsinformation beinhaltet 
+Der Dateiname jeder Datenepoche oder der zugehörigen Qualitätsinformation beinhaltet
 \begin{itemize}
-\item Dateiname=MCD43A4.A2000057.h18v04.006.hdf 
+\item Dateiname=MCD43A4.A2000057.h18v04.006.hdf
 \item Produkt = MCD43A4 (hier Datenprodukt)
-\item Day Of Year = A2000057 
+\item Day Of Year = A2000057
 \item Kachel = h18v04
 \item Version = 006
 \item Fileextension = hdf
@@ -551,6 +540,32 @@ Um ein Jahr zu rekonstruieren bzw zu filtern werden 46 Datenpunkte verwendet. Di
 \end{figure}
 
 
+\section{Sentinel}
+Sentinel sind eine Reihe von Erdbeobachtungs- und Forschungssatelliten der ESA welche im Rahmen des Copernicus Forschungsprogramms gestartet und zum Einsatz kommen. Sie setzten sich aus 5 Satelliten zusammen die im optischen und Radarbereich eine dichte Bandbreite an Informationen über den Planeten sammeln. Sentinel 2  liefern Daten im optischen, nahen infraroten Bereich, hochauflösend von 10 mal 10 Meter,  in einem Intervall von 5 Tagen. Dies gewährt Aussicht auf besonders dichte Zeitreihen die mit diesem System möglich sind. Sentinel 3  nimmt die Erdoberfläche mit einer höheren Auflösung auf , soll allerdings zumindest auf dem Level der MODIS Daten  kalibriert sein. Die entwickelte Methodik zielt auch auf eine portable Herangehensweise ab, dass man die besser kalibrierten Sentinel 3 Daten zum Kalibrieren von Satellitendaten anderer Syteme  verwendet.
+
+
+\section{Sinusodial Referenzsystem}
+Die Daten der verwendeten MODIS-Zeitreihe wurden mittels dem MODIS-Reprojection-Tool in eine Sinusoidale Projection gebracht. Die Sinusoidal-Projektion nist eine flächentreue, pseudo-zylindrische Projektion, welche die gesamte Erdoberfläche darstellen kann. Der Zentralmeridian und der Äquator werden winkel- und längentreu wiedergegeben während Meridiane als Sinuskurven und Breitenkreise als Geraden dargestellt werden. Als Basis dient eine Kugel mit einem gemittelten Erdradius von 6371007,181 m ( MODIS Land, web-quelle nr 11). Je weiter man sich vom Abbildungsmeridian entfernt umso verzerrter wird die Darstellung. Die meisten MODIS Land Produkte sind als Kacheln indiziert und nutzen das Sinusodial-Grid-Tilling-System. Am Äquator weist eine Kachel eine Größe von 10 Grad mal 10 Grad auf. Das Kachelkoordinatensystem startet bei (0,0) - (horizontale nummer, verticale nummer) in der linken oberen Ecke beginnt und bei (35,17) in der rechten unteren Ecke endet. Das System zählt dabei von rechts nach links (horizontal) und von oben nach unten (vertikal)
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{./Grafiken/RefSys/modis_sinusoidal_grid.jpg}
+\caption{\textit{MODIS Tilling System, (U.S.G.S., 2013)}}
+\end{figure}
+
+
+
+\section{UTM-Referenzsystem}
+Sämtliche Daten der Landsatmissionen sind im \textit{Universal Transverse Mercator}-Referenzsystem (UTM) projiziert. Es handelt sich hierbei um ein globales Koordinatensystem das die Erdoberfläche von 80 Grad Süd bis 84 Grad Nord streifenförmig in 6 Grad breite Zonen unterteilt. Als Basis dient das Bezugsellipsoid WGS84. UTM nutzt eine transversale Mercator-Projektion zum verebnen. Hierbei berührt der Projektionszylinder die Oberfläche nicht am Bezugsmeridian sondern schneidet sie. Dadurch ensteht ein Streifen
+
+
+% ==========================================================================
+%
+% METHODIK
+%
+% ==========================================================================
+
+\chapter{Methodik}
 
 % ==============================================================================================================
 % METHODIK
@@ -971,4 +986,32 @@ Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg h�
 \end{figure}
 \subsection{DFT}
 \subsection{FFT}
+
+% ==============================================================================================================
+%
+% Literaturverzeichnis
+%
+% ==============================================================================================================
+\chapter{Literaturverzeichnis}
+
+\newcommand{\litentry}[1]{\hangindent=1cm\hangafter=1 #1\par\medskip}
+
+\litentry{Eklundh, L., \& Jönsson, P. (2012). \textit{TIMESAT 3.1 software manual}. Lund University \& Malmö University. http://www.nateko.lu.se/TIMESAT/}
+
+\litentry{Helder, D., Thome, K. J., Mishra, N., Chander, G., Xiong, X., Angal, A., \& Choi, T. (2013). Absolute radiometric calibration of Landsat using a pseudo invariant calibration site. \textit{IEEE Transactions on Geoscience and Remote Sensing, 51}(3), 1360--1369. https://doi.org/10.1109/TGRS.2013.2243738}
+
+\litentry{Jönsson, P., \& Eklundh, L. (2004). TIMESAT—a program for analyzing time-series of satellite sensor data. \textit{Computers \& Geosciences, 30}(8), 833--845. https://doi.org/10.1016/j.cageo.2004.05.006}
+
+\litentry{Román, M. O., Schaaf, C. B., Woodcock, C. E., Strahler, A. H., Yang, X., Braswell, R. H., Curtis, P. S., Davis, K. J., Dragoni, D., Goulden, M. L., Gu, L., Hollinger, D. Y., Kolb, T. E., Meyers, T. P., Munger, J. W., Privette, J. L., Richardson, A. D., Wilson, T. B., \& Wofsy, S. C. (2009). The MODIS (Collection V005) BRDF/albedo product: Assessment of spatial representativeness over forested landscapes. \textit{Remote Sensing of Environment, 113}(11), 2476--2498. https://doi.org/10.1016/j.rse.2009.07.009}
+
+\litentry{Tan, B., Morisette, J. T., Wolfe, R. E., Gao, F., Ederer, G. A., Nightingale, J., \& Pedelty, J. A. (2011). An enhanced TIMESAT algorithm for estimating vegetation phenology metrics from MODIS data. \textit{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, 4}(2), 361--371. https://doi.org/10.1109/JSTARS.2010.2075916}
+
+\litentry{Tokola, T., Löfman, S., \& Erkkilä, A. (1999). Relative calibration of multitemporal Landsat data for forest cover change detection. \textit{Remote Sensing of Environment, 68}(1), 1--11. https://doi.org/10.1016/S0034-4257(98)00096-0}
+
+\litentry{U.S. Geological Survey. (2013). \textit{Landsat Ecosystem Disturbance Adaptive Processing System (LEDAPS) algorithm description} (Open-File Report 2013--1057). U.S. Department of the Interior. https://doi.org/10.3133/ofr20131057}
+
+\litentry{Vermote, E., Tanré, D., Deuzé, J. L., Herman, M., Morcrette, J.-J., \& Kotchenova, S. Y. (2006). \textit{Second simulation of a satellite signal in the solar spectrum -- Vector (6SV)} (6S User Guide, Version 3).}
+
+\litentry{Vermote, E. F., \& Saleous, N. Z. (2006). Calibration of NOAA16 AVHRR over a desert site using MODIS data. \textit{Remote Sensing of Environment, 105}(3), 214--220. https://doi.org/10.1016/j.rse.2006.06.015}
+
 \end{document}
