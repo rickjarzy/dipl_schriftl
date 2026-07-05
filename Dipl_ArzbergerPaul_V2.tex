@@ -66,21 +66,57 @@ Ziel dieser Arbeit ist vor allem die aufgestellten Thesen mit Ergebnissen zu üb
 \section{Filterung verrauschter Satellitenbildzeitreihen}
 Satellitenbilddaten können durch atmosphärische Einflüsse wie Dunst, nicht identifizierte Wolkenpixel, Aerosole, gasförmigen Dämpfern etc zusätzlich zu den Effekten des Einfallswinkel und der Illumination verfälscht sein. In den meisten Studien über Phänologie sowie der Bestimmung  von phenologischen Parametern basierend auf Satellitenbilddaten wird als erster Schritt die verrauschte Zeitreihe in eine gefittete Zeitreihe übergeführt.
 
+\subsection{Savitzky Golay}
 
-\subsection{Methoden der Zeitreihenfilterung}
-\subsubsection{Savitzky Golay}
-Das dem Savitzky Golay Filter zugrunde liegende Polynom ist zweiter Ordnung und die Breite des Moving-Windows der zur Berechnung herangezogenen Daten wird vom User eingegeben. 
+
+\subsubsection{Einführung und grundlegendes Konzept}
+Der Savitzky-Golay-Filter (häufig auch als S-G-Filter oder Least-Squares-Filter bezeichnet) ist ein digitaler Tiefpassfilter, der primär zur Glättung von verrauschten Datenreihen eingesetzt wird (Numerical Recipes, 1992, S. 650). Die Grundprämisse der Datenglättung ist, dass eine sich langsam verändernde Variable von zufälligem Rauschen überlagert wird. Während ein einfacher gleitender Durchschnitt (Moving Window Average) das Rauschen zwar reduziert, führt er jedoch bei Merkmalen mit einer von null abweichenden zweiten Ableitung – wie lokalen Maxima oder Signalspitzen – zu systematischen Fehlern: Die Höhe von Spitzen wird verringert und ihre Breite vergrößert, wodurch das zweite Moment (die Linienbreite) der Daten verletzt wird (Numerical Recipes, 1992, S. 650).
+
+Um dieses Problem zu lösen, nähert die Savitzky-Golay-Filterung die Daten innerhalb eines gleitenden Fensters nicht durch eine Konstante an, sondern passt ein Polynom höheren Grades (wie das in Gleichung 1 gezeigte) mithilfe der Methode der kleinsten Quadrate an die Punkte an (Numerical Recipes, 1992, S. 650). 
+
+\subsubsection{Mathematische Funktionsweise}
+Der Filter berechnet einen Least-Squares-Fit, um das Polynom an die Datenpunkte innerhalb eines gleitenden Fensters der Breite $N = 2m+1$ anzupassen. Da dieser Anpassungsprozess lediglich auf einer linearen Matrixinversion basiert, sind die Koeffizienten des angepassten Polynoms lineare Kombinationen der Datenwerte. Dies bedeutet, dass die Filterkoeffizienten im Voraus berechnet werden können (Numerical Recipes, 1992, S. 651). Die eigentliche Glättung eines Datenpunktes $Y_j^*$ erfolgt im laufenden Betrieb äußerst effizient als einfache lineare Faltung (Convolution) der benachbarten Originalwerte $Y_{j+i}$ mit den festen Koeffizienten $C_i$:
+
 \begin{equation}
-f(t) = a_0+a_1 \cdot t+a_2 \cdot t^2
+Y_j^* = \frac{\sum_{i=-m}^{m} C_i Y_{j+i}}{N}
 \end{equation}
+Hierbei ist $N$ die Gesamtanzahl der Datenpunkte im Fenster und $m$ die halbe Fensterbreite (Chen et al., 2004, S. 333).
+
+\subsubsection{Iterative Anwendung und obere Hüllkurve (Upper Envelope)}
+In der Fernerkundung, speziell bei der Analyse von Vegetationszeitreihen (z.B. NDVI), wird der S-G-Filter häufig modifiziert angewandt. Wolken, Schatten oder schlechte atmosphärische Bedingungen senken die NDVI-Werte in der Regel unnatürlich stark ab (Chen et al., 2004, S. 334). Daher zielt die Filterung darauf ab, die Kurve an die obere Hüllkurve (Upper Envelope) der Daten anzupassen (Eklundh \& Jönsson, 2015, S. 16).
+
+Ein gängiger iterativer Ansatz berechnet hierfür zunächst einen langfristigen Trend. Punkte, die unterhalb dieses Trends liegen, werden als Rauschen betrachtet und in Folgeschritten mit geringeren Gewichten $W_i$ versehen (Chen et al., 2004, S. 336). Um die Qualität der iterativen Anpassung in jedem Durchlauf zu bewerten, wird ein Anpassungs-Index (Fitting-Effect Index) $F_k$ berechnet:
+
+\begin{equation}
+F_k = \sum_{i=1}^{n} \left( \left| N_i^{k+1} - N_i^0 \right| \cdot W_i \right)
+\end{equation}
+Dabei ist $N_i^{k+1}$ der gefilterte Wert der $k$-ten Iteration und $N_i^0$ der ursprüngliche Wert der Zeitreihe. Der Prozess wird iterativ wiederholt, bis $F_k$ sein Minimum erreicht hat, was die beste Rekonstruktion des tatsächlichen Vegetationszyklus darstellt (Chen et al., 2004, S. 336).
+
+\subsubsection{Adaptive Savitzky-Golay-Filterung}
+Wie in der obigen Abbildung dargestellt, nutzen Auswertungsprogramme wie TIMESAT eine adaptive Version des S-G-Filters (Eklundh \& Jönsson, 2015, S. 17). Die Filterung wird zunächst mit einer global definierten Fensterbreite durchgeführt. Werden danach in den gefilterten Daten jedoch starke Anstiege oder Abfälle registriert (etwa durch ein plötzliches Ergrünen der Vegetation im Frühjahr), wird die Fenstergröße lokal verkleinert, was es der Funktion ermöglicht, komplexem Verhalten deutlich genauer zu folgen (Eklundh \& Jönsson, 2015, S. 17). 
 
 \begin{figure}[H]		% H bedeutet Here
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Fitting/TIMESATmanuell_savitzky_golay_filter.PNG}
-\caption{\textit{Gefittete Funktion nach Savitzky Golay. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funtion. In (a) ist die Moving-Window-Größe n=5, in (b) ist die Moving-Window-Größe n=3 (Eklundh \& Jönsson, 2012)}}
+\caption{\textit{Gefittete Funktion nach Savitzky Golay. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funktion. In (a) ist die Moving-Window-Größe n=5, in (b) ist die Moving-Window-Größe n=3 (Eklundh \& Jönsson, 2015, S. 18)}}
 \end{figure}
 
-\subsubsection{Asymmetrische Gauss'scher Fit}
+\subsubsection{Vor- und Nachteile}
+Ein entscheidender Vorteil des S-G-Filters ist seine Fähigkeit, subtile und schnelle phänologische Veränderungen in Zeitserien sehr gut zu erfassen (Gao et al., 2008, S. 60). Verglichen mit klassischen Durchschnittsfiltern bleiben bei einem optimal konfigurierten Filter die Höhe, Breite und Fläche von Signalamplituden (Peaks) spektakulär gut erhalten (Numerical Recipes, 1992, S. 653). Da die Umsetzung im Code nur vorberechnete Koeffizienten benötigt, ist sie zudem rechnerisch sehr schnell (Chen et al., 2004, S. 343).
+
+Zu den Nachteilen gehört die hohe Sensibilität gegenüber starkem Rauschen, was bei nicht vollständig entfernten Störungen zu Oszillationen oder systematischen Überschätzungen (Bias) führen kann (Lu et al., 2007, S. 1131). Zudem erfordert die Methode mathematisch zwingend äquidistante Datenpunkte (Numerical Recipes, 1992, S. 650) und führt an den Start- und Endpunkten einer Zeitreihe zu sogenannten Randeffekten (Edge Effects), da dort für das Filterfenster keine realen benachbarten Punkte mehr vorliegen (Chen et al., 2004, S. 337).
+
+
+\subsubsection{S-G in der praktischen Anwendung}
+
+Das dem Savitzky-Golay-Filter zugrunde liegende Polynom im praktischen Teil der Diplomarbeit wurde mit einem Polynom zweiter Ordnung angenommen und die Breite des Moving-Windows, sprich die Anzahl der MODIS Szene der zur Berechnung herangezogenen Daten wird vom User festgelegt. 
+\begin{equation}
+f(t) = a_0+a_1 \cdot t+a_2 \cdot t^2
+\end{equation}
+
+
+
+\subsection{Asymmetrische Gauss'scher Fit}
 
 \begin{equation}
 f(t;x_1,\dots,x_5)=\begin{cases} exp \left[-\left(\frac{t-x_1}{x_2}\right)^{x_3}\right] & \mbox{if} \ n  > x_1 
@@ -104,7 +140,7 @@ x_5\qquad &\dots\qquad \text{Wölbung linke Seite}
 \caption{\textit{Auswirkungen auf die Breite und Wölbung wenn sich die lokalen Parameter ändern. In (a) wurde $x_2$ vermindert (durchgezogen) und erhöht ( strichliert),dass sich in einer geänderten Breite und Wölbung auf der rechten Seite auswirkt. In (b) wurde $x_3$ vermindert (durchgezogen) und erhöht (strichliert).(Eklundh \& Jönsson, 2012)}}
 \end{figure}
 
-\subsubsection{Doppel-Logistische Funktion}
+\subsection{Doppel-Logistische Funktion}
 
 \begin{equation}
 f(t;x_1,\dots,x_4) = \frac{1}{1+exp\left(\frac{x_1-t}{x_2}\right)} - \frac{1}{1+exp\left(\frac{x_3-t}{x_4}\right)}
@@ -119,7 +155,7 @@ f(t;x_1,\dots,x_4) = \frac{1}{1+exp\left(\frac{x_1-t}{x_2}\right)} - \frac{1}{1+
 
 
 % Atzberger 2013
-\subsubsection{Fourier-Analyse}
+\subsection{Fourier-Analyse}
 Die Diskrete Fourier Transformation ist gegeben durch
 \begin{equation}
 F_{(u)}=\frac{1}{N}\sum_{t=0}^{N=1}VI(t)\cdot e^{-2\pi ut/T}
@@ -142,7 +178,7 @@ VI^*(t)=F_{m(0)} + \frac{1}{N}\sum_{t=0}^{N=1}\left(F_{m(n)} \cdot cos\left(\fra
 % Fitting Methoden aus der Literatur
 %
 % ==================================================
-\subsection{Vergleich unterschiedlicher Fittingmethoden anhand verrauschter Satellitendatenzeitreihen}
+\subsection{Vergleich unterschiedlicher Fittingmethoden anhand verrauschter Satellitendatenzeitreihen aus der Literatur}
 Atkinson et al. (2012) wenden anhand des MERIS Terrestrial Chlorophyll Index (MTCI) , ein Vegetationsindex der linear vom Chlorophyllgehalt in überschirmten Flächen abhängt und aus einer MERIS-Zeitreihe abgeleitet wurde, die Diskrete Fourier Transformation, eine Asymmetrische Gauss Funktion, eine Doppel-Logistische Funktion sowie einen Whittaker Smoother auf ihre MTCI-Zeitreihe an. Generell sei vorweg gesagt, dass jede Methode ihre Vor- und Nachteile mit sich bringt, wie sie auf Messfehler oder Ausreisser reagiert beziehungsweise zur Interpretation herangezogen werden kann(de Beurs K.M., Henebry G.M.,2010). \newline
 % Grafiken von Arzberger et al einfügen
 
@@ -996,11 +1032,21 @@ Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg h�
 
 \newcommand{\litentry}[1]{\hangindent=1cm\hangafter=1 #1\par\medskip}
 
+\litentry{Chen, J., Jönsson, P., Tamura, M., Gu, Z., Matsushita, B., \& Eklundh, L. (2004). A simple method for reconstructing a high-quality NDVI time-series data set based on the Savitzky–Golay filter. \textit{Remote Sensing of Environment, 91}(3-4), 332--344.}
+
 \litentry{Eklundh, L., \& Jönsson, P. (2012). \textit{TIMESAT 3.1 software manual}. Lund University \& Malmö University. http://www.nateko.lu.se/TIMESAT/}
+
+\litentry{Eklundh, L., \& Jönsson, P. (2015). \textit{TIMESAT 3.2 with parallel processing Software Manual}. Lund and Malmö University, Sweden.}
+
+\litentry{Gao, F., Morisette, J. T., Wolfe, R. E., Ederer, G., Pedelty, J., Masuoka, E., Myneni, R., Tan, B., \& Nightingale, J. (2008). An Algorithm to Produce Temporally and Spatially Continuous MODIS-LAI Time Series. \textit{IEEE Geoscience and Remote Sensing Letters, 5}(1), 60--64.}
 
 \litentry{Helder, D., Thome, K. J., Mishra, N., Chander, G., Xiong, X., Angal, A., \& Choi, T. (2013). Absolute radiometric calibration of Landsat using a pseudo invariant calibration site. \textit{IEEE Transactions on Geoscience and Remote Sensing, 51}(3), 1360--1369. https://doi.org/10.1109/TGRS.2013.2243738}
 
 \litentry{Jönsson, P., \& Eklundh, L. (2004). TIMESAT—a program for analyzing time-series of satellite sensor data. \textit{Computers \& Geosciences, 30}(8), 833--845. https://doi.org/10.1016/j.cageo.2004.05.006}
+
+\litentry{Lu, X., Liu, R., Liu, J., \& Liang, S. (2007). Removal of Noise by Wavelet Method to Generate High Quality Temporal Data of Terrestrial MODIS Products. \textit{Photogrammetric Engineering \& Remote Sensing, 73}(10), 1129--1139.}
+
+\litentry{Numerical Recipes in C. (1992). \textit{The Art of Scientific Computing}. Cambridge University Press.}
 
 \litentry{Román, M. O., Schaaf, C. B., Woodcock, C. E., Strahler, A. H., Yang, X., Braswell, R. H., Curtis, P. S., Davis, K. J., Dragoni, D., Goulden, M. L., Gu, L., Hollinger, D. Y., Kolb, T. E., Meyers, T. P., Munger, J. W., Privette, J. L., Richardson, A. D., Wilson, T. B., \& Wofsy, S. C. (2009). The MODIS (Collection V005) BRDF/albedo product: Assessment of spatial representativeness over forested landscapes. \textit{Remote Sensing of Environment, 113}(11), 2476--2498. https://doi.org/10.1016/j.rse.2009.07.009}
 
