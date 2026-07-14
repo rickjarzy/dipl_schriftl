@@ -109,7 +109,7 @@ Zu den Nachteilen gehört die hohe Sensibilität gegenüber starkem Rauschen, wa
 
 \subsubsection{S-G in der praktischen Anwendung}
 
-Das dem Savitzky-Golay-Filter zugrunde liegende Polynom im praktischen Teil der Diplomarbeit wurde mit einem Polynom zweiter Ordnung angenommen und die Breite des Moving-Windows, sprich die Anzahl der MODIS Szene der zur Berechnung herangezogenen Daten wird vom User festgelegt. 
+Das dem Savitzky-Golay-Filter zugrunde liegende Polynom im praktischen Teil der Diplomarbeit wurde mit einem Polynom zweiter Ordnung angenommen und die Breite des Moving-Windows, sprich die Anzahl der MODIS Szene der zur Berechnung herangezogenen Daten wurde mit 15 Epochen festgelegt. Für die Vollständigkeit wird hier noch die Formel des Polynom 2. Grades angeführt. 
 \begin{equation}
 f(t) = a_0+a_1 \cdot t+a_2 \cdot t^2
 \end{equation}
@@ -118,34 +118,87 @@ f(t) = a_0+a_1 \cdot t+a_2 \cdot t^2
 
 \subsection{Asymmetrische Gauss'scher Fit}
 
+\paragraph{Einführung und grundlegendes Konzept}
+Neben dem Savitzky-Golay-Filter ist die Kurvenanpassung (Fitting) mittels asymmetrischer Gauß-Funktionen eine der zentralen Methoden zur Glättung von Zeitreihen und zur Extraktion von phänologischen Parametern aus Satellitendaten (Eklundh \& Jönsson, 2015, S. 18). Während klassische harmonische Analysen (wie die Fourier-Transformation) eine Zeitreihe durch eine globale Summe von Sinus- und Kosinuswellen annähern, verwendet dieser Ansatz lokale Modellfunktionen. Dabei werden spezifische Funktionen an Datenintervalle rund um die saisonalen Maxima (Peaks) und Minima der Zeitreihe angepasst (Eklundh \& Jönsson, 2015, S. 18; Hermance et al., 2007, S. 3266). Dies ist besonders vorteilhaft, da Wachstumsphasen (Ergrünen) und Absterbephasen (Seneszenz) in der Vegetation so gut wie nie symmetrisch ablaufen.
+
+\paragraph{Mathematische Funktionsweise}
+Die lokale Basis-Modellfunktion einer asymmetrischen Gauß-Glocke wird abschnittsweise definiert, sodass die linke und rechte Flanke unabhängig voneinander geformt werden können (Eklundh \& Jönsson, 2015, S. 19):
+
 \begin{equation}
-f(t;x_1,\dots,x_5)=\begin{cases} exp \left[-\left(\frac{t-x_1}{x_2}\right)^{x_3}\right] & \mbox{if} \ n  > x_1 
+g(t;x_1,\dots,x_5)=\begin{cases} exp \left[-\left(\frac{t-x_1}{x_2}\right)^{x_3}\right] & \mbox{if} \ t  > x_1 
 \\ \\
-exp\left[-\left(\frac{x_1-t}{x_4}\right)^{x_5}\right] & \mbox{if} \ n  < x_1
+exp\left[-\left(\frac{x_1-t}{x_4}\right)^{x_5}\right] & \mbox{if} \ t  < x_1
 \end{cases}
 \end{equation}
 
-\begin{flalign}			% flush left align 
-t\qquad &\dots\qquad Zeit\\
-x_1\qquad &\dots\qquad \text{Position des Maximum oder Minimums} \\
+\begin{flalign*}			% flush left align mit * verhindert unerwünschte Nummerierung jeder Zeile
+t\qquad &\dots\qquad \text{Zeit}\\
+x_1\qquad &\dots\qquad \text{Position des Maximums oder Minimums} \\
 x_2\qquad &\dots\qquad \text{Breite rechte Seite}\\
-x_3\qquad &\dots\qquad \text{Wölbung rechte Seite}\\
+x_3\qquad &\dots\qquad \text{Wölbung (Flachheit/Steilheit) rechte Seite}\\
 x_4\qquad &\dots\qquad \text{Breite linke Seite}\\
-x_5\qquad &\dots\qquad \text{Wölbung linke Seite}
-\end{flalign}
+x_5\qquad &\dots\qquad \text{Wölbung (Flachheit/Steilheit) linke Seite}
+\end{flalign*}
 
 \begin{figure}[H]		% H bedeutet Here
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Fitting/TIMESATmanuell_asymmetric_gaussian_filter.PNG}
-\caption{\textit{Auswirkungen auf die Breite und Wölbung wenn sich die lokalen Parameter ändern. In (a) wurde $x_2$ vermindert (durchgezogen) und erhöht ( strichliert),dass sich in einer geänderten Breite und Wölbung auf der rechten Seite auswirkt. In (b) wurde $x_3$ vermindert (durchgezogen) und erhöht (strichliert).(Eklundh \& Jönsson, 2012)}}
+\caption{\textit{Auswirkungen auf die Breite und Wölbung, wenn sich die lokalen Parameter ändern. In (a) wurde $x_2$ vermindert (durchgezogen) und erhöht (strichliert), was sich in einer geänderten Breite auf der rechten Seite auswirkt. In (b) wurde $x_3$ vermindert (durchgezogen) und erhöht (strichliert) (Eklundh \& Jönsson, 2015, S. 19).}}
 \end{figure}
+
+Die eigentliche Modellfunktion für ein Datenintervall ergibt sich dann durch Hinzufügen der linearen Parameter $c_1$ und $c_2$, welche das Basisniveau und die Amplitude des Signals bestimmen (Eklundh \& Jönsson, 2015, S. 18):
+\begin{equation}
+f(t) = c_1 + c_2 \cdot g(t; x)
+\end{equation}
+
+\paragraph{Kurvenanpassung und globale Modellierung}
+Da die Gleichung nicht-linear von den Parametern $x$ abhängt, erfolgt die Optimierung (die Minimierung der Fehlerquadrate) über separable nicht-lineare Least-Squares-Verfahren, wie der Levenberg-Marquardt-Methode (Eklundh \& Jönsson, 2015, S. 20). Um das oftmals durch Wolken negativ verzerrte Rauschen auszugleichen, wird die Anpassung in mehreren iterativen Schritten durchgeführt. Punkte, die unter der Kurve liegen, erhalten ein geringeres Gewicht, wodurch sich die Funktion an die obere Hüllkurve (Upper Envelope) der Zeitreihe annähert (Eklundh \& Jönsson, 2015, S. 16, 20).
+
+Da die lokalen Funktionen das Signal in den Übergangsbereichen (Flanken und Tälern) oft schlechter beschreiben, werden benachbarte lokale Modellfunktionen mithilfe von sanft abfallenden Cut-off-Funktionen zu einer einzigen, kontinuierlichen globalen Funktion $F(t)$ verschmolzen. Dies verleiht dem Modell die Flexibilität, komplexen Vegetationsverläufen exakt zu folgen (Eklundh \& Jönsson, 2015, S. 20-21).
+
+\paragraph{Vor- und Nachteile}
+Ein entscheidender Vorteil des asymmetrischen Gauß-Fits ist seine Stabilität: Bei extrem stark verrauschten Daten tendieren polynom-basierte Filter (wie Savitzky-Golay) oft zu unerwünschten Schwankungen. In solchen Fällen liefert das Fitting mittels asymmetrischer Gauß-Funktionen oftmals stabilere und physikalisch sinnvollere Ergebnisse (Eklundh \& Jönsson, 2015, S. 25). Zudem setzt das mathematische Prinzip nicht zwingend voraus, dass die Datenpunkte in streng gleichmäßigen (äquidistanten) Abständen vorliegen (Hermance et al., 2007, S. 3266).
+
+Ein wesentlicher Nachteil ist hingegen die Rechenintensität: Die numerische Lösung eines nicht-linearen Least-Squares-Problems ist im Vergleich zur einfachen linearen Matrixinversion deutlich rechenaufwendiger (Eklundh \& Jönsson, 2015, S. 20). Bei hochkomplexen oder erratischen Zeitreihen ohne klare Saisonalität kann der eingeschränkte Funktionsraum der Gauß-Glocken zudem zu stark vereinfachten, zu glatten Ergebnissen führen (Eklundh \& Jönsson, 2015, S. 19, 25).
+
 
 \subsection{Doppel-Logistische Funktion}
 
+\paragraph{Einführung und grundlegendes Konzept}
+Neben dem Savitzky-Golay-Filter und der asymmetrischen Gauß-Funktion ist die Kurvenanpassung durch doppel-logistische Funktionen eine weitere etablierte Methode zur Glättung von fehlerbehafteten Satelliten-Zeitreihen und zur Extraktion phänologischer Parameter (Atkinson et al., 2012, S. 401). Ähnlich wie bei der asymmetrischen Gauß-Funktion basiert dieser Ansatz auf der Verwendung lokaler Modellfunktionen, die gezielt an Datenintervalle rund um die saisonalen Maxima und Minima der Zeitreihe angepasst werden (Eklundh \& Jönsson, 2015, S. 18).
+
+\paragraph{Mathematische Funktionsweise}
+Die lokale Modellfunktion für ein Datenintervall basiert auf einer doppel-logistischen Basisfunktion $g(t;x_1,\dots,x_4)$, deren Form durch vier nicht-lineare Parameter definiert wird (Atkinson et al., 2012, S. 404; Eklundh \& Jönsson, 2015, S. 19):
+
 \begin{equation}
-f(t;x_1,\dots,x_4) = \frac{1}{1+exp\left(\frac{x_1-t}{x_2}\right)} - \frac{1}{1+exp\left(\frac{x_3-t}{x_4}\right)}
+g(t;x_1,\dots,x_4) = \frac{1}{1+exp\left(\frac{x_1-t}{x_2}\right)} - \frac{1}{1+exp\left(\frac{x_3-t}{x_4}\right)}
 \end{equation}
 
+\begin{flalign*}			% flush left align mit * verhindert unerwünschte Nummerierung der Zeilen
+t\qquad &\dots\qquad \text{Zeit}\\
+x_1\qquad &\dots\qquad \text{Position des linken Wendepunkts (stärkster Anstieg)} \\
+x_2\qquad &\dots\qquad \text{Änderungsrate (Steilheit) am linken Wendepunkt}\\
+x_3\qquad &\dots\qquad \text{Position des rechten Wendepunkts (stärkster Abfall)}\\
+x_4\qquad &\dots\qquad \text{Änderungsrate (Steilheit) am rechten Wendepunkt}
+\end{flalign*}
+
+Um die endgültige Modellfunktion für ein Intervall zu erhalten, wird diese Basisfunktion $g(t; x)$ noch mit den linearen Parametern $c_1$ (Basisniveau) und $c_2$ (Amplitude) skaliert: $f(t) = c_1 + c_2 \cdot g(t; x)$ (Eklundh \& Jönsson, 2015, S. 18). Um eine physikalisch sinnvolle und glatte Kurvenform zu gewährleisten, werden die Parameterwerte während der mathematischen Anpassung auf ihren zulässigen Bereich restringiert (Eklundh \& Jönsson, 2015, S. 19).
+
+\paragraph{Kurvenanpassung und globale Modellierung}
+Da die Modellfunktion nicht-linear von den Parametern abhängt, erfolgt die Optimierung (Minimierung der Fehlerquadrate) über separable nicht-lineare Least-Squares-Verfahren, wie beispielsweise die Levenberg-Marquardt-Methode (Eklundh \& Jönsson, 2015, S. 20).
+
+\begin{figure}[H]		% H bedeutet Here
+\centering
+\includegraphics[scale=0.6]{./Grafiken/Fitting/TIMESATmanuell_adaption_to_the_uper_envelope.PNG}
+\caption{\textit{Gefittete Funktion nach meheren Iterationen. Die dünne Linie repräsentiert die Rohdaten, die dicke Linie repräsentiert die gefittete Funktion (a). In (b) die erneute Berechnung des Modells mit einer verringerten Gewichtung der niedrigeren Datenwerte (Eklundh \& Jönsson, 2015, S. 16).}}
+\end{figure}
+
+Wie in der Abbildung zu sehen, wird das typischerweise negativ verzerrte Rauschen (z. B. durch Wolkenbedeckung) in mehreren iterativen Schritten ausgeglichen (Eklundh \& Jönsson, 2015, S. 16). Datenwerte, die unterhalb der ersten angepassten Kurve liegen, erhalten in den Folgeschritten ein stark verringertes Gewicht, wodurch sich die Funktion schrittweise an die obere Hüllkurve (Upper Envelope) der realen Daten annähert (Eklundh \& Jönsson, 2015, S. 16). Um die gesamte Zeitreihe lückenlos abzubilden, werden benachbarte lokale Modellfunktionen abschließend mithilfe von sanft abfallenden Cut-off-Funktionen zu einer einzigen kontinuierlichen, globalen Funktion verschmolzen (Atkinson et al., 2012, S. 403; Eklundh \& Jönsson, 2015, S. 20-21).
+
+\paragraph{Vor- und Nachteile}
+Die Methode ist besonders robust gegenüber weißem Rauschen. In Simulationen, bei denen den Zeitreihen künstlich starkes Gaußsches Rauschen hinzugefügt wurde, lieferte sie oft stabilere Ergebnisse als Fourier- oder Savitzky-Golay-Ansätze (Atkinson et al., 2012, S. 416). Bei Vegetationstypen mit nur einer klaren jährlichen Wachstumsphase erzielt die doppel-logistische Funktion exzellente Modellanpassungen und erhält die Flankensteilheit der Signale während der Ergrünungs- und Absterbephasen unverfälscht aufrecht (Atkinson et al., 2012, S. 409, 416).
+
+Ein wesentlicher Nachteil ist, dass die Methode pro definiertem Saisonintervall mathematisch einen einzelnen, klaren Peak erzwingt und dabei Plateaus oder kleinere Fluktuationen an der Spitze ignoriert (Atkinson et al., 2012, S. 409). Bei landwirtschaftlichen Flächen mit mehreren Ernten pro Jahr (Doppel- oder Dreifach-Ernten) liefert sie daher oft unzureichende Ergebnisse (Atkinson et al., 2012, S. 409, 416). Zudem reagiert die Anpassung empfindlich auf starkes Rauschen in den kurzen Übergangsphasen zwischen zwei Wachstumszyklen und kann durch Datentrends, die in das vorherige oder nachfolgende Jahr hineinreichen, verzerrt werden (Atkinson et al., 2012, S. 407, 409).
 
 \begin{figure}[H]		% H bedeutet Here
 \centering
@@ -155,31 +208,89 @@ f(t;x_1,\dots,x_4) = \frac{1}{1+exp\left(\frac{x_1-t}{x_2}\right)} - \frac{1}{1+
 
 
 % Atzberger 2013
-\subsection{Fourier-Analyse}
-Die Diskrete Fourier Transformation ist gegeben durch
+%\subsection{Fourier-Analyse}
+%Die Diskrete Fourier Transformation ist gegeben durch
+%\begin{equation}
+%F_{(u)}=\frac{1}{N}\sum_{t=0}^{N=1}VI(t)\cdot e^{-2\pi ut/T}
+%\end{equation}
+%wobei $VI(t)$ in diesem Fall der einzusetzende Wert aus der Zeitreihe zum Zeitpunkt $t$, $n$ die Anzahl der Fourier-Komponenten, $t$ der Periodenindex, $T$ die Gesamtperiodenanzahl wobei diese Zahl gleich der Gesamtanzahl an Epochen in der %Zeitreihe. Die obere Gleichung besteht eigentlich aus zwei Zeilen: einem Kosinus-Teil (Realteil) sowie einem Sinus-Teil (Imaginärteil).Die Gleichung für den Kosinus lautet:
+%\begin{equation}
+%F_{c(u)}=\frac{1}{N}\sum_{t=0}^{N=1}\left(VI(t)\cdot cos\left(2\pi\frac{ut}{T}\right)\right).
+%\end{equation}
+%Die Gleichung für den Sinusteil setzt sich wie folgt zusammen:
+%\begin{equation}
+%F_{s(u)}=\frac{1}{N}\sum_{t=0}^{N=1}\left(VI(t)\cdot sin\left(2\pi\frac{ut}{T}\right)\right).
+%\end{equation}
+%Aus diesen beiden Gleichungen lassen sich die Phase $F_p$ und die Magnitude $F_m$ berechnen:
+%\begin{equation}
+%VI^*(t)=F_{m(0)} + \frac{1}{N}\sum_{t=0}^{N=1}\left(F_{m(n)} \cdot cos\left(\frac{2\pi nt}{T}-F{p(n)}\right)\right)
+%\end{equation}
+
+\subsection{Harmonische Analyse und Fourier-Transformation}
+
+\paragraph{Einführung und grundlegendes Konzept}
+Die harmonische Analyse, zumeist implementiert in Form der Fourier-Transformation, ist eine weit verbreitete, globale Methode zur Glättung von Zeitreihen und zur Extraktion phänologischer Parameter aus Fernerkundungsdaten (Atkinson et al., 2012, S. 401–402). Das Grundprinzip besteht darin, das komplexe, oft verrauschte Vegetationssignal in eine Reihe von Sinus- und Kosinuswellen (Harmonische) mit unterschiedlichen Frequenzen zu zerlegen (Atkinson et al., 2012, S. 402). Hochfrequente Fluktuationen werden dabei als unerwünschtes Rauschen (z. B. durch Wolken oder atmosphärische Störungen) interpretiert und herausgefiltert, während die verbleibenden niederfrequenten Harmonischen die dominante, tatsächliche saisonale Variation der Vegetation repräsentieren (Atkinson et al., 2012, S. 402; Wagenseil \& Samimi, 2006).
+
+\paragraph{Mathematische Funktionsweise}
+In der klassischen diskreten Fourier-Transformation (DFT) wird der Vegetationsindex $VI(t)$ zum Zeitpunkt $t$ in seine Frequenzkomponenten zerlegt. Aus dem Real- und Imaginärteil der Transformation lassen sich die Magnitude (Amplitude) $Fm(n)$ und die Phase $Fp(n)$ für jede Oberschwingung $n$ berechnen. Die geglättete Kurve $VI^*(t)$ wird anschließend durch die Summe eines Basiswerts $Fm(0)$ und einer ausgewählten Anzahl $u$ von Harmonischen rekonstruiert (Atkinson et al., 2012, S. 402):
+
 \begin{equation}
-F_{(u)}=\frac{1}{N}\sum_{t=0}^{N=1}VI(t)\cdot e^{-2\pi ut/T}
+VI^*(t) = Fm(0) + \sum_{n=1}^{u} Fm(n) \cos\left(\frac{2\pi nt}{T} - Fp(n)\right)
 \end{equation}
-wobei $VI(t)$ in diesem Fall der einzusetzende Wert aus der Zeitreihe zum Zeitpunkt $t$, $n$ die Anzahl der Fourier-Komponenten, $t$ der Periodenindex, $T$ die Gesamtperiodenanzahl wobei diese Zahl gleich der Gesamtanzahl an Epochen in der Zeitreihe. Die obere Gleichung besteht eigentlich aus zwei Zeilen: einem Kosinus-Teil (Realteil) sowie einem Sinus-Teil (Imaginärteil).Die Gleichung für den Kosinus lautet:
+
+\begin{flalign*}			
+T\qquad &\dots\qquad \text{Länge der Zeitperiode (z.B. Anzahl der Komposite pro Jahr)}\\
+u\qquad &\dots\qquad \text{Anzahl der verwendeten Harmonischen (Fourier-Komponenten)} \\
+Fm(n)\qquad &\dots\qquad \text{Magnitude der } n\text{-ten Harmonischen}\\
+Fp(n)\qquad &\dots\qquad \text{Phase der } n\text{-ten Harmonischen}
+\end{flalign*}
+
+\paragraph{Nicht-klassische harmonische Analyse}
+Ein Problem der klassischen Fourier-Analyse ist die strikte Voraussetzung, dass die Datenpunkte in absolut gleichmäßigen zeitlichen Abständen (äquidistant) vorliegen müssen (Hermance et al., 2007, S. 3265). Um dies zu umgehen und zeitliche Lücken (Data Gaps) besser zu handhaben, wird in der Praxis häufig eine modifizierte, nicht-klassische harmonische Analyse eingesetzt. Diese löst das Problem mittels der Methode der kleinsten Quadrate (Least-Squares) und kombiniert die harmonische Serie zusätzlich mit einem niedriggradigen Polynom, um langfristige Sensordrifts oder Klimatrends über mehrere Jahre abzubilden (Bradley et al., 2007, S. 140; Hermance et al., 2007, S. 3266):
+
 \begin{equation}
-F_{c(u)}=\frac{1}{N}\sum_{t=0}^{N=1}\left(VI(t)\cdot cos\left(2\pi\frac{ut}{T}\right)\right).
+d_{pred}(t_i) = \sum_{k=0}^L c_k t_i^k + \sum_{j=1}^M \left[ a_j \cos\left(\frac{2\pi j}{T} t_i\right) + b_j \sin\left(\frac{2\pi j}{T} t_i\right) \right]
 \end{equation}
-Die Gleichung für den Sinusteil setzt sich wie folgt zusammen:
-\begin{equation}
-F_{s(u)}=\frac{1}{N}\sum_{t=0}^{N=1}\left(VI(t)\cdot sin\left(2\pi\frac{ut}{T}\right)\right).
-\end{equation}
-Aus diesen beiden Gleichungen lassen sich die Phase $F_p$ und die Magnitude $F_m$ berechnen:
-\begin{equation}
-VI^*(t)=F_{m(0)} + \frac{1}{N}\sum_{t=0}^{N=1}\left(F_{m(n)} \cdot cos\left(\frac{2\pi nt}{T}-F{p(n)}\right)\right)
-\end{equation}
+wobei $L$ der Grad des Polynoms für den Langzeittrend und $M$ die Ordnung der harmonischen Serie ist (Hermance et al., 2007, S. 3266).
+
+\paragraph{Kurvenanpassung und globale Modellierung}
+Ein wesentlicher Vorteil der Methode ist ihre einfache Parametrisierung, da primär nur die Anzahl der zu verwendenden Harmonischen definiert werden muss (Atkinson et al., 2012, S. 401). Niedrige Frequenzen glätten das Signal stark, können jedoch wichtige Variationen übersehen. Für natürliche Vegetation mit einem klaren Wachstumszyklus pro Jahr (Single Season) ist die Verwendung der ersten 3 bis 4 Fourier-Komponenten meist ideal (Atkinson et al., 2012, S. 404). Um in landwirtschaftlichen Regionen komplexere Muster mit zwei oder drei Ernten pro Jahr abzubilden, müssen typischerweise etwa 6 Komponenten verwendet werden (Atkinson et al., 2012, S. 404). 
+
+\paragraph{Vor- und Nachteile}
+Zu den größten Stärken der Fourier-Analyse zählt die robuste Konstruktion durchschnittlicher, jährlicher Basismodelle (Average Annual Phenologies) bei extrem stark verrauschten Daten (Bradley et al., 2007, S. 140). Im Gegensatz zu asymmetrischen Gauß- oder doppel-logistischen Modellen, die das Signal in eine strikte einzelne Glockenform zwingen, kann die Fourier-Transformation (durch das Hinzufügen weiterer Harmonischer) mühelos Gebiete mit multiplen Wachstumszyklen (Doppel-Ernten) erfassen (Atkinson et al., 2012, S. 409, 416).
+
+Die gravierendsten Nachteile ergeben sich aus der Natur der zugrunde liegenden symmetrischen Sinus- und Kosinusfunktionen. Da das Wachstum und Absterben von Vegetation (Ergrünen und Seneszenz) naturgemäß oft asymmetrisch verläuft, kann der Fourier-Ansatz diese Asymmetrie nur bedingt abbilden und führt häufig zu systematischen Kurvenverschiebungen im Vergleich zu den Originaldaten (Chen et al., 2004, S. 333, 338). Zudem neigt die Fourier-Glättung bei unregelmäßigem Rauschen oder Datenlücken im Winter massiv zur Bildung künstlicher, fehlerhafter Oszillationen ("spurious oscillations" oder "Ringing-Effekt"), weshalb sie häufig durch zusätzliche Rauigkeits-Dämpfungen (Roughness Damping) künstlich stabilisiert werden muss (Chen et al., 2004, S. 333; Hermance et al., 2007, S. 3266).
 
 
 
+% ==================================================
 % Fitting Methoden aus der Literatur
 %
 % ==================================================
 \subsection{Vergleich unterschiedlicher Fittingmethoden anhand verrauschter Satellitendatenzeitreihen aus der Literatur}
-Atkinson et al. (2012) wenden anhand des MERIS Terrestrial Chlorophyll Index (MTCI) , ein Vegetationsindex der linear vom Chlorophyllgehalt in überschirmten Flächen abhängt und aus einer MERIS-Zeitreihe abgeleitet wurde, die Diskrete Fourier Transformation, eine Asymmetrische Gauss Funktion, eine Doppel-Logistische Funktion sowie einen Whittaker Smoother auf ihre MTCI-Zeitreihe an. Generell sei vorweg gesagt, dass jede Methode ihre Vor- und Nachteile mit sich bringt, wie sie auf Messfehler oder Ausreisser reagiert beziehungsweise zur Interpretation herangezogen werden kann(de Beurs K.M., Henebry G.M.,2010). \newline
+Atkinson et al. (2012) wenden anhand des MERIS Terrestrial Chlorophyll Index (MTCI), ein Vegetationsindex der linear vom Chlorophyllgehalt in überschirmten Flächen abhängt und aus einer MERIS-Zeitreihe abgeleitet wurde, die Diskrete Fourier Transformation, eine Asymmetrische Gauss Funktion, eine Doppel-Logistische Funktion sowie einen Whittaker Smoother auf ihre MTCI-Zeitreihe an. Generell sei vorweg gesagt, dass jede Methode ihre Vor- und Nachteile mit sich bringt, wie sie auf Messfehler oder Ausreisser reagiert beziehungsweise zur Interpretation herangezogen werden kann (de Beurs \& Henebry, 2010).
+
+\paragraph{Rahmenbedingungen und Untersuchungsgebiet}
+Die Studien von Atkinson et al. (2009) und Atkinson et al. (2012) vergleichen diese Glättungsverfahren (ergänzt um den Savitzky-Golay-Filter) zur Extraktion phänologischer Parameter (Atkinson et al., 2009; Atkinson et al., 2012, S. 401). Als Untersuchungsgebiet diente der indische Subkontinent, der aufgrund seiner extrem heterogenen Landschaften – von tropischen Regenwäldern bis hin zu stark landwirtschaftlich genutzten Zonen mit multiplen Ernten pro Jahr – besonders anspruchsvoll für Modellierungen ist (Atkinson et al., 2009; Atkinson et al., 2012, S. 404). Im Gegensatz zum fehleranfälligen NDVI weist der hier genutzte MTCI ein höheres Signal-Rausch-Verhältnis auf und ist kaum durch atmosphärische Störungen negativ verzerrt (Atkinson et al., 2012, S. 401). Das Rauschen in MTCI-Daten kann daher als weißes (Gaußsches) Rauschen um einen lokalen Mittelwert angenommen werden, weshalb die Modelle an diesen Mittelwert anstatt an die obere Hüllkurve angepasst werden (Atkinson et al., 2012, S. 401).
+
+\paragraph{Parametrisierung und Skalierbarkeit}
+Eine zentrale Erkenntnis ist, dass es für komplexe, heterogene Gebiete nicht möglich ist, ein einziges, perfektes Set an Parametern für Modelle wie Savitzky-Golay, Asymmetrische Gauß-Funktion oder Doppel-Logistik zu finden (Atkinson et al., 2009; Atkinson et al., 2012, S. 401). Da Parameter wie Fenstergröße, Rausch-Schwellenwerte oder Anpassungsstärke manuell vorgegeben werden müssen, kann dies zu Inkonsistenzen in den abgeleiteten Informationen führen (Atkinson et al., 2012, S. 401).
+
+\paragraph{Leistung der Asymmetrischen Gauß- (AG) und Doppel-Logistischen (DL) Modelle}
+Lokale Anpassungsverfahren wie AG und DL zeichnen sich dadurch aus, dass sie die Flankensteilheit der phänologischen Signale beim Ergrünen und Absterben extrem gut und unverfälscht erhalten (Atkinson et al., 2012, S. 409). In Simulationen mit starkem, künstlichem weißem Rauschen lieferte das DL-Modell im Vergleich zu den anderen Methoden oft die stabilsten Ergebnisse (Atkinson et al., 2012, S. 409, 416). Für natürliche Vegetationsarten mit exakt einer Wachstumsphase erzielen beide Modelle exzellente Anpassungen (Atkinson et al., 2012, S. 416). Der größte Nachteil ist jedoch, dass sie pro Saisonintervall mathematisch exakt einen Signal-Peak erzwingen (Atkinson et al., 2012, S. 409). In Gebieten mit zwei oder drei Ernten pro Jahr lieferten sie daher unzureichende Ergebnisse und reagierten sehr empfindlich auf Rauschen in den kurzen Übergangsphasen sowie auf Signaltrends aus benachbarten Wachstumszyklen (Atkinson et al., 2012, S. 407, 409).
+
+\paragraph{Leistung der Fourier-Analyse (DFT / HANTS)}
+Die Fourier-basierte Glättung erwies sich für großflächige, heterogene Räume als eine sehr praxistaugliche und konsistente Methode (Atkinson et al., 2009). Sie ist einfach zu implementieren und benötigt vom Nutzer primär nur die Anzahl der Harmonischen als Parameter (Atkinson et al., 2009; Atkinson et al., 2012, S. 401). Im Gegensatz zu AG und DL kann sie problemlos multiple Erntezyklen abbilden: 3 bis 4 Harmonische reichten für natürliche Vegetation aus, während 6 Harmonische komplexe landwirtschaftliche Doppel- oder Dreifach-Ernten zuverlässig rekonstruierten (Atkinson et al., 2009; Atkinson et al., 2012, S. 404). Ein Schwachpunkt ist, dass die Fourier-Analyse bei unregelmäßigem, negativem Rauschen zur Bildung unerwünschter Oszillationen (Wellenmuster) neigen kann, was jedoch durch die Reduktion auf wenige, niederfrequente Komponenten gedämpft werden kann (Atkinson et al., 2012, S. 409).
+
+\paragraph{Savitzky-Golay (SG) und Whittaker Filter}
+Der Savitzky-Golay-Filter zeigte bei vollautomatischer Auswertung verschiedenster Vegetationszonen Schwächen, da es unmöglich war, einheitliche Parameter für alle Landschaftstypen zu finden, und konnte qualitativ nicht so überzeugen wie der Fourier-Ansatz (Atkinson et al., 2009). Der Whittaker-Filter lieferte bei realen Datenreihen zwar extrem gute Fehlerwerte (niedrigste RMSE), wurde aber in strengen statistischen Metriken (AIC, BIC) aufgrund seiner vielen freien Modellparameter stark bestraft und reagierte sensibler auf künstliches Rauschen als das DL-Modell (Atkinson et al., 2012, S. 415-416).
+
+\paragraph{Auswirkungen auf die Phänologie-Bestimmung (Onset of Greenness)}
+Das finale Ziel der Glättung ist die Schätzung phänologischer Parameter wie dem Beginn der Wachstumsphase (Onset of Greenness). Trotz methodischer Unterschiede wichen die Schätzungen in homogenen Waldgebieten modellübergreifend im Durchschnitt nur um etwa eine Woche voneinander ab (Atkinson et al., 2012, S. 416). Die größten Diskrepanzen, mit durchschnittlich 3 bis 4 Wochen, zeigten sich in trockenen Laubwäldern (Atkinson et al., 2012, S. 414, 416). Deren Wachstum ist stark von unregelmäßigen Niederschlägen und lokalen Dürreereignissen abhängig, was zu einer extremen Rauschanfälligkeit und großen inter-annualen Variabilität führt (Atkinson et al., 2012, S. 415, 416).
+
+\paragraph{Fazit}
+Für die vollautomatische Prozessierung extrem großer, heterogener Gebiete mit natürlichen und komplexen landwirtschaftlichen Rhythmen empfehlen die Autoren die Fourier-Analyse, da diese leicht zu implementieren ist und am verlässlichsten multiple Saisons abbildet (Atkinson et al., 2009; Atkinson et al., 2012, S. 416). Für die formtreue und rauschresistente Rekonstruktion einzelner, reiner Vegetationszyklen (Single Season) ist hingegen das Doppel-Logistische Modell hervorragend geeignet (Atkinson et al., 2012, S. 416).
+
 % Grafiken von Arzberger et al einfügen
 
 \begin{figure}[H]		% H bedeutet Here
@@ -1032,7 +1143,16 @@ Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg h�
 
 \newcommand{\litentry}[1]{\hangindent=1cm\hangafter=1 #1\par\medskip}
 
+\litentry{Atkinson, P. M., Jeganathan, C., \& Dash, J. (2009). Analysing the effect of different geocomputational techniques on estimating phenology in India. In B. G. Lees, \& S.W. Laffan (Eds.), \textit{10th International Conference on GeoComputation}. Sydney: UNSW.}
+
+\litentry{Atkinson, P. M., Jeganathan, C., Dash, J., \& Atzberger, C. (2012). Inter-comparison of four models for smoothing satellite sensor time-series data to estimate vegetation phenology. \textit{Remote Sensing of Environment, 123}, 400--417. https://doi.org/10.1016/j.rse.2012.04.001}
+
+
+\litentry{Bradley, B. A., Jacob, R. W., Hermance, J. F., \& Mustard, J. F. (2007). A curve fitting procedure to derive inter-annual phenologies from time series of noisy satellite NDVI data. \textit{Remote Sensing of Environment, 106}(2), 137--145. https://doi.org/10.1016/j.rse.2006.08.002}
+
 \litentry{Chen, J., Jönsson, P., Tamura, M., Gu, Z., Matsushita, B., \& Eklundh, L. (2004). A simple method for reconstructing a high-quality NDVI time-series data set based on the Savitzky–Golay filter. \textit{Remote Sensing of Environment, 91}(3-4), 332--344.}
+
+\litentry{de Beurs, K. M., \& Henebry, G. M. (2010). Spatio-temporal statistical methods for modelling land surface phenology. In I. L. Hudson, \& M. R. Keatley (Eds.), \textit{Phenological research}. Springer Science + Business Media. https://doi.org/10.1007/978-90-481-3335-2\_9}
 
 \litentry{Eklundh, L., \& Jönsson, P. (2012). \textit{TIMESAT 3.1 software manual}. Lund University \& Malmö University. http://www.nateko.lu.se/TIMESAT/}
 
@@ -1040,13 +1160,15 @@ Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg h�
 
 \litentry{Gao, F., Morisette, J. T., Wolfe, R. E., Ederer, G., Pedelty, J., Masuoka, E., Myneni, R., Tan, B., \& Nightingale, J. (2008). An Algorithm to Produce Temporally and Spatially Continuous MODIS-LAI Time Series. \textit{IEEE Geoscience and Remote Sensing Letters, 5}(1), 60--64.}
 
+\litentry{Hermance, J. F., Jacob, R. W., Bradley, B. A., \& Mustard, J. F. (2007). Extracting Phenological Signals From Multiyear AVHRR NDVI Time Series: Framework for Applying High-Order Annual Splines With Roughness Damping \textit{IEEE Transactions on Geoscience and Remote Sensing, 45}(10), 3264--3276.}
+
 \litentry{Helder, D., Thome, K. J., Mishra, N., Chander, G., Xiong, X., Angal, A., \& Choi, T. (2013). Absolute radiometric calibration of Landsat using a pseudo invariant calibration site. \textit{IEEE Transactions on Geoscience and Remote Sensing, 51}(3), 1360--1369. https://doi.org/10.1109/TGRS.2013.2243738}
 
 \litentry{Jönsson, P., \& Eklundh, L. (2004). TIMESAT—a program for analyzing time-series of satellite sensor data. \textit{Computers \& Geosciences, 30}(8), 833--845. https://doi.org/10.1016/j.cageo.2004.05.006}
 
 \litentry{Lu, X., Liu, R., Liu, J., \& Liang, S. (2007). Removal of Noise by Wavelet Method to Generate High Quality Temporal Data of Terrestrial MODIS Products. \textit{Photogrammetric Engineering \& Remote Sensing, 73}(10), 1129--1139.}
 
-\litentry{Numerical Recipes in C. (1992). \textit{The Art of Scientific Computing}. Cambridge University Press.}
+\litentry{Press, W. H., Teukolsky, S. A., Vetterling, W. T., \& Flannery, B. P. (1992). \textit{Numerical recipes in C: The art of scientific computing} (2nd ed.). Cambridge University Press.}
 
 \litentry{Román, M. O., Schaaf, C. B., Woodcock, C. E., Strahler, A. H., Yang, X., Braswell, R. H., Curtis, P. S., Davis, K. J., Dragoni, D., Goulden, M. L., Gu, L., Hollinger, D. Y., Kolb, T. E., Meyers, T. P., Munger, J. W., Privette, J. L., Richardson, A. D., Wilson, T. B., \& Wofsy, S. C. (2009). The MODIS (Collection V005) BRDF/albedo product: Assessment of spatial representativeness over forested landscapes. \textit{Remote Sensing of Environment, 113}(11), 2476--2498. https://doi.org/10.1016/j.rse.2009.07.009}
 
