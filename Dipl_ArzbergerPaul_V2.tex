@@ -323,41 +323,68 @@ Für die vollautomatische Prozessierung extrem großer, heterogener Gebiete mit 
 % 
 % Absolute Kalibrierung
 % ==================================================
+%\section{Kalibrierung}
+
+%\subsection{Absolute Kalibrierung}
+%Unter der absoluten radiometrischen Kalibrierung versteht man die Umrechnung von Digital Numbers (DN) eines Satelliten in physikalische Einheiten in "`am Sensor"' spektrale Strahlung $\left[Wm^{-2}sr^{-1}\mu m^{-1}\right]$. DN eines Sensores %haben keine Gemeinsamkeiten mit einem anderen Aufnahmesystem. Die Konvertierung zu "`am Sensor"' eintreffende Spektrale Information und Top-Of-Atmosphere Reflexion (TOA) sind fundamentale Vorgehensweisen um die Daten/Produkte zweier %unterschiedlicher Sensoren zu vergleichen. 
+
+%\subsubsection{Pseudo Invariante Feature Sites - PICS}
+%Es exitsiert eine Vielzahl an Möglichkeiten von pre-launch laborgetätigten Kalibrationen und post-launch on-orbit Kalibrierungen. Eine der meistverwendeten on-orbit Kalibrierungsmethoden ist die Verwendung von Pseudo Invarianten Calibration Sites (PICS). %PICS sind radiometrisch stabile Orte und deren ursprünglicher Zweck der Überwachung der radiometrischen Stabilität eines Sensors mit einem hohen Genauigkeitsgrad. Jene Sites zeigen auch hohes Potential unter ähnlicher Genauigkeit zur absoluten %Kalibrierung herangezogen zu werden. (5\% Genauigkeit bei Kreuzkalibrierung MSS und Landsat 5 TM laut  Helder et al., 2013). Die zeitliche Stabilität der Libya 4 - Kalibrierungssite wurde anhand des HYPERION EO-1, einem hyperspektralem  %Erdbeobachtungssensor in hochtransmittiven Spektren des SWIR (bei 1628 nm Wellenlänge ist die Atmosphäre nahezu transparent) untersucht, (siehe Helder et al, 2013)
 \section{Kalibrierung}
 
+\subsection{Radiometrische Bildkalibrierung}
+Die radiometrische Kalibrierung von Satellitenbildern unterscheidet grundlegend zwischen der \textbf{absoluten Kalibrierung} (Atmosphärenkorrektur) und der \textbf{relativen Kalibrierung} (TU Graz, 2021, S. 3, 10).
+
 \subsection{Absolute Kalibrierung}
-Unter der absoluten radiometrischen Kalibrierung versteht man die Umrechnung von Digital Numbers (DN) eines Satelliten in physikalische Einheiten in "`am Sensor"' spektrale Strahlung $\left[Wm^{-2}sr^{-1}\mu m^{-1}\right]$. DN eines Senores haben keine Gemeinsamkeiten mit einem anderen Aufnahmesystem. Die Konvertierung zu "`am Sensor"' eintreffende Spektrale Information und Top-Of-Atmosphere Reflexion (TOA) sind fundamentale Vorgehensweisen um die Daten/Produkte zweier unterschiedlicher Sensoren zu vergleichen. 
+Unter der absoluten radiometrischen Kalibrierung versteht man die Umrechnung von Digital Numbers (DN) eines Satelliten in physikalische Einheiten in "`am Sensor"' spektrale Strahlung $\left[Wm^{-2}sr^{-1}\mu m^{-1}\right]$ (Helder et al., 2013, S. 1360; TU Graz, 2021, S. 15). Digital Numbers eines Sensors haben keine Gemeinsamkeiten mit einem anderen Aufnahmesystem (Helder et al., 2013, S. 1360). Die Konvertierung zu "`am Sensor"' eintreffender spektraler Information und Top-Of-Atmosphere Reflexion (TOA) sind fundamentale Vorgehensweisen, um die Daten/Produkte zweier unterschiedlicher Sensoren zu vergleichen (Helder et al., 2013, S. 1360).
+
+Der vollständige Verarbeitungs-Workflow der absoluten Kalibrierung gliedert sich in drei zentrale Schritte (TU Graz, 2021, S. 15):
+\begin{enumerate}
+    \item Erfassung der einheitslosen Digital Numbers (DN) durch den Sensor.
+    \item Radiometrische Kalibrierung der DN zur spektralen Strahldichte (\textit{Radiance}).
+    \item Atmosphärenkorrektur der Strahldichte zur Ermittlung der tatsächlichen Oberflächenreflexion (\textit{Reflectance}).
+\end{enumerate}
+
+Zur Atmosphärenkorrektur werden sowohl empirische Ansätze wie die \textit{Dark Object Subtraction} (DOS) als auch physikalische Strahlungstransfermodelle (z.\,B. LOWTRAN, MODTRAN) oder spezialisierte Software-Tools wie Sen2Cor für Sentinel-2 eingesetzt (TU Graz, 2021, S. 17, 19).
 
 \subsubsection{Pseudo Invariante Feature Sites - PICS}
-Es exitsiert eine Vielzahl an Möglichkeiten von pre-launch laborgetätigten Kalibrationen und post-launch on-orbit Kalibrierungen. Eine der meistverwendeten on-orbit Kalibrierungsmethoden ist die Verwendung von Pseudo Invarianten Calibration Sites (PICS). PICS sind radiometrisch stabile Orte und deren ursprünglicher Zweck der Überwachung der radiometrischen Stabilität eines Sensors mit einem hohen Genauigkeistgrad. Jene Sites zeigen auch hohes Potential unter ähnlicher Genauigkeit zur absoluten Kalibrierung herangezogen zu werden. (5\% Genauigkeit bei Kreuzkalibrierung MSS und Landsat 5 TM laut  Helder et al., 2013). Die zeitliche Stabilität der Libya 4 - Kalibrierungssite wurde anhand des HYPERION EO-1, einem hyperspektralem Erdbeobachtungssensor in hochtransmittiven Spektren des SWIR (bei 1628 nm Wellenlänge ist die Atmosphäre nahezu transparent) untersucht, (siehe Helder et al, 2013)
+Es existiert eine Vielzahl an Möglichkeiten von pre-launch laborgetätigten Kalibrationen und post-launch on-orbit Kalibrierungen (Helder et al., 2013, S. 1360). Eine der meistverwendeten on-orbit Kalibrierungsmethoden ist die Verwendung von Pseudo Invarianten Calibration Sites (PICS) (Helder et al., 2013, S. 1360–1361). PICS sind radiometrisch stabile Orte mit dem ursprünglichen Zweck der Überwachung der radiometrischen Stabilität eines Sensors mit einem hohen Genauigkeitsgrad (Helder et al., 2013, S. 1360–1361). Jene Sites zeigen auch hohes Potenzial, unter ähnlicher Genauigkeit zur absoluten Kalibrierung herangezogen zu werden (5\% Genauigkeit bei Kreuzkalibrierung MSS und Landsat 5 TM laut Helder et al., 2013, S. 1361–1362). Die zeitliche Stabilität der Libya 4 - Kalibrierungssite wurde anhand des HYPERION EO-1, einem hyperspektralem Erdbeobachtungssensor in hochtransmittiven Spektren des SWIR (bei 1628 nm Wellenlänge ist die Atmosphäre nahezu transparent) untersucht (Helder et al., 2013, S. 1362–1363).
 
+\subsection{Relative Kalibrierung}
+Im Gegensatz zur absoluten Kalibrierung dient die relative radiometrische Kalibrierung der Bereinigung radiometrischer Unterschiede zwischen mehreren Bildaufnahmen (TU Graz, 2021, S. 12). Sie bildet eine essenzielle Vorverarbeitung für die Erstellung nahtloser Bildmosaike sowie für automatische Veränderungsanalysen (\textit{Change Detection}) (TU Graz, 2021, S. 12). Zudem ermöglicht sie vor allem in gebirgigen Regionen mit schwieriger Feldarbeit eine erhebliche Budgeteinsparung, da ermittelte Trainings- und Referenzgebiete für die überwachte Klassifikation auf benachbarte Szenen übertragen werden können (TU Graz, 2021, S. 13–14).
+
+Zu den gängigsten methodischen Ansätzen zählen (TU Graz, 2021, S. 10):
+\begin{itemize}
+    \item \textbf{Regressionsfunktionen:} Berechnung von Band-Offsets und Gains basierend auf den Grauwertbeziehungen in den Überlappungsbereichen benachbarter Szenen (TU Graz, 2021, S. 20–21). 
+    \item \textbf{Histogramm-Matching:} Anpassung der kumulativen Verteilungsfunktion der Grauwerte einer Szene an ein Referenzbild (TU Graz, 2021, S. 24). Während regressionsbasierte Verfahren bei Verzerrungen in der Überlappungszone geometrische Probleme verursachen können, arbeitet das Histogramm-Matching unabhängig von geometrischen Verzerrungen (TU Graz, 2021, S. 27).
+\end{itemize}
 \begin{enumerate}
-\item Sonora Desert - Nord Amerika
-\item Lybia 4
-\item Sahara
-\item Railroad Valley - U.S.A. Nevada
-\item Ivanpah Playa - U.S.A. Kalifornien
+    \item Sonoran Desert -- Nordamerika (Helder et al., 2013, S. 1362)
+    \item Libya 4 -- Nordafrika (Helder et al., 2013, S. 1361)
+    \item Sahara -- Nordafrika (Helder et al., 2013, S. 1361)
+    \item Railroad Valley -- Nevada, U.S.A. (Markham et al., 2003, S. 310)
+    \item Ivanpah Playa -- Kalifornien, U.S.A. (Markham et al., 2003, S. 310)
 \end{enumerate}
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.6]{./Grafiken/Abscal/zeitlStabilitaetLybia4_inkl_BRDF.PNG}
-\caption{\textit{TOA Reflexion zeitlicher Trend von HYPERION über der Libya 4 Testsite und anhand einer BRDF korrigiert (Helder et al., 2013)}}
+\caption{\textit{TOA-Reflexion: Zeitlicher Trend von HYPERION über der Libya 4 Testsite vor und nach Korrektur mittels BRDF-Modell (Helder et al., 2013, S. 1363)}}
 \end{figure}
 
-Helder et al. (2013) wenden zuerst wird ein vereinfachtes lineares BRDF-Modell auf die Libya Testsite an. In diesem Modell wird lediglich der solare Zenithwinkel berücksichtig. Sämtliche anderen Einflüsse werden vernachlässigt.
+Helder et al. (2013, S. 1364--1365) wenden ein vereinfachtes lineares BRDF-Modell auf die Libya 4 Testsite an. In diesem Modell wird primär der solare Zenitwinkel berücksichtigt:
 \begin{equation}
-\rho_{Libya4}(\lambda,SZA) = k(\lambda)\rho_h(\lambda)\left[a(\lambda)(SZA)+1\right]
+\rho_{\text{Libya4}}(\lambda, \text{SZA}) = k(\lambda) \cdot \rho_h(\lambda) \cdot \left[ a(\lambda) \cdot (\text{SZA}) + 1 \right]
 \end{equation}
 
-TOA-Reflexion der Libya4 PICS wird von $\rho(\lambda)$ repräsentiert, $k(\lambda)$ ist der Skalierungsfaktor für das Hyperionspekrtrum, $\rho_h(\lambda)$ ist ein MODIS-Skalierungsfaktor und $a(\lambda)$ repräsentiert den linearen Koeffizienten welcher für die Korrektur des solaren Zenithwinkels benötigt wird.
-Die modellierten Werte und die gemessene Beobachtungen unterscheiden sich dabei um 1.3\% (Helder et al., 2013)
-Um das Modell zu validieren wurde es auf Landsat 7 ETM+ Daten angewandt. Bei Landsat7 ETM+ wird die radiometrische Genauigkeit/Stabilität auf 5\% angegeben. Da Landsat ein "`am Sensor"' Messlösung ist muss die spektrale Welle die am Sensor gemessen wird, mittels eine Standartprozedur in die TOA übergeführt werden.
+Die TOA-Reflexion der Libya 4 PICS wird durch $\rho_{\text{Libya4}}$ repräsentiert, $k(\lambda)$ ist der Skalierungsfaktor für das Hyperion-Spektrum, $\rho_h(\lambda)$ beschreibt das Hyperion-Referenzspektrum und $a(\lambda)$ repräsentiert den linearen Koeffizienten zur Korrektur des solaren Zenitwinkels (SZA) (Helder et al., 2013, S. 1365). Die modellierten Werte und die tatsächlichen Beobachtungen weisen dabei eine geringe Abweichung (Bias) von lediglich 1,37\% auf (Helder et al., 2013, S. 1365).
+
+Um das Modell zu validieren, wurde es auf Landsat 7 ETM+ Daten angewendet (Helder et al., 2013, S. 1366). Da Landsat primär spektrale Strahldichte am Sensor misst, muss diese mittels einer Standardprozedur in die TOA-Reflexion übergeführt werden (Helder et al., 2013, S. 1366):
 \begin{equation}
-\rho_\lambda=\frac{\pi\cdot L_\lambda\cdot d^2}{ESUN_\lambda \cdot cos\Theta_s}
+\rho_\lambda = \frac{\pi \cdot L_\lambda \cdot d^2}{ESUN_\lambda \cdot \cos\Theta_s}
 \end{equation}
-$p_\lambda$ repräsentiert die Oberflächenreflexion $\left[einheitslos\right]$, $L_\lambda$ repräsentiert die spektrale Welle direkt am Sensor $\left[W/(m^2sr\mu m)\right]$, $d$ Erd-Sonnen-Distanz $\left[astronomische Einheit\right]$, $ESUN_\lambda$ repräsentiert die mittlere atmopshärische Solarstrahlung $\left[W/(m^2sr\mu m)\right]$, $\Theta_s$ steht für den solaren Zenithwinkel.
-Die Kalibrierungen zeigen bei beiden Sensoren ein Ergebnis das innerhalb ihrer angegeben Ungenauigkeit von 2\% für MODIS und 5\% für Landsat5 ETM+.
+
+Dabei repräsentiert $\rho_\lambda$ die planetare TOA-Reflexion $\left[\text{einheitslos}\right]$, $L_\lambda$ die spektrale Strahldichte am Sensor $\left[\text{W}\cdot\text{m}^{-2}\cdot\text{sr}^{-1}\cdot\mu\text{m}^{-1}\right]$, $d$ die Erd-Sonnen-Distanz in astronomischen Einheiten (AU), $ESUN_\lambda$ die mittlere exoatmosphärische solare Bestrahlungsstärke $\left[\text{W}\cdot\text{m}^{-2}\cdot\mu\text{m}^{-1}\right]$ und $\Theta_s$ den solaren Zenitwinkel (Helder et al., 2013, S. 1366). Die Vergleiche liegen innerhalb der angegebenen Unsicherheiten von 2\% für MODIS und 5\% für Landsat 7 ETM+ (Helder et al., 2013, S. 1366).
 
 \begin{figure}[H]
 \centering
@@ -1168,11 +1195,15 @@ Zu Beginn und zum Ende der Graphen existieren oft über ein, zwei Epochen weg h�
 
 \litentry{Lu, X., Liu, R., Liu, J., \& Liang, S. (2007). Removal of Noise by Wavelet Method to Generate High Quality Temporal Data of Terrestrial MODIS Products. \textit{Photogrammetric Engineering \& Remote Sensing, 73}(10), 1129--1139.}
 
+\litentry{Markham, B. L., Barker, J. L., Barsi, J. A., Kaita, E., Thome, K. J., Helder, D. L., Palluconi, F. D., Schott, J. R., \& Scaramuzza, P. (2003). Landsat-7 ETM+ radiometric stability and absolute calibration. \textit{Proceedings of SPIE}, 4881, 308--318. https://doi.org/10.1117/12.462410}
+
 \litentry{Press, W. H., Teukolsky, S. A., Vetterling, W. T., \& Flannery, B. P. (1992). \textit{Numerical recipes in C: The art of scientific computing} (2nd ed.). Cambridge University Press.}
 
 \litentry{Román, M. O., Schaaf, C. B., Woodcock, C. E., Strahler, A. H., Yang, X., Braswell, R. H., Curtis, P. S., Davis, K. J., Dragoni, D., Goulden, M. L., Gu, L., Hollinger, D. Y., Kolb, T. E., Meyers, T. P., Munger, J. W., Privette, J. L., Richardson, A. D., Wilson, T. B., \& Wofsy, S. C. (2009). The MODIS (Collection V005) BRDF/albedo product: Assessment of spatial representativeness over forested landscapes. \textit{Remote Sensing of Environment, 113}(11), 2476--2498. https://doi.org/10.1016/j.rse.2009.07.009}
 
 \litentry{Tan, B., Morisette, J. T., Wolfe, R. E., Gao, F., Ederer, G. A., Nightingale, J., \& Pedelty, J. A. (2011). An enhanced TIMESAT algorithm for estimating vegetation phenology metrics from MODIS data. \textit{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, 4}(2), 361--371. https://doi.org/10.1109/JSTARS.2010.2075916}
+
+\litentry{Technische Universität Graz. (2021). \textit{Chapter 7a: Data preprocessing} [Vorlesungsfolien]. Vorlesung Environmental Monitoring with Remote Sensing, Institut für Geodäsie, Technische Universität Graz.}
 
 \litentry{Tokola, T., Löfman, S., \& Erkkilä, A. (1999). Relative calibration of multitemporal Landsat data for forest cover change detection. \textit{Remote Sensing of Environment, 68}(1), 1--11. https://doi.org/10.1016/S0034-4257(98)00096-0}
 
